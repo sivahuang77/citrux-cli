@@ -25,7 +25,10 @@ The system uses a translation layer to support multiple LLM backends:
 - `CITRUX_MODEL`: Preferred model name.
 - `OPENAI_API_BASE`: Custom URL for OpenAI-compatible proxies (e.g., DeepSeek, Ollama).
 
-## 5. Build & Distribution
-- **Bundler**: `esbuild` producing `bundle/citrux.js`.
-- **Installation**: Global command via `npm link` or `npm install -g <tgz>`.
-- **Shebang**: Fixed `#!/usr/bin/env node` at line 1.
+## 6. Future Development Roadmap & Suggestions
+- **VS Code Branding**: Retrofit `vscode-ide-companion` to "Citrux Companion" with matching orange themes.
+- **Context Manager**: Implement an interactive tool to manage `CITRUX.md` file inclusions visually.
+- **Citrux Cloud Integration**: Built-in deployment tools for user servers (cloudGarage/citrux.ai).
+- **Auto-updater**: Implement automatic version checking via GitHub API.
+- **Enhanced Telemetry**: Precise token usage tracking for non-Google providers.
+

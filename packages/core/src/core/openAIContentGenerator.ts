@@ -187,6 +187,7 @@ export class OpenAIContentGenerator implements ContentGenerator {
       model: this.modelName,
       messages,
       stream: true,
+      stream_options: { include_usage: true },
       tools: request.config?.tools?.flatMap((t: any) => t.functionDeclarations?.map((f: any) => ({
         type: 'function',
         function: {
@@ -231,6 +232,19 @@ export class OpenAIContentGenerator implements ContentGenerator {
 
         try {
           const chunk = JSON.parse(dataStr);
+          
+          // Final usage chunk
+          if (chunk.usage) {
+            const result = new GenerateContentResponse();
+            result.usageMetadata = {
+              promptTokenCount: chunk.usage.prompt_tokens,
+              candidatesTokenCount: chunk.usage.completion_tokens,
+              totalTokenCount: chunk.usage.total_tokens,
+            };
+            yield result;
+            continue;
+          }
+
           const choice = chunk.choices?.[0];
           if (!choice) continue;
 
@@ -296,8 +310,19 @@ export class OpenAIContentGenerator implements ContentGenerator {
     })();
   }
 
-  async countTokens(_request: CountTokensParameters): Promise<CountTokensResponse> {
-    return { totalTokens: 0 };
+  async countTokens(request: CountTokensParameters): Promise<CountTokensResponse> {
+    const contents = toContents(request.contents);
+    let totalChars = 0;
+    for (const content of contents) {
+      for (const part of content.parts || []) {
+        if (part.text) {
+          totalChars += part.text.length;
+        }
+      }
+    }
+    // Very rough estimation for OpenAI-compatible providers: ~4 chars per token
+    const estimatedTokens = Math.ceil(totalChars / 4);
+    return { totalTokens: estimatedTokens };
   }
 
   async embedContent(_request: EmbedContentParameters): Promise<EmbedContentResponse> {

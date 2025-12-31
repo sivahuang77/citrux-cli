@@ -18,7 +18,8 @@
 
 ## Track 4: Future Roadmap (In Progress)
 - [x] **Enhanced Streaming**: Smooth token-by-token output for non-Google providers.
+- [x] **Enhanced Telemetry**: Precise token usage tracking for non-Google providers.
 - [ ] **Context Management**: Visual manager for `CITRUX.md` files.
 - [ ] **Citrux Cloud Integration**: Built-in tools for Citrux-specific cloud workflows.
+- [x] **Auto-updater**: Custom update check for Citrux releases.
 - [ ] **VS Code Extension**: Branded version of the IDE companion.
-- [ ] **Auto-updater**: Custom update check for Citrux releases.

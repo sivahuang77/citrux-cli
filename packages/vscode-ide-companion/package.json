@@ -1,13 +1,13 @@
 {
-  "name": "gemini-cli-vscode-ide-companion",
-  "displayName": "Gemini CLI Companion",
-  "description": "Enable Gemini CLI with direct access to your IDE workspace.",
+  "name": "citrux-cli-companion",
+  "displayName": "Citrux Companion",
+  "description": "Enable Citrux CLI with direct access to your IDE workspace.",
   "version": "0.1.0",
-  "publisher": "google",
+  "publisher": "citrux",
   "icon": "assets/icon.png",
   "repository": {
     "type": "git",
-    "url": "https://github.com/google-gemini/gemini-cli.git",
+    "url": "https://github.com/sivahuang77/citrux-cli.git",
     "directory": "packages/vscode-ide-companion"
   },
   "engines": {
@@ -19,10 +19,10 @@
     "AI"
   ],
   "keywords": [
-    "gemini-cli",
-    "gemini cli",
-    "gemini",
-    "gemini code",
+    "citrux-cli",
+    "citrux cli",
+    "citrux",
+    "citrux code",
     "cli",
     "ide integration",
     "ide companion"
@@ -32,74 +32,74 @@
   ],
   "contributes": {
     "configuration": {
-      "title": "Gemini CLI",
+      "title": "Citrux CLI",
       "properties": {
-        "gemini-cli.debug.logging.enabled": {
+        "citrux-cli.debug.logging.enabled": {
           "type": "boolean",
           "default": false,
-          "description": "Enable detailed logging for debugging the Gemini CLI Companion."
+          "description": "Enable detailed logging for debugging the Citrux CLI Companion."
         }
       }
     },
     "languages": [
       {
-        "id": "gemini-diff-editable"
+        "id": "citrux-diff-editable"
       }
     ],
     "commands": [
       {
-        "command": "gemini.diff.accept",
-        "title": "Gemini CLI: Accept Diff",
+        "command": "citrux.diff.accept",
+        "title": "Citrux CLI: Accept Diff",
         "icon": "$(check)"
       },
       {
-        "command": "gemini.diff.cancel",
-        "title": "Gemini CLI: Close Diff Editor",
+        "command": "citrux.diff.cancel",
+        "title": "Citrux CLI: Close Diff Editor",
         "icon": "$(close)"
       },
       {
-        "command": "gemini-cli.runGeminiCLI",
-        "title": "Gemini CLI: Run"
+        "command": "citrux-cli.runCitruxCLI",
+        "title": "Citrux CLI: Run"
       },
       {
-        "command": "gemini-cli.showNotices",
-        "title": "Gemini CLI: View Third-Party Notices"
+        "command": "citrux-cli.showNotices",
+        "title": "Citrux CLI: View Third-Party Notices"
       }
     ],
     "menus": {
       "commandPalette": [
         {
-          "command": "gemini.diff.accept",
-          "when": "gemini.diff.isVisible"
+          "command": "citrux.diff.accept",
+          "when": "citrux.diff.isVisible"
         },
         {
-          "command": "gemini.diff.cancel",
-          "when": "gemini.diff.isVisible"
+          "command": "citrux.diff.cancel",
+          "when": "citrux.diff.isVisible"
         }
       ],
       "editor/title": [
         {
-          "command": "gemini.diff.accept",
-          "when": "gemini.diff.isVisible",
+          "command": "citrux.diff.accept",
+          "when": "citrux.diff.isVisible",
           "group": "navigation"
         },
         {
-          "command": "gemini.diff.cancel",
-          "when": "gemini.diff.isVisible",
+          "command": "citrux.diff.cancel",
+          "when": "citrux.diff.isVisible",
           "group": "navigation"
         }
       ]
     },
     "keybindings": [
       {
-        "command": "gemini.diff.accept",
+        "command": "citrux.diff.accept",
         "key": "ctrl+s",
-        "when": "gemini.diff.isVisible"
+        "when": "citrux.diff.isVisible"
       },
       {
-        "command": "gemini.diff.accept",
+        "command": "citrux.diff.accept",
         "key": "cmd+s",
-        "when": "gemini.diff.isVisible"
+        "when": "citrux.diff.isVisible"
       }
     ]
   },

@@ -4,17 +4,20 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import latestVersion from 'latest-version';
 import semver from 'semver';
 import { getPackageJson, debugLogger } from '@google/gemini-cli-core';
 import type { LoadedSettings } from '../../config/settings.js';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
+import { fetch } from 'undici';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-export const FETCH_TIMEOUT_MS = 2000;
+export const FETCH_TIMEOUT_MS = 5000;
+
+// GitHub URL for Citrux CLI package.json
+const GITHUB_PACKAGE_JSON_URL = 'https://raw.githubusercontent.com/sivahuang77/citrux-cli/main/package.json';
 
 // Replicating the bits of UpdateInfo we need from update-notifier
 export interface UpdateInfo {
@@ -27,24 +30,6 @@ export interface UpdateInfo {
 export interface UpdateObject {
   message: string;
   update: UpdateInfo;
-}
-
-/**
- * From a nightly and stable version, determines which is the "best" one to offer.
- * The rule is to always prefer nightly if the base versions are the same.
- */
-function getBestAvailableUpdate(
-  nightly?: string,
-  stable?: string,
-): string | null {
-  if (!nightly) return stable || null;
-  if (!stable) return nightly || null;
-
-  if (semver.coerce(stable)?.version === semver.coerce(nightly)?.version) {
-    return nightly;
-  }
-
-  return semver.gt(stable, nightly) ? stable : nightly;
 }
 
 export async function checkForUpdates(
@@ -64,45 +49,31 @@ export async function checkForUpdates(
     }
 
     const { name, version: currentVersion } = packageJson;
-    const isNightly = currentVersion.includes('nightly');
 
-    if (isNightly) {
-      const [nightlyUpdate, latestUpdate] = await Promise.all([
-        latestVersion(name, { version: 'nightly' }),
-        latestVersion(name),
-      ]);
+    // Fetch latest version from GitHub
+    const response = await fetch(GITHUB_PACKAGE_JSON_URL, {
+      signal: AbortSignal.timeout(FETCH_TIMEOUT_MS)
+    });
 
-      const bestUpdate = getBestAvailableUpdate(nightlyUpdate, latestUpdate);
+    if (!response.ok) {
+      return null;
+    }
 
-      if (bestUpdate && semver.gt(bestUpdate, currentVersion)) {
-        const message = `A new version of Gemini CLI is available! ${currentVersion} → ${bestUpdate}`;
-        const type = semver.diff(bestUpdate, currentVersion) || undefined;
-        return {
-          message,
-          update: {
-            latest: bestUpdate,
-            current: currentVersion,
-            name,
-            type,
-          },
-        };
-      }
-    } else {
-      const latestUpdate = await latestVersion(name);
+    const remotePackageJson = (await response.json()) as any;
+    const latestUpdate = remotePackageJson.version;
 
-      if (latestUpdate && semver.gt(latestUpdate, currentVersion)) {
-        const message = `Gemini CLI update available! ${currentVersion} → ${latestUpdate}`;
-        const type = semver.diff(latestUpdate, currentVersion) || undefined;
-        return {
-          message,
-          update: {
-            latest: latestUpdate,
-            current: currentVersion,
-            name,
-            type,
-          },
-        };
-      }
+    if (latestUpdate && semver.gt(latestUpdate, currentVersion)) {
+      const message = `Citrux CLI update available! ${currentVersion} → ${latestUpdate}`;
+      const type = semver.diff(latestUpdate, currentVersion) || undefined;
+      return {
+        message,
+        update: {
+          latest: latestUpdate,
+          current: currentVersion,
+          name,
+          type,
+        },
+      };
     }
 
     return null;

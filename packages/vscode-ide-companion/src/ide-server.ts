@@ -36,9 +36,9 @@ class CORSError extends Error {
 }
 
 const MCP_SESSION_ID_HEADER = 'mcp-session-id';
-const IDE_SERVER_PORT_ENV_VAR = 'GEMINI_CLI_IDE_SERVER_PORT';
-const IDE_WORKSPACE_PATH_ENV_VAR = 'GEMINI_CLI_IDE_WORKSPACE_PATH';
-const IDE_AUTH_TOKEN_ENV_VAR = 'GEMINI_CLI_IDE_AUTH_TOKEN';
+const IDE_SERVER_PORT_ENV_VAR = 'CITRUX_CLI_IDE_SERVER_PORT';
+const IDE_WORKSPACE_PATH_ENV_VAR = 'CITRUX_CLI_IDE_WORKSPACE_PATH';
+const IDE_AUTH_TOKEN_ENV_VAR = 'CITRUX_CLI_IDE_AUTH_TOKEN';
 
 interface WritePortAndWorkspaceArgs {
   context: vscode.ExtensionContext;
@@ -336,36 +336,35 @@ export class IDEServer {
         }
       });
 
-      this.server = app.listen(0, '127.0.0.1', async () => {
-        const address = (this.server as HTTPServer).address();
-        if (address && typeof address !== 'string') {
-          this.port = address.port;
-          this.log(`IDE server listening on http://127.0.0.1:${this.port}`);
-          let portFile: string | undefined;
-          try {
-            const portDir = path.join(os.tmpdir(), 'gemini', 'ide');
-            await fs.mkdir(portDir, { recursive: true });
-            portFile = path.join(
-              portDir,
-              `gemini-ide-server-${process.ppid}-${this.port}.json`,
-            );
-            this.portFile = portFile;
-          } catch (err) {
-            const message = err instanceof Error ? err.message : String(err);
-            this.log(`Failed to create IDE port file: ${message}`);
-          }
-
-          await writePortAndWorkspace({
-            context,
-            port: this.port,
-            portFile: this.portFile,
-            authToken: this.authToken ?? '',
-            log: this.log,
-          });
-        }
-        resolve();
-      });
-
+                this.server = app.listen(0, '127.0.0.1', async () => {
+              const address = (this.server as HTTPServer).address();
+              if (address && typeof address !== 'string') {
+                this.port = address.port;
+                this.log(`IDE server listening on http://127.0.0.1:${this.port}`);
+                let portFile: string | undefined;
+                try {
+                  const portDir = path.join(os.tmpdir(), 'citrux', 'ide');
+                  await fs.mkdir(portDir, { recursive: true });
+                  portFile = path.join(
+                    portDir,
+                    `citrux-ide-server-${process.ppid}-${this.port}.json`,
+                  );
+                  this.portFile = portFile;
+                } catch (err) {
+                  const message = err instanceof Error ? err.message : String(err);
+                  this.log(`Failed to create IDE port file: ${message}`);
+                }
+      
+                await writePortAndWorkspace({
+                  context,
+                  port: this.port,
+                  portFile: this.portFile,
+                  authToken: this.authToken ?? '',
+                  log: this.log,
+                });
+              }
+              resolve();
+            });
       this.server.on('close', () => {
         this.log('IDE server connection closed.');
       });
@@ -436,7 +435,7 @@ const createMcpServer = (
 ) => {
   const server = new McpServer(
     {
-      name: 'gemini-cli-companion-mcp-server',
+      name: 'citrux-cli-companion-mcp-server',
       version: '1.0.0',
     },
     { capabilities: { logging: {} } },

@@ -62,12 +62,10 @@ export function handleAutoUpdate(
   ) {
     return;
   }
-  const isNightly = info.update.latest.includes('nightly');
 
-  const updateCommand = installationInfo.updateCommand.replace(
-    '@latest',
-    isNightly ? '@nightly' : `@${info.update.latest}`,
-  );
+  // Citrux CLI update command always points to GitHub for now
+  const updateCommand = 'npm install -g https://github.com/sivahuang77/citrux-cli.git';
+  
   const updateProcess = spawnFn(updateCommand, {
     stdio: 'ignore',
     shell: true,
