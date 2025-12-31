@@ -1,7 +1,7 @@
 {
   "name": "@google/gemini-cli-a2a-server",
   "version": "0.1.0",
-  "description": "Gemini CLI A2A Server",
+  "description": "Citrux CLI A2A Server",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/google-gemini/gemini-cli.git",

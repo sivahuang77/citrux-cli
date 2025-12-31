@@ -57,6 +57,7 @@ export function createMockConfig(
     getProxy: vi.fn().mockReturnValue(undefined),
     getHistory: vi.fn().mockReturnValue([]),
     getEmbeddingModel: vi.fn().mockReturnValue('text-embedding-004'),
+    getDisabledContextFiles: vi.fn().mockReturnValue([]),
     getSessionId: vi.fn().mockReturnValue('test-session-id'),
     getUserTier: vi.fn(),
     getMessageBus: vi.fn(),

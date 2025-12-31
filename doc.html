@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Citrux CLI 官方技術文件 - Fresh Code, Deep Logic</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --citrux-orange: #ff8c00;
+            --citrux-dark: #1a1a1a;
+            --citrux-light: #f8f9fa;
+            --sidebar-width: 280px;
+            --text-main: #333;
+            --text-muted: #666;
+            --code-bg: #2d2d2d;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            line-height: 1.6;
+            color: var(--text-main);
+            background-color: #fff;
+            display: flex;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: var(--sidebar-width);
+            height: 100vh;
+            background: var(--citrux-light);
+            border-right: 1px solid #e1e4e8;
+            position: fixed;
+            overflow-y: auto;
+            padding: 2rem 1.5rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--citrux-orange);
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .nav-group-title {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        .nav-item {
+            list-style: none;
+            margin-bottom: 0.25rem;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: var(--text-main);
+            font-size: 0.95rem;
+            display: block;
+            padding: 0.4rem 0.75rem;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+
+        .nav-link:hover {
+            background: #ffeeda;
+            color: var(--citrux-orange);
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: var(--sidebar-width);
+            flex: 1;
+            padding: 4rem 10% 4rem 5%;
+            max-width: 1200px;
+        }
+
+        section {
+            margin-bottom: 5rem;
+            scroll-margin-top: 2rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--citrux-dark);
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            margin-top: 2.5rem;
+            margin-bottom: 1.2rem;
+            color: var(--citrux-dark);
+            border-bottom: 2px solid var(--citrux-light);
+            padding-bottom: 0.5rem;
+        }
+
+        h3 {
+            font-size: 1.3rem;
+            margin-top: 1.5rem;
+            color: var(--citrux-orange);
+        }
+
+        p {
+            margin-bottom: 1.2rem;
+            color: #444;
+        }
+
+        .badge {
+            background: var(--citrux-orange);
+            color: white;
+            padding: 0.2rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        /* Code Blocks */
+        pre {
+            background: var(--code-bg);
+            color: #ccc;
+            padding: 1.2rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            font-family: 'Fira Code', 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+
+        code {
+            background: #f1f1f1;
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+
+        pre code {
+            background: transparent;
+            padding: 0;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+        }
+
+        th {
+            background: var(--citrux-light);
+            font-weight: 700;
+        }
+
+        .alert {
+            padding: 1rem;
+            border-left: 4px solid var(--citrux-orange);
+            background: #fff5e6;
+            margin: 1.5rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                display: none;
+            }
+            .main-content {
+                margin-left: 0;
+                padding: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <aside class="sidebar">
+        <div class="logo">
+            <i class="fa-solid fa-citrus"></i> Citrux CLI
+        </div>
+        
+        <div class="nav-group">
+            <div class="nav-group-title">入門指南</div>
+            <li class="nav-item"><a href="#overview" class="nav-link">產品總覽</a></li>
+            <li class="nav-item"><a href="#installation" class="nav-link">安裝步驟</a></li>
+            <li class="nav-item"><a href="#quickstart" class="nav-link">快速配置</a></li>
+        </div>
+
+        <div class="nav-group">
+            <div class="nav-group-title">核心技術</div>
+            <li class="nav-item"><a href="#context-engine" class="nav-link">層級式記憶引擎</a></li>
+            <li class="nav-item"><a href="#streaming" class="nav-link">SSE 串流架構</a></li>
+        </div>
+
+        <div class="nav-group">
+            <div class="nav-group-title">功能參考</div>
+            <li class="nav-item"><a href="#commands" class="nav-link">指令百科</a></li>
+            <li class="nav-item"><a href="#tools" class="nav-link">代理工具箱</a></li>
+            <li class="nav-item"><a href="#ide" class="nav-link">IDE 整合 (VS Code)</a></li>
+        </div>
+
+        <div class="nav-group">
+            <div class="nav-group-title">進階與開發</div>
+            <li class="nav-item"><a href="#extensions" class="nav-link">擴充功能與 Hooks</a></li>
+            <li class="nav-item"><a href="#contributing" class="nav-link">貢獻指南</a></li>
+            <li class="nav-item"><a href="#releases" class="nav-link">版本更新日誌</a></li>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <!-- Section: Overview -->
+        <section id="overview">
+            <h1>🍊 Citrux CLI 總覽</h1>
+            <p><span class="badge">Version 0.1.0</span> <strong>Fresh Code, Deep Logic.</strong></p>
+            <p>Citrux CLI 是一款專為現代軟體工程師打造的原創智慧終端介面（TUI）。它不僅僅是一個 AI 聊天框，而是深度植根於您本地開發環境的「智慧指揮中心」。透過自研的 SSE 流式傳輸引擎與多層級上下文管理系統，Citrux CLI 讓您在終端機中就能與最強大的 LLM 協作，從事架構設計、代碼重構與自動化部署。</p>
+            <div class="alert">
+                <strong>為什麼選擇 Citrux？</strong> 不同於通用聊天工具，Citrux 具備本地檔案讀寫、Shell 執行與層級式專案感知能力，專為解決真實世界的開發痛點。
+            </div>
+        </section>
+
+        <!-- Section: Installation -->
+        <section id="installation">
+            <h2>🚀 安裝與配置</h2>
+            <h3>系統需求</h3>
+            <p>Citrux CLI 支援 macOS (Intel/M1), Linux, 與 Windows (WSL2)。</p>
+            <pre><code># 透過 GitHub 直接安裝
+npm install -g https://github.com/sivahuang77/citrux-cli.git</code></pre>
+            
+            <h3>驗證安裝</h3>
+            <p>安裝完成後，輸入 <code>citrux</code>。若看到橘色標誌，即代表系統就緒。</p>
+            
+            <h3 id="quickstart">模型配置 (/model)</h3>
+            <p>Citrux 不綁定單一供應商。輸入 <code>/model</code> 即可切換：</p>
+            <ul>
+                <li><strong>DeepSeek</strong>: 推理能力極強，性價比首選。</li>
+                <li><strong>OpenAI</strong>: 業界標竿 GPT-4o 支援。</li>
+                <li><strong>Google Gemini</strong>: 超大上下文支援。</li>
+                <li><strong>Ollama</strong>: 100% 本地運行的私有模型。</li>
+            </ul>
+        </section>
+
+        <!-- Section: Context Engine -->
+        <section id="context-engine">
+            <h2>🧠 核心技術：層級式上下文引擎</h2>
+            <p>Citrux CLI 的靈魂在於它對您專案的「深度理解」。我們採用了獨創的記憶架構：</p>
+            
+            <h3>📄 CITRUX.md 協議</h3>
+            <p>透過在不同目錄放置 <code>CITRUX.md</code>，您可以定義 AI 的認知範圍：</p>
+            <table>
+                <tr>
+                    <th>層級</th>
+                    <th>路徑範例</th>
+                    <th>用途</th>
+                </tr>
+                <tr>
+                    <td>全域記憶</td>
+                    <td><code>~/.citrux/CITRUX.md</code></td>
+                    <td>通用開發風格與個人偏好</td>
+                </tr>
+                <tr>
+                    <td>專案記憶</td>
+                    <td><code>./Project/CITRUX.md</code></td>
+                    <td>架構規範、技術棧定義</td>
+                </tr>
+                <tr>
+                    <td>模組記憶</td>
+                    <td><code>./src/auth/CITRUX.md</code></td>
+                    <td>特定功能模組的業務邏輯</td>
+                </tr>
+            </table>
+
+            <h3>🎛️ 視覺化管理器</h3>
+            <p>使用 <code>/memory manage</code> 可以開啟 TUI 介面，手動開關特定檔案的載入，有效節省 Token 並提升回答精準度。</p>
+        </section>
+
+        <!-- Section: Streaming -->
+        <section id="streaming">
+            <h2>🌊 SSE 流式傳輸引擎</h2>
+            <p>我們研發了專用的 SSE 解析器，解決了傳統工具在流式輸出時的痛點：</p>
+            <ul>
+                <li><strong>工具調用積累</strong>：在接收到完整的 JSON 標籤前，引擎會智慧緩衝，確保 <code>replace</code> 或 <code>shell</code> 操作不會因資料片段而損毀。</li>
+                <li><strong>毫秒級回應</strong>：字元級別的即時渲染，讓 AI 的思考過程肉眼可見。</li>
+                <li><strong>精準 Token 計量</strong>：即時監控輸入與輸出，並在 Footer 顯示預估費用。</li>
+            </ul>
+        </section>
+
+        <!-- Section: Commands -->
+        <section id="commands">
+            <h2>⌨️ 指令手冊 (Command Reference)</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>分類</th>
+                        <th>指令</th>
+                        <th>詳細說明</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>系統</strong></td>
+                        <td><code>/model</code></td>
+                        <td>切換 LLM 供應商與驗證 API Key。</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><code>/settings</code></td>
+                        <td>調整主題、字體、自動更新與安全選項。</td>
+                    </tr>
+                    <tr>
+                        <td><strong>記憶</strong></td>
+                        <td><code>/memory manage</code></td>
+                        <td>視覺化管理 <code>CITRUX.md</code> 載入狀態。</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><code>/memory refresh</code></td>
+                        <td>強制重新掃描磁碟上的上下文檔案。</td>
+                    </tr>
+                    <tr>
+                        <td><strong>對話</strong></td>
+                        <td><code>/chat reset</code></td>
+                        <td>開啟新的純淨對話，清空上下文記憶。</td>
+                    </tr>
+                    <tr>
+                        <td><strong>診斷</strong></td>
+                        <td><code>/tools</code></td>
+                        <td>列出 AI 目前擁有的技能清單與環境需求。</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Section: Tools -->
+        <section id="tools">
+            <h2>🛠️ 代理工具箱 (Agentic Tools)</h2>
+            <p>Citrux CLI 賦予 AI 「行動」的能力。AI 會自主判斷何時該調用工具：</p>
+            <h3>1. 精密重構 (Replace Tool)</h3>
+            <p>AI 能夠在不破壞檔案結構的情況下，精準替換代碼片段。每次操作都會顯示 <strong>Diff 對比圖</strong> 供您確認。</p>
+            <h3>2. 系統執行 (Shell Tool)</h3>
+            <p>在您的授權下執行指令。支援 <code>npm</code>, <code>git</code>, <code>docker</code> 等所有環境指令。</p>
+            <h3>3. 智慧檢索 (Index Tools)</h3>
+            <p>內建 <code>grep</code> 與 <code>glob</code> 支援，AI 可以在數千個檔案中迅速鎖定邏輯起點。</p>
+        </section>
+
+        <!-- Section: IDE -->
+        <section id="ide">
+            <h2>💻 IDE 整合：Citrux Companion</h2>
+            <p>我們深知開發者大部分時間待在編輯器中。<strong>Citrux Companion (VS Code)</strong> 實現了以下連動：</p>
+            <ul>
+                <li><strong>Selection Sync</strong>：在編輯器選取代碼，終端機即刻同步分析。</li>
+                <li><strong>One-Click Apply</strong>：AI 生成的修復方案，按一個鍵直接套用至源碼。</li>
+                <li><strong>環境共用</strong>：環境變數與安全金鑰在終端與 IDE 間無縫傳遞。</li>
+            </ul>
+        </section>
+
+        <!-- Section: Extensions -->
+        <section id="extensions">
+            <h2>🧩 進階擴充與 Hooks</h2>
+            <p>Citrux 是可程式化的。開發者可以透過 Hook 介入 AI 的生命週期：</p>
+            <ul>
+                <li><code>BeforeModel</code>: 在發送到雲端前過濾敏感資訊。</li>
+                <li><code>AfterTool</code>: 在檔案寫入後自動執行格式化指令。</li>
+            </ul>
+        </section>
+
+        <!-- Section: Contributing -->
+        <section id="contributing">
+            <h2>🛠️ 開發與貢獻</h2>
+            <p>Citrux CLI 是開源專案，歡迎任何形式的貢獻。</p>
+            <pre><code># 複製原始碼
+git clone https://github.com/sivahuang77/citrux-cli.git
+# 本地運行
+npm install && npm start</code></pre>
+        </section>
+
+        <!-- Section: Releases -->
+        <section id="releases">
+            <h2>📅 版本日誌</h2>
+            <h3>v0.1.0 - 2026-01-01</h3>
+            <ul>
+                <li>正式品牌發佈：Citrux CLI。</li>
+                <li>實作交互式 <code>/memory manage</code> 管理器。</li>
+                <li>自研 OpenAI SSE 流式引擎上線。</li>
+                <li>支援 DeepSeek R1/V3 推理模型。</li>
+            </ul>
+        </section>
+
+        <footer style="margin-top: 5rem; color: var(--text-muted); font-size: 0.8rem; text-align: center;">
+            &copy; 2026 Citrux CLI Team. Fresh Code, Deep Logic.
+        </footer>
+    </main>
+
+    <script>
+        // Simple scroll spy or link highlight could be added here
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>

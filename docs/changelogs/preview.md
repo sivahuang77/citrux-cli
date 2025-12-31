@@ -13,7 +13,7 @@ npm install -g @google/gemini-cli@preview
 
 ## What's Changed
 
-- feat(ide): fallback to GEMINI_CLI_IDE_AUTH_TOKEN env var by @skeshive in
+- feat(ide): fallback to CITRUX_CLI_IDE_AUTH_TOKEN env var by @skeshive in
   https://github.com/google-gemini/gemini-cli/pull/14843
 - feat: display quota stats for unused models in /stats by @sehoon38 in
   https://github.com/google-gemini/gemini-cli/pull/14764

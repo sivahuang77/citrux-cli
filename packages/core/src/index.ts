@@ -26,6 +26,7 @@ export * from './commands/types.js';
 
 // Export Core Logic
 export * from './core/client.js';
+export { GeminiClient as CitruxClient } from './core/client.js';
 export * from './core/contentGenerator.js';
 export * from './core/loggingContentGenerator.js';
 export * from './core/geminiChat.js';
@@ -50,6 +51,7 @@ export * from './core/apiKeyCredentialStorage.js';
 
 // Export utilities
 export * from './utils/paths.js';
+export { GEMINI_DIR as CITRUX_DIR } from './utils/paths.js';
 export * from './utils/schemaValidator.js';
 export * from './utils/errors.js';
 export * from './utils/exitCodes.js';

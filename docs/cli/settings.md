@@ -1,15 +1,15 @@
-# Gemini CLI settings (`/settings` command)
+# Citrux CLI settings (`/settings` command)
 
-Control your Gemini CLI experience with the `/settings` command. The `/settings`
-command opens a dialog to view and edit all your Gemini CLI settings, including
+Control your Citrux CLI experience with the `/settings` command. The `/settings`
+command opens a dialog to view and edit all your Citrux CLI settings, including
 your UI experience, keybindings, and accessibility features.
 
-Your Gemini CLI settings are stored in a `settings.json` file. In addition to
+Your Citrux CLI settings are stored in a `settings.json` file. In addition to
 using the `/settings` command, you can also edit them in one of the following
 locations:
 
-- **User settings**: `~/.gemini/settings.json`
-- **Workspace settings**: `your-project/.gemini/settings.json`
+- **User settings**: `~/.citrux/settings.json`
+- **Workspace settings**: `your-project/.citrux/settings.json`
 
 Note: Workspace settings override user settings.
 
@@ -41,7 +41,7 @@ they appear in the UI.
 | UI Label                       | Setting                                  | Description                                                          | Default |
 | ------------------------------ | ---------------------------------------- | -------------------------------------------------------------------- | ------- |
 | Hide Window Title              | `ui.hideWindowTitle`                     | Hide the window title bar.                                           | `false` |
-| Show Status in Title           | `ui.showStatusInTitle`                   | Show Gemini CLI status and thoughts in the terminal window title.    | `false` |
+| Show Status in Title           | `ui.showStatusInTitle`                   | Show Citrux CLI status and thoughts in the terminal window title.    | `false` |
 | Hide Tips                      | `ui.hideTips`                            | Hide helpful tips in the UI.                                         | `false` |
 | Hide Banner                    | `ui.hideBanner`                          | Hide the application banner.                                         | `false` |
 | Hide Context Summary           | `ui.hideContextSummary`                  | Hide the context summary (GEMINI.md, MCP servers) above the input.   | `false` |
@@ -79,7 +79,7 @@ they appear in the UI.
 | Memory Discovery Max Dirs            | `context.discoveryMaxDirs`                        | Maximum number of directories to search for memory.                                                                                             | `200`   |
 | Load Memory From Include Directories | `context.loadMemoryFromIncludeDirectories`        | Controls how /memory refresh loads GEMINI.md files. When true, include directories are scanned; when false, only the current directory is used. | `false` |
 | Respect .gitignore                   | `context.fileFiltering.respectGitIgnore`          | Respect .gitignore files when searching.                                                                                                        | `true`  |
-| Respect .geminiignore                | `context.fileFiltering.respectGeminiIgnore`       | Respect .geminiignore files when searching.                                                                                                     | `true`  |
+| Respect .citruxignore                | `context.fileFiltering.respectGeminiIgnore`       | Respect .citruxignore files when searching.                                                                                                     | `true`  |
 | Enable Recursive File Search         | `context.fileFiltering.enableRecursiveFileSearch` | Enable recursive file search functionality when completing @ references in the prompt.                                                          | `true`  |
 | Disable Fuzzy Search                 | `context.fileFiltering.disableFuzzySearch`        | Disable fuzzy search when searching for files.                                                                                                  | `false` |
 

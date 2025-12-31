@@ -1,8 +1,8 @@
-# Gemini CLI core
+# Citrux CLI core
 
-Gemini CLI's core package (`packages/core`) is the backend portion of Gemini
+Citrux CLI's core package (`packages/core`) is the backend portion of Gemini
 CLI, handling communication with the Gemini API, managing tools, and processing
-requests sent from `packages/cli`. For a general overview of Gemini CLI, see the
+requests sent from `packages/cli`. For a general overview of Citrux CLI, see the
 [main documentation page](../index.md).
 
 ## Navigating this section
@@ -16,7 +16,7 @@ requests sent from `packages/cli`. For a general overview of Gemini CLI, see the
 
 ## Role of the core
 
-While the `packages/cli` portion of Gemini CLI provides the user interface,
+While the `packages/cli` portion of Citrux CLI provides the user interface,
 `packages/core` is responsible for:
 
 - **Gemini API interaction:** Securely communicating with the Google Gemini API,
@@ -61,7 +61,7 @@ You can find the token limits for each model in the
 
 ## Model fallback
 
-Gemini CLI includes a model fallback mechanism to ensure that you can continue
+Citrux CLI includes a model fallback mechanism to ensure that you can continue
 to use the CLI even if the default "pro" model is rate-limited.
 
 If you are using the default "pro" model and the CLI detects that you are being

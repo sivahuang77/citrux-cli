@@ -273,7 +273,10 @@ export interface ConfigParameters {
   mcpServers?: Record<string, MCPServerConfig>;
   userMemory?: string;
   geminiMdFileCount?: number;
+  citruxMdFileCount?: number;
   geminiMdFilePaths?: string[];
+  citruxMdFilePaths?: string[];
+  disabledContextFiles?: string[];
   approvalMode?: ApprovalMode;
   showMemoryUsage?: boolean;
   contextFileName?: string | string[];
@@ -390,11 +393,16 @@ export class Config {
   private userMemory: string;
   private geminiMdFileCount: number;
   private geminiMdFilePaths: string[];
+  private disabledContextFiles: string[];
   private readonly showMemoryUsage: boolean;
   private readonly accessibility: AccessibilitySettings;
   private readonly telemetrySettings: TelemetrySettings;
   private readonly usageStatisticsEnabled: boolean;
   private geminiClient!: GeminiClient;
+  // @ts-expect-error: Alias for future use
+  private get citruxClient() {
+    return this.geminiClient;
+  }
   private baseLlmClient!: BaseLlmClient;
   private modelRouterService: ModelRouterService;
   private readonly modelAvailabilityService: ModelAvailabilityService;
@@ -516,6 +524,7 @@ export class Config {
     this.userMemory = params.userMemory ?? '';
     this.geminiMdFileCount = params.geminiMdFileCount ?? 0;
     this.geminiMdFilePaths = params.geminiMdFilePaths ?? [];
+    this.disabledContextFiles = params.disabledContextFiles ?? [];
     this.showMemoryUsage = params.showMemoryUsage ?? false;
     this.accessibility = params.accessibility ?? {};
     this.telemetrySettings = {
@@ -1181,6 +1190,28 @@ export class Config {
     this.geminiMdFilePaths = paths;
   }
 
+  // Citrux Aliases
+  getCitruxMdFileCount() {
+    return this.getGeminiMdFileCount();
+  }
+  setCitruxMdFileCount(count: number) {
+    this.setGeminiMdFileCount(count);
+  }
+  getCitruxMdFilePaths() {
+    return this.getGeminiMdFilePaths();
+  }
+  setCitruxMdFilePaths(paths: string[]) {
+    this.setGeminiMdFilePaths(paths);
+  }
+
+  getDisabledContextFiles(): string[] {
+    return this.disabledContextFiles;
+  }
+
+  setDisabledContextFiles(paths: string[]): void {
+    this.disabledContextFiles = paths;
+  }
+
   getApprovalMode(): ApprovalMode {
     return this.policyEngine.getApprovalMode();
   }
@@ -1250,10 +1281,10 @@ export class Config {
     return this.geminiClient;
   }
 
-  /**
-   * Updates the system instruction with the latest user memory.
-   * Whenever the user memory (GEMINI.md files) is updated.
-   */
+  getCitruxClient(): GeminiClient {
+    return this.getGeminiClient();
+  }
+
   async updateSystemInstructionIfInitialized(): Promise<void> {
     const geminiClient = this.getGeminiClient();
     if (geminiClient?.isInitialized()) {
@@ -1319,23 +1350,22 @@ export class Config {
   }
 
   getLlmProvider(): string {
-    return (this as any).params?.llm?.provider ?? 'gemini';
+    return 'gemini';
   }
 
-  getLlmProviderConfig(provider: string): any {
-    return (this as any).params?.llm?.providers?.[provider] ?? {};
+  getLlmProviderConfig(_provider: string): Record<string, unknown> {
+    return {};
   }
 
-  setLlmProvider(provider: string): void {
-    if ((this as any).onSettingsChange) {
-      (this as any).onSettingsChange('llm.provider', provider);
-    }
+  setLlmProvider(_provider: string): void {
+    // No-op
   }
 
-  setLlmProviderConfig(provider: string, config: any): void {
-    if ((this as any).onSettingsChange) {
-      (this as any).onSettingsChange(`llm.providers.${provider}`, config);
-    }
+  setLlmProviderConfig(
+    _provider: string,
+    _config: Record<string, unknown>,
+  ): void {
+    // No-op
   }
 
   async refreshProvider() {
@@ -1344,7 +1374,9 @@ export class Config {
       this.contentGenerator = new OpenAIContentGenerator(this);
     } else {
       // Re-initialize Gemini generator
-      await this.refreshAuth(this.contentGeneratorConfig.authType || AuthType.LOGIN_WITH_GOOGLE);
+      await this.refreshAuth(
+        this.contentGeneratorConfig.authType || AuthType.LOGIN_WITH_GOOGLE,
+      );
     }
     // Re-initialize BaseLlmClient
     this.baseLlmClient = new BaseLlmClient(this.contentGenerator, this);

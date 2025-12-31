@@ -1,141 +1,60 @@
-# Gemini CLI installation, execution, and deployment
+# 🚀 安裝與快速入門
 
-Install and run Gemini CLI. This document provides an overview of Gemini CLI's
-installation methods and deployment architecture.
+本指南將協助您在幾分鐘內完成 Citrux CLI 的安裝與基礎配置。
 
-## How to install and/or run Gemini CLI
+## 📦 系統需求
 
-There are several ways to run Gemini CLI. The recommended option depends on how
-you intend to use Gemini CLI.
+- **Node.js**: v18.0.0 或更高版本。
+- **作業系統**: macOS (Intel/M1), Linux, 或 Windows (PowerShell/WSL2)。
+- **Git**: 用於版本管理與自動更新。
 
-- As a standard installation. This is the most straightforward method of using
-  Gemini CLI.
-- In a sandbox. This method offers increased security and isolation.
-- From the source. This is recommended for contributors to the project.
+## 🛠️ 安裝步驟
 
-### 1. Standard installation (recommended for standard users)
+### 1. 全域安裝
 
-This is the recommended way for end-users to install Gemini CLI. It involves
-downloading the Gemini CLI package from the NPM registry.
+Citrux CLI 透過 GitHub 分發，確保您獲得的是最新開發成果：
 
-- **Global install:**
+```bash
+npm install -g https://github.com/sivahuang77/citrux-cli.git
+```
 
-  ```bash
-  npm install -g @google/gemini-cli
-  ```
+### 2. 驗證安裝
 
-  Then, run the CLI from anywhere:
+安裝完成後，在終端輸入：
 
-  ```bash
-  gemini
-  ```
+```bash
+citrux
+```
 
-- **NPX execution:**
+如果看到橘色的 Citrux 標誌，代表安裝成功。
 
-  ```bash
-  # Execute the latest version from NPM without a global install
-  npx @google/gemini-cli
-  ```
+## ⚙️ 模型配置
 
-### 2. Run in a sandbox (Docker/Podman)
+首次啟動後，您需要配置 LLM 供應商。輸入：
 
-For security and isolation, Gemini CLI can be run inside a container. This is
-the default way that the CLI executes tools that might have side effects.
+```bash
+/model
+```
 
-- **Directly from the registry:** You can run the published sandbox image
-  directly. This is useful for environments where you only have Docker and want
-  to run the CLI.
-  ```bash
-  # Run the published sandbox image
-  docker run --rm -it us-docker.pkg.dev/gemini-code-dev/gemini-cli/sandbox:0.1.1
-  ```
-- **Using the `--sandbox` flag:** If you have Gemini CLI installed locally
-  (using the standard installation described above), you can instruct it to run
-  inside the sandbox container.
-  ```bash
-  gemini --sandbox -y -p "your prompt here"
-  ```
+在彈出的視窗中：
 
-### 3. Run from source (recommended for Gemini CLI contributors)
+1.  **選擇供應商**：OpenAI, DeepSeek, Google 或 Custom。
+2.  **輸入 API Key**：Citrux 會安全地將其儲存在 `~/.citrux/settings.json`。
+3.  **選取型號**：如 `deepseek-reasoner` 或 `gpt-4o`。
 
-Contributors to the project will want to run the CLI directly from the source
-code.
+## 📄 設定您的第一個專案
 
-- **Development mode:** This method provides hot-reloading and is useful for
-  active development.
-  ```bash
-  # From the root of the repository
-  npm run start
-  ```
-- **Production-like mode (linked package):** This method simulates a global
-  installation by linking your local package. It's useful for testing a local
-  build in a production workflow.
+在您的專案根目錄建立 `CITRUX.md`，內容範例：
 
-  ```bash
-  # Link the local cli package to your global node_modules
-  npm link packages/cli
+```markdown
+# 專案規範
 
-  # Now you can run your local version using the `gemini` command
-  gemini
-  ```
+- 框架：Vite + React
+- 禁止使用：`any` 型別
+```
+
+這將讓 Citrux 在處理該專案的對話時自動載入這些限制。
 
 ---
 
-### 4. Running the latest Gemini CLI commit from GitHub
-
-You can run the most recently committed version of Gemini CLI directly from the
-GitHub repository. This is useful for testing features still in development.
-
-```bash
-# Execute the CLI directly from the main branch on GitHub
-npx https://github.com/google-gemini/gemini-cli
-```
-
-## Deployment architecture
-
-The execution methods described above are made possible by the following
-architectural components and processes:
-
-**NPM packages**
-
-Gemini CLI project is a monorepo that publishes two core packages to the NPM
-registry:
-
-- `@google/gemini-cli-core`: The backend, handling logic and tool execution.
-- `@google/gemini-cli`: The user-facing frontend.
-
-These packages are used when performing the standard installation and when
-running Gemini CLI from the source.
-
-**Build and packaging processes**
-
-There are two distinct build processes used, depending on the distribution
-channel:
-
-- **NPM publication:** For publishing to the NPM registry, the TypeScript source
-  code in `@google/gemini-cli-core` and `@google/gemini-cli` is transpiled into
-  standard JavaScript using the TypeScript Compiler (`tsc`). The resulting
-  `dist/` directory is what gets published in the NPM package. This is a
-  standard approach for TypeScript libraries.
-
-- **GitHub `npx` execution:** When running the latest version of Gemini CLI
-  directly from GitHub, a different process is triggered by the `prepare` script
-  in `package.json`. This script uses `esbuild` to bundle the entire application
-  and its dependencies into a single, self-contained JavaScript file. This
-  bundle is created on-the-fly on the user's machine and is not checked into the
-  repository.
-
-**Docker sandbox image**
-
-The Docker-based execution method is supported by the `gemini-cli-sandbox`
-container image. This image is published to a container registry and contains a
-pre-installed, global version of Gemini CLI.
-
-## Release process
-
-The release process is automated through GitHub Actions. The release workflow
-performs the following actions:
-
-1.  Build the NPM packages using `tsc`.
-2.  Publish the NPM packages to the artifact registry.
-3.  Create GitHub releases with bundled assets.
+_下一步：[探索完整指令參考](../cli/commands.md)_

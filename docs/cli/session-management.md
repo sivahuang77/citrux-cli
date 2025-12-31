@@ -1,13 +1,13 @@
 # Session Management
 
-Gemini CLI includes robust session management features that automatically save
+Citrux CLI includes robust session management features that automatically save
 your conversation history. This allows you to interrupt your work and resume
 exactly where you left off, review past interactions, and manage your
 conversation history effectively.
 
 ## Automatic Saving
 
-Every time you interact with Gemini CLI, your session is automatically saved.
+Every time you interact with Citrux CLI, your session is automatically saved.
 This happens in the background without any manual intervention.
 
 - **What is saved:** The complete conversation history, including:
@@ -15,7 +15,7 @@ This happens in the background without any manual intervention.
   - All tool executions (inputs and outputs).
   - Token usage statistics (input/output/cached, etc.).
   - Assistant thoughts/reasoning summaries (when available).
-- **Location:** Sessions are stored in `~/.gemini/tmp/<project_hash>/chats/`.
+- **Location:** Sessions are stored in `~/.citrux/tmp/<project_hash>/chats/`.
 - **Scope:** Sessions are project-specific. Switching directories to a different
   project will switch to that project's session history.
 
@@ -106,7 +106,7 @@ gemini --delete-session 2
 
 ## Configuration
 
-You can configure how Gemini CLI manages your session history in your
+You can configure how Citrux CLI manages your session history in your
 `settings.json` file.
 
 ### Session Retention

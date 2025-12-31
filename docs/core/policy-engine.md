@@ -1,6 +1,6 @@
 # Policy engine
 
-The Gemini CLI includes a powerful policy engine that provides fine-grained
+The Citrux CLI includes a powerful policy engine that provides fine-grained
 control over tool execution. It allows users and administrators to define rules
 that determine whether a tool call should be allowed, denied, or require user
 confirmation.
@@ -11,9 +11,9 @@ To create your first policy:
 
 1.  **Create the policy directory** if it doesn't exist:
     ```bash
-    mkdir -p ~/.gemini/policies
+    mkdir -p ~/.citrux/policies
     ```
-2.  **Create a new policy file** (e.g., `~/.gemini/policies/my-rules.toml`). You
+2.  **Create a new policy file** (e.g., `~/.citrux/policies/my-rules.toml`). You
     can use any filename ending in `.toml`; all such files in this directory
     will be loaded and combined:
     ```toml
@@ -23,7 +23,7 @@ To create your first policy:
     decision = "allow"
     priority = 100
     ```
-3.  **Run a command** that triggers the policy (e.g., ask Gemini CLI to
+3.  **Run a command** that triggers the policy (e.g., ask Citrux CLI to
     `git status`). The tool will now execute automatically without prompting for
     confirmation.
 
@@ -94,7 +94,7 @@ has a designated number that forms the base of the final priority calculation.
 
 | Tier    | Base | Description                                                                |
 | :------ | :--- | :------------------------------------------------------------------------- |
-| Default | 1    | Built-in policies that ship with the Gemini CLI.                           |
+| Default | 1    | Built-in policies that ship with the Citrux CLI.                           |
 | User    | 2    | Custom policies defined by the user.                                       |
 | Admin   | 3    | Policies managed by an administrator (e.g., in an enterprise environment). |
 
@@ -254,7 +254,7 @@ priority = 500
 
 ## Default policies
 
-The Gemini CLI ships with a set of default policies to provide a safe
+The Citrux CLI ships with a set of default policies to provide a safe
 out-of-the-box experience.
 
 - **Read-only tools** (like `read_file`, `glob`) are generally **allowed**.

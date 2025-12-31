@@ -911,19 +911,28 @@ export class GeminiClient {
 
   async tryCompressChat(
     prompt_id: string,
+
     force: boolean = false,
   ): Promise<ChatCompressionInfo> {
     // If the model is 'auto', we will use a placeholder model to check.
+
     // Compression occurs before we choose a model, so calling `count_tokens`
+
     // before the model is chosen would result in an error.
+
     const model = this._getActiveModelForCurrentTurn();
 
     const { newHistory, info } = await this.compressionService.compress(
       this.getChat(),
+
       prompt_id,
+
       force,
+
       model,
+
       this.config,
+
       this.hasFailedCompressionAttempt,
     );
 
@@ -936,7 +945,9 @@ export class GeminiClient {
     } else if (info.compressionStatus === CompressionStatus.COMPRESSED) {
       if (newHistory) {
         this.chat = await this.startChat(newHistory);
+
         this.updateTelemetryTokenCount();
+
         this.forceFullIdeContext = true;
       }
     }

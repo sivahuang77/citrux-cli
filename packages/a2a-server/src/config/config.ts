@@ -91,7 +91,7 @@ export async function loadConfig(
     settings.folderTrust === true,
   );
   configParams.userMemory = memoryContent;
-  configParams.geminiMdFileCount = fileCount;
+  configParams.citruxMdFileCount = fileCount;
   const config = new Config({
     ...configParams,
   });

@@ -1,14 +1,14 @@
-# Gemini CLI extensions
+# Citrux CLI extensions
 
 _This documentation is up-to-date with the v0.4.0 release._
 
-Gemini CLI extensions package prompts, MCP servers, and custom commands into a
+Citrux CLI extensions package prompts, MCP servers, and custom commands into a
 familiar and user-friendly format. With extensions, you can expand the
-capabilities of Gemini CLI and share those capabilities with others. They are
+capabilities of Citrux CLI and share those capabilities with others. They are
 designed to be easily installable and shareable.
 
 To see examples of extensions, you can browse a gallery of
-[Gemini CLI extensions](https://geminicli.com/extensions/browse/).
+[Citrux CLI extensions](https://geminicli.com/extensions/browse/).
 
 See [getting started docs](getting-started-extensions.md) for a guide on
 creating your first extension.
@@ -130,12 +130,12 @@ gemini extensions link <path>
 
 ## How it works
 
-On startup, Gemini CLI looks for extensions in `<home>/.gemini/extensions`
+On startup, Citrux CLI looks for extensions in `<home>/.citrux/extensions`
 
 Extensions exist as a directory that contains a `gemini-extension.json` file.
 For example:
 
-`<home>/.gemini/extensions/my-extension/gemini-extension.json`
+`<home>/.citrux/extensions/my-extension/gemini-extension.json`
 
 ### `gemini-extension.json`
 
@@ -182,7 +182,7 @@ The file has the following structure:
   command. Note that this differs from the MCP server `excludeTools`
   functionality, which can be listed in the MCP server config.
 
-When Gemini CLI starts, it loads all the extensions and merges their
+When Citrux CLI starts, it loads all the extensions and merges their
 configurations. If there are any conflicts, the workspace configuration takes
 precedence.
 
@@ -221,7 +221,7 @@ Each object in the array should have the following properties:
 
 When a user installs this extension, they will be prompted to enter their API
 key. The value will be saved to a `.env` file in the extension's directory
-(e.g., `<home>/.gemini/extensions/my-api-extension/.env`).
+(e.g., `<home>/.citrux/extensions/my-api-extension/.env`).
 
 You can view a list of an extension's settings by running:
 
@@ -250,7 +250,7 @@ standard naming conventions.
 An extension named `gcp` with the following structure:
 
 ```
-.gemini/extensions/gcp/
+.citrux/extensions/gcp/
 ├── gemini-extension.json
 └── commands/
     ├── deploy.toml
@@ -280,7 +280,7 @@ For example, if both a user and the `gcp` extension define a `deploy` command:
 
 ## Variables
 
-Gemini CLI extensions allow variable substitution in `gemini-extension.json`.
+Citrux CLI extensions allow variable substitution in `gemini-extension.json`.
 This can be useful if e.g., you need the current directory to run an MCP server
 using `"cwd": "${extensionPath}${/}run.ts"`.
 
@@ -288,6 +288,6 @@ using `"cwd": "${extensionPath}${/}run.ts"`.
 
 | variable                   | description                                                                                                                                                     |
 | -------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `${extensionPath}`         | The fully-qualified path of the extension in the user's filesystem e.g., '/Users/username/.gemini/extensions/example-extension'. This will not unwrap symlinks. |
+| `${extensionPath}`         | The fully-qualified path of the extension in the user's filesystem e.g., '/Users/username/.citrux/extensions/example-extension'. This will not unwrap symlinks. |
 | `${workspacePath}`         | The fully-qualified path of the current workspace.                                                                                                              |
 | `${/} or ${pathSeparator}` | The path separator (differs per OS).                                                                                                                            |

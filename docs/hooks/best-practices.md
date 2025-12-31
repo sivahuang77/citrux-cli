@@ -1,8 +1,8 @@
-# Hooks on Gemini CLI: Best practices
+# Hooks on Citrux CLI: Best practices
 
 This guide covers security considerations, performance optimization, debugging
 techniques, and privacy considerations for developing and deploying hooks in
-Gemini CLI.
+Citrux CLI.
 
 ## Security considerations
 
@@ -155,7 +155,7 @@ Store results between invocations to avoid repeated computation:
 const fs = require('fs');
 const path = require('path');
 
-const CACHE_FILE = '.gemini/hook-cache.json';
+const CACHE_FILE = '.citrux/hook-cache.json';
 
 function readCache() {
   try {
@@ -258,7 +258,7 @@ Write debug information to dedicated log files:
 
 ```bash
 #!/usr/bin/env bash
-LOG_FILE=".gemini/hooks/debug.log"
+LOG_FILE=".citrux/hooks/debug.log"
 
 # Log with timestamp
 log() {
@@ -307,7 +307,7 @@ cat > test-input.json << 'EOF'
 EOF
 
 # Test the hook
-cat test-input.json | .gemini/hooks/my-hook.sh
+cat test-input.json | .citrux/hooks/my-hook.sh
 
 # Check exit code
 echo "Exit code: $?"
@@ -374,7 +374,7 @@ Begin with basic logging hooks before implementing complex logic:
 #!/usr/bin/env bash
 # Simple logging hook to understand input structure
 input=$(cat)
-echo "$input" >> .gemini/hook-inputs.log
+echo "$input" >> .citrux/hook-inputs.log
 echo "Logged input"
 ```
 
@@ -401,8 +401,8 @@ tool_name=$(echo "$input" | jq -r '.tool_name')
 Always make hook scripts executable:
 
 ```bash
-chmod +x .gemini/hooks/*.sh
-chmod +x .gemini/hooks/*.js
+chmod +x .citrux/hooks/*.sh
+chmod +x .citrux/hooks/*.js
 ```
 
 ### Version control
@@ -410,8 +410,8 @@ chmod +x .gemini/hooks/*.js
 Commit hooks to share with your team:
 
 ```bash
-git add .gemini/hooks/
-git add .gemini/settings.json
+git add .citrux/hooks/
+git add .citrux/settings.json
 git commit -m "Add project hooks for security and testing"
 ```
 
@@ -419,13 +419,13 @@ git commit -m "Add project hooks for security and testing"
 
 ```gitignore
 # Ignore hook cache and logs
-.gemini/hook-cache.json
-.gemini/hook-debug.log
-.gemini/memory/session-*.jsonl
+.citrux/hook-cache.json
+.citrux/hook-debug.log
+.citrux/memory/session-*.jsonl
 
 # Keep hook scripts
-!.gemini/hooks/*.sh
-!.gemini/hooks/*.js
+!.citrux/hooks/*.sh
+!.citrux/hooks/*.js
 ```
 
 ### Document behavior
@@ -442,7 +442,7 @@ Add descriptions to help others understand your hooks:
           {
             "name": "secret-scanner",
             "type": "command",
-            "command": "$GEMINI_PROJECT_DIR/.gemini/hooks/block-secrets.sh",
+            "command": "$GEMINI_PROJECT_DIR/.citrux/hooks/block-secrets.sh",
             "description": "Scans code changes for API keys, passwords, and other secrets before writing"
           }
         ]
@@ -500,18 +500,18 @@ echo "write_file|replace" | grep -E "write_.*|replace"
 **Ensure script is executable:**
 
 ```bash
-ls -la .gemini/hooks/my-hook.sh
-chmod +x .gemini/hooks/my-hook.sh
+ls -la .citrux/hooks/my-hook.sh
+chmod +x .citrux/hooks/my-hook.sh
 ```
 
 **Verify script path:**
 
 ```bash
 # Check path expansion
-echo "$GEMINI_PROJECT_DIR/.gemini/hooks/my-hook.sh"
+echo "$GEMINI_PROJECT_DIR/.citrux/hooks/my-hook.sh"
 
 # Verify file exists
-test -f "$GEMINI_PROJECT_DIR/.gemini/hooks/my-hook.sh" && echo "File exists"
+test -f "$GEMINI_PROJECT_DIR/.citrux/hooks/my-hook.sh" && echo "File exists"
 ```
 
 ### Hook timing out
@@ -695,12 +695,12 @@ fi
 #!/usr/bin/env bash
 
 # List all environment variables
-env > .gemini/hook-env.log
+env > .citrux/hook-env.log
 
 # Check specific variables
-echo "GEMINI_PROJECT_DIR: $GEMINI_PROJECT_DIR" >> .gemini/hook-env.log
-echo "GEMINI_SESSION_ID: $GEMINI_SESSION_ID" >> .gemini/hook-env.log
-echo "GEMINI_API_KEY: ${GEMINI_API_KEY:+<set>}" >> .gemini/hook-env.log
+echo "GEMINI_PROJECT_DIR: $GEMINI_PROJECT_DIR" >> .citrux/hook-env.log
+echo "GEMINI_SESSION_ID: $GEMINI_SESSION_ID" >> .citrux/hook-env.log
+echo "GEMINI_API_KEY: ${GEMINI_API_KEY:+<set>}" >> .citrux/hook-env.log
 ```
 
 **Use .env files:**
@@ -716,7 +716,7 @@ fi
 
 ## Privacy considerations
 
-Hook inputs and outputs may contain sensitive information. Gemini CLI respects
+Hook inputs and outputs may contain sensitive information. Citrux CLI respects
 the `telemetry.logPrompts` setting for hook data logging.
 
 ### What data is collected
@@ -802,5 +802,5 @@ console.log(JSON.stringify(sanitizeOutput(hookOutput)));
 
 - [Hooks Reference](index.md) - Complete API reference
 - [Writing Hooks](writing-hooks.md) - Tutorial and examples
-- [Configuration](../cli/configuration.md) - Gemini CLI settings
+- [Configuration](../cli/configuration.md) - Citrux CLI settings
 - [Hooks Design Document](../hooks-design.md) - Technical architecture

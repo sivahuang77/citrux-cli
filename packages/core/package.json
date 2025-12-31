@@ -1,7 +1,7 @@
 {
   "name": "@citrux/core",
   "version": "0.1.0",
-  "description": "Gemini CLI Core",
+  "description": "Citrux CLI Core",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",

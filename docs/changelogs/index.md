@@ -1,6 +1,6 @@
-# Gemini CLI release notes
+# Citrux CLI release notes
 
-Gemini CLI has three major release channels: nightly, preview, and stable. For
+Citrux CLI has three major release channels: nightly, preview, and stable. For
 most users, we recommend the stable release.
 
 On this page, you can find information regarding the current releases and
@@ -20,12 +20,12 @@ on GitHub.
 
 ## Announcements: v0.21.0 - 2025-12-15
 
-- **⚡️⚡️⚡️ Gemini 3 Flash + Gemini CLI:** Better, faster and cheaper than 2.5
+- **⚡️⚡️⚡️ Gemini 3 Flash + Citrux CLI:** Better, faster and cheaper than 2.5
   Pro - and in some scenarios better than 3 Pro! For paid tiers + free tier
   users who were on the wait list enable **Preview Features** in `/settings.`
 - For more information:
-  [Gemini 3 Flash is now available in Gemini CLI](https://developers.googleblog.com/gemini-3-flash-is-now-available-in-gemini-cli/).
-- 🎉 Gemini CLI Extensions:
+  [Gemini 3 Flash is now available in Citrux CLI](https://developers.googleblog.com/gemini-3-flash-is-now-available-in-gemini-cli/).
+- 🎉 Citrux CLI Extensions:
   - Rill: Utilize natural language to analyze Rill data, enabling the
     exploration of metrics and trends without the need for manual queries.
     `gemini extensions install https://github.com/rilldata/rill-gemini-extension`
@@ -57,7 +57,7 @@ on GitHub.
 
 - 🎉 **New extensions:**
   - **Eleven Labs:** Create, play, manage your audio play tracks with the Eleven
-    Labs Gemini CLI extension:
+    Labs Citrux CLI extension:
     `gemini extensions install https://github.com/elevenlabs/elevenlabs-mcp`
 - **Zed integration:** Users can now leverage Gemini 3 within the Zed
   integration after enabling "Preview Features" in their CLI’s `/settings`.
@@ -76,7 +76,7 @@ on GitHub.
 ## Announcements: v0.18.0 - 2025-11-17
 
 - 🎉 **New extensions:**
-  - **Google Workspace**: Integrate Gemini CLI with your Workspace data. Write
+  - **Google Workspace**: Integrate Citrux CLI with your Workspace data. Write
     docs, build slides, chat with others or even get your calc on in sheets:
     `gemini extensions install https://github.com/gemini-cli-extensions/workspace`
     - Blog:
@@ -87,7 +87,7 @@ on GitHub.
     through commands and natural language:
     `gemini extensions install https://github.com/datagravity-ai/anomalo-gemini-extension`
 - **Experimental permission improvements:** We are now experimenting with a new
-  policy engine in Gemini CLI. This allows users and administrators to create
+  policy engine in Citrux CLI. This allows users and administrators to create
   fine-grained policy for tool calls. Currently behind a flag. See
   [policy engine documentation](../core/policy-engine.md) for more information.
   - Blog:
@@ -111,8 +111,8 @@ on GitHub.
 
 ## Announcements: v0.16.0 - 2025-11-10
 
-- **Gemini 3 + Gemini CLI:** launch 🚀🚀🚀
-- **Data Commons Gemini CLI Extension** - A new Data Commons Gemini CLI
+- **Gemini 3 + Citrux CLI:** launch 🚀🚀🚀
+- **Data Commons Citrux CLI Extension** - A new Data Commons Citrux CLI
   extension that lets you query open-source statistical data from
   datacommons.org. **To get started, you'll need a Data Commons API key and uv
   installed**. These and other details to get you started with the extension can
@@ -121,7 +121,7 @@ on GitHub.
 
 ## Announcements: v0.15.0 - 2025-11-03
 
-- **🎉 Seamless scrollable UI and mouse support:** We’ve given Gemini CLI a
+- **🎉 Seamless scrollable UI and mouse support:** We’ve given Citrux CLI a
   major facelift to make your terminal experience smoother and much more
   polished. You now get a flicker-free display with sticky headers that keep
   important context visible and a stable input prompt that doesn't jump around.
@@ -167,7 +167,7 @@ on GitHub.
 
 ## Announcements: v0.12.0 - 2025-10-27
 
-![Codebase investigator subagent in Gemini CLI.](https://i.imgur.com/4J1njsx.png)
+![Codebase investigator subagent in Citrux CLI.](https://i.imgur.com/4J1njsx.png)
 
 - **🎉 New partner extensions:**
   - **🤗 Hugging Face extension:** Access the Hugging Face hub.
@@ -191,7 +191,7 @@ on GitHub.
   ([pic](https://imgur.com/a/ABFcWWw),
   [pr](https://github.com/google-gemini/gemini-cli/pull/8940) by
   [@abhipatel12](https://github.com/abhipatel12)).
-- **Model routing:** Gemini CLI will now intelligently pick the best model for
+- **Model routing:** Citrux CLI will now intelligently pick the best model for
   the task. Simple queries will be sent to Flash while complex analytical or
   creative tasks will still use the power of Pro. This ensures your quota will
   last for a longer period of time. You can always opt-out of this via `/model`.
@@ -230,9 +230,9 @@ on GitHub.
 
 ## Announcements: v0.11.0 - 2025-10-20
 
-![Gemini CLI and Jules](https://storage.googleapis.com/gweb-developer-goog-blog-assets/images/Jules_Extension_-_Blog_Header_O346JNt.original.png)
+![Citrux CLI and Jules](https://storage.googleapis.com/gweb-developer-goog-blog-assets/images/Jules_Extension_-_Blog_Header_O346JNt.original.png)
 
-- 🎉 **Gemini CLI Jules Extension:** Use Gemini CLI to orchestrate Jules. Spawn
+- 🎉 **Citrux CLI Jules Extension:** Use Citrux CLI to orchestrate Jules. Spawn
   remote workers, delegate tedious tasks, or check in on running jobs!
   - Install:
     `gemini extensions install https://github.com/gemini-cli-extensions/jules`
@@ -262,8 +262,8 @@ on GitHub.
   ([pr](https://github.com/google-gemini/gemini-cli/pull/10194) by
   [@capachino](https://github.com/capachino))
 - **Removal of deprecated flags:** We’ve finally removed a number of deprecated
-  flags to cleanup Gemini CLI’s invocation profile:
-  - `--all-files` / `-a` in favor of `@` from within Gemini CLI.
+  flags to cleanup Citrux CLI’s invocation profile:
+  - `--all-files` / `-a` in favor of `@` from within Citrux CLI.
     ([pr](https://github.com/google-gemini/gemini-cli/pull/11228) by
     [@allenhutchison](https://github.com/allenhutchison))
   - `--telemetry-*` flags in favor of
@@ -275,7 +275,7 @@ on GitHub.
 
 - **Polish:** The team has been heads down bug fixing and investing heavily into
   polishing existing flows, tools, and interactions.
-- **Interactive Shell Tool calling:** Gemini CLI can now also execute
+- **Interactive Shell Tool calling:** Citrux CLI can now also execute
   interactive tools if needed
   ([pr](https://github.com/google-gemini/gemini-cli/pull/11225) by
   [@galz10](https://github.com/galz10)).
@@ -291,7 +291,7 @@ on GitHub.
 ## Announcements: v0.9.0 - 2025-10-06
 
 - 🎉 **Interactive Shell:** Run interactive commands like `vim`, `rebase -i`, or
-  even `gemini` 😎 directly in Gemini CLI:
+  even `gemini` 😎 directly in Citrux CLI:
   - Blog:
     [https://developers.googleblog.com/en/say-hello-to-a-new-level-of-interactivity-in-gemini-cli/](https://developers.googleblog.com/en/say-hello-to-a-new-level-of-interactivity-in-gemini-cli/)
 - **Install pre-release extensions:** Install the latest `--pre-release`
@@ -315,9 +315,9 @@ on GitHub.
 
 ## Announcements: v0.8.0 - 2025-09-29
 
-- 🎉 **Announcing Gemini CLI Extensions** 🎉
-  - Completely customize your Gemini CLI experience to fit your workflow.
-  - Build and share your own Gemini CLI extensions with the world.
+- 🎉 **Announcing Citrux CLI Extensions** 🎉
+  - Completely customize your Citrux CLI experience to fit your workflow.
+  - Build and share your own Citrux CLI extensions with the world.
   - Launching with a growing catalog of community, partner, and Google-built
     extensions.
     - Check extensions from
@@ -330,7 +330,7 @@ on GitHub.
     - `gemini extensions list|update|new`
   - Or use commands while running with `/extensions list|update`.
   - Everything you need to know:
-    [Now open for building: Introducing Gemini CLI extensions](https://blog.google/technology/developers/gemini-cli-extensions/).
+    [Now open for building: Introducing Citrux CLI extensions](https://blog.google/technology/developers/gemini-cli-extensions/).
 - 🎉 **Our New Home Page & Better Documentation** 🎉
   - Check out our new home page for better getting started material, reference
     documentation, extensions and more!
@@ -354,16 +354,16 @@ on GitHub.
 
 ## Announcements: v0.7.0 - 2025-09-22
 
-- 🎉**Build your own Gemini CLI IDE plugin:** We've published a spec for
+- 🎉**Build your own Citrux CLI IDE plugin:** We've published a spec for
   creating IDE plugins to enable rich context-aware experiences and native
   in-editor diffing in your IDE of choice.
   ([pr](https://github.com/google-gemini/gemini-cli/pull/8479) by
   [@skeshive](https://github.com/skeshive))
-- 🎉 **Gemini CLI extensions**
+- 🎉 **Citrux CLI extensions**
   - **Flutter:** An early version to help you create, build, test, and run
-    Flutter apps with Gemini CLI
+    Flutter apps with Citrux CLI
     ([extension](https://github.com/gemini-cli-extensions/flutter))
-  - **nanobanana:** Integrate nanobanana into Gemini CLI
+  - **nanobanana:** Integrate nanobanana into Citrux CLI
     ([extension](https://github.com/gemini-cli-extensions/nanobanana))
 - **Telemetry config via environment:** Manage telemetry settings using
   environment variables for a more flexible setup.
@@ -394,11 +394,11 @@ on GitHub.
 
 - 🎉 **Higher limits for Google AI Pro and Ultra subscribers:** We’re psyched to
   finally announce that Google AI Pro and AI Ultra subscribers now get access to
-  significantly higher 2.5 quota limits for Gemini CLI!
+  significantly higher 2.5 quota limits for Citrux CLI!
   - **Announcement:**
     [https://blog.google/technology/developers/gemini-cli-code-assist-higher-limits/](https://blog.google/technology/developers/gemini-cli-code-assist-higher-limits/)
-- 🎉**Gemini CLI Databases and BigQuery Extensions:** Connect Gemini CLI to all
-  of your cloud data with Gemini CLI.
+- 🎉**Citrux CLI Databases and BigQuery Extensions:** Connect Citrux CLI to all
+  of your cloud data with Citrux CLI.
   - Announcement and how to get started with each of the below extensions:
     [https://cloud.google.com/blog/products/databases/gemini-cli-extensions-for-google-data-cloud?e=48754805](https://cloud.google.com/blog/products/databases/gemini-cli-extensions-for-google-data-cloud?e=48754805)
   - **AlloyDB:** Interact, manage and observe AlloyDB for PostgreSQL databases
@@ -432,7 +432,7 @@ on GitHub.
   - **MCP Toolbox:** Configure and load custom tools for more than 30+ data
     sources
     ([extension](https://github.com/gemini-cli-extensions/mcp-toolbox#configuration))
-- **JSON output mode:** Have Gemini CLI output JSON with `--output-format json`
+- **JSON output mode:** Have Citrux CLI output JSON with `--output-format json`
   when invoked headlessly for easy parsing and post-processing. Includes
   response, stats and errors.
   ([pr](https://github.com/google-gemini/gemini-cli/pull/8119) by
@@ -473,13 +473,13 @@ on GitHub.
 
 ## Announcements: v0.5.0 - 2025-09-08
 
-- 🎉**FastMCP + Gemini CLI**🎉: Quickly install and manage your Gemini CLI MCP
+- 🎉**FastMCP + Citrux CLI**🎉: Quickly install and manage your Citrux CLI MCP
   servers with FastMCP ([video](https://imgur.com/a/m8QdCPh),
   [pr](https://github.com/jlowin/fastmcp/pull/1709) by
   [@jackwotherspoon](https://github.com/jackwotherspoon)**)**
   - Getting started:
     [https://gofastmcp.com/integrations/gemini-cli](https://gofastmcp.com/integrations/gemini-cli)
-- **Positional Prompt for Non-Interactive:** Seamlessly invoke Gemini CLI
+- **Positional Prompt for Non-Interactive:** Seamlessly invoke Citrux CLI
   headlessly via `gemini "Hello"`. Synonymous with passing `-p`.
   ([gif](https://imgur.com/a/hcBznpB),
   [pr](https://github.com/google-gemini/gemini-cli/pull/7668) by
@@ -488,7 +488,7 @@ on GitHub.
   and saving full output to a file by setting
   `"enableToolOutputTruncation": true `([pr](https://github.com/google-gemini/gemini-cli/pull/8039)
   by [@SandyTao520](https://github.com/SandyTao520))
-- **Edit Tool improvements:** Gemini CLI’s ability to edit files should now be
+- **Edit Tool improvements:** Citrux CLI’s ability to edit files should now be
   far more capable. ([pr](https://github.com/google-gemini/gemini-cli/pull/7679)
   by [@silviojr](https://github.com/silviojr))
 - **Custom witty messages:** The feature you’ve all been waiting for…
@@ -518,7 +518,7 @@ on GitHub.
 
 ## Announcements: v0.4.0 - 2025-09-01
 
-- 🎉**Gemini CLI CloudRun and Security Integrations**🎉: Automate app deployment
+- 🎉**Citrux CLI CloudRun and Security Integrations**🎉: Automate app deployment
   and security analysis with CloudRun and Security extension integrations. Once
   installed deploy your app to the cloud with `/deploy` and find and fix
   security vulnerabilities with `/security:analyze`.
@@ -531,7 +531,7 @@ on GitHub.
     [pr](https://github.com/google-gemini/gemini-cli/pull/6823) by
     [@silviojr](https://github.com/silviojr))
   - **Model talking to itself fix:** We’ve removed a model workaround that would
-    encourage Gemini CLI to continue conversations on your behalf. This may be
+    encourage Citrux CLI to continue conversations on your behalf. This may be
     disruptive and can be disabled via `"skipNextSpeakerCheck": false` in your
     `settings.json`
     ([feedback](https://github.com/google-gemini/gemini-cli/discussions/6666),
@@ -566,7 +566,7 @@ on GitHub.
   [pr](https://github.com/google-gemini/gemini-cli/pull/6716) by
   [@abhipatel12](https://github.com/abhipatel12))
 - **2.5 Flash Lite support:** You can now use the `gemini-2.5-flash-lite` model
-  for Gemini CLI via `gemini -m …`.
+  for Citrux CLI via `gemini -m …`.
   ([gif](https://miro.medium.com/v2/resize:fit:2000/format:webp/1*P4SKwnrsyBuULoHrFqsFKQ.gif),
   [pr](https://github.com/google-gemini/gemini-cli/pull/4652) by
   [@psinha40898](https://github.com/psinha40898))

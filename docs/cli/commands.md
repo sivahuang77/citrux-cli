@@ -1,354 +1,85 @@
-# CLI commands
+# ⌨️ CLI 指令完整參考
 
-Gemini CLI supports several built-in commands to help you manage your session,
-customize the interface, and control its behavior. These commands are prefixed
-with a forward slash (`/`), an at symbol (`@`), or an exclamation mark (`!`).
+Citrux
+CLI 的所有功能都透過斜槓指令 (`/`) 驅動。本頁面將詳細介紹每個指令的參數、行為與應用場景。
 
-## Slash commands (`/`)
+## 系統管理
 
-Slash commands provide meta-level control over the CLI itself.
+### `/model`
 
-### Built-in Commands
+**功能**：開啟多模型管理視窗。
 
-- **`/bug`**
-  - **Description:** File an issue about Gemini CLI. By default, the issue is
-    filed within the GitHub repository for Gemini CLI. The string you enter
-    after `/bug` will become the headline for the bug being filed. The default
-    `/bug` behavior can be modified using the `advanced.bugCommand` setting in
-    your `.gemini/settings.json` files.
+- **交互介面**：視覺化切換供應商（OpenAI, DeepSeek, Google, Ollama）。
+- **金鑰管理**：即時更新與驗證各供應商的 API 金鑰與 Base URL。
 
-- **`/chat`**
-  - **Description:** Save and resume conversation history for branching
-    conversation state interactively, or resuming a previous state from a later
-    session.
-  - **Sub-commands:**
-    - **`save`**
-      - **Description:** Saves the current conversation history. You must add a
-        `<tag>` for identifying the conversation state.
-      - **Usage:** `/chat save <tag>`
-      - **Details on checkpoint location:** The default locations for saved chat
-        checkpoints are:
-        - Linux/macOS: `~/.gemini/tmp/<project_hash>/`
-        - Windows: `C:\Users\<YourUsername>\.gemini\tmp\<project_hash>\`
-        - **Behavior:** Chats are saved into a project-specific directory,
-          determined by where you run the CLI. Consequently, saved chats are
-          only accessible when working within that same project.
-        - **Note:** These checkpoints are for manually saving and resuming
-          conversation states. For automatic checkpoints created before file
-          modifications, see the
-          [Checkpointing documentation](../cli/checkpointing.md).
-    - **`resume`**
-      - **Description:** Resumes a conversation from a previous save.
-      - **Usage:** `/chat resume <tag>`
-      - **Note:** You can only resume chats that were saved within the current
-        project. To resume a chat from a different project, you must run the
-        Gemini CLI from that project's directory.
-    - **`list`**
-      - **Description:** Lists available tags for chat state resumption.
-      - **Note:** This command only lists chats saved within the current
-        project. Because chat history is project-scoped, chats saved in other
-        project directories will not be displayed.
-    - **`delete`**
-      - **Description:** Deletes a saved conversation checkpoint.
-      - **Usage:** `/chat delete <tag>`
-    - **`share`**
-      - **Description** Writes the current conversation to a provided Markdown
-        or JSON file.
-      - **Usage** `/chat share file.md` or `/chat share file.json`. If no
-        filename is provided, then the CLI will generate one.
+### `/settings`
 
-- **`/clear`**
-  - **Description:** Clear the terminal screen, including the visible session
-    history and scrollback within the CLI. The underlying session data (for
-    history recall) might be preserved depending on the exact implementation,
-    but the visual display is cleared.
-  - **Keyboard shortcut:** Press **Ctrl+L** at any time to perform a clear
-    action.
+**功能**：配置 Citrux 的運行行為。
 
-- **`/compress`**
-  - **Description:** Replace the entire chat context with a summary. This saves
-    on tokens used for future tasks while retaining a high level summary of what
-    has happened.
+- **UI 設定**：主題切換、字體大小、語音模式。
+- **安全性**：調整自動執行 shell 指令的信任等級。
 
-- **`/copy`**
-  - **Description:** Copies the last output produced by Gemini CLI to your
-    clipboard, for easy sharing or reuse.
-  - **Note:** This command requires platform-specific clipboard tools to be
-    installed.
-    - On Linux, it requires `xclip` or `xsel`. You can typically install them
-      using your system's package manager.
-    - On macOS, it requires `pbcopy`, and on Windows, it requires `clip`. These
-      tools are typically pre-installed on their respective systems.
+### `/help [command]`
 
-- **`/directory`** (or **`/dir`**)
-  - **Description:** Manage workspace directories for multi-directory support.
-  - **Sub-commands:**
-    - **`add`**:
-      - **Description:** Add a directory to the workspace. The path can be
-        absolute or relative to the current working directory. Moreover, the
-        reference from home directory is supported as well.
-      - **Usage:** `/directory add <path1>,<path2>`
-      - **Note:** Disabled in restrictive sandbox profiles. If you're using
-        that, use `--include-directories` when starting the session instead.
-    - **`show`**:
-      - **Description:** Display all directories added by `/directory add` and
-        `--include-directories`.
-      - **Usage:** `/directory show`
+**功能**：顯示系統說明。
 
-- **`/editor`**
-  - **Description:** Open a dialog for selecting supported editors.
+- 如果不帶參數，顯示所有可用指令列表。
+- 帶參數時（如 `/help memory`），顯示該指令的進階用法與子指令。
 
-- **`/extensions`**
-  - **Description:** Lists all active extensions in the current Gemini CLI
-    session. See [Gemini CLI Extensions](../extensions/index.md).
+---
 
-- **`/help`** (or **`/?`**)
-  - **Description:** Display help information about Gemini CLI, including
-    available commands and their usage.
+## 記憶與上下文
 
-- **`/mcp`**
-  - **Description:** Manage configured Model Context Protocol (MCP) servers.
-  - **Sub-commands:**
-    - **`list`** or **`ls`**:
-      - **Description:** List configured MCP servers and tools. This is the
-        default action if no subcommand is specified.
-    - **`desc`**
-      - **Description:** List configured MCP servers and tools with
-        descriptions.
-    - **`schema`**:
-      - **Description:** List configured MCP servers and tools with descriptions
-        and schemas.
-    - **`auth`**:
-      - **Description:** Authenticate with an OAuth-enabled MCP server.
-      - **Usage:** `/mcp auth <server-name>`
-      - **Details:** If `<server-name>` is provided, it initiates the OAuth flow
-        for that server. If no server name is provided, it lists all configured
-        servers that support OAuth authentication.
-    - **`refresh`**:
-      - **Description:** Restarts all MCP servers and re-discovers their
-        available tools.
+### `/memory manage`
 
-- [**`/model`**](./model.md)
-  - **Description:** Opens a dialog to choose your Gemini model.
+**核心功能**：這是 Citrux 的特色功能，用於視覺化管理工作區中的 `CITRUX.md`
+檔案。
 
-- **`/memory`**
-  - **Description:** Manage the AI's instructional context (hierarchical memory
-    loaded from `GEMINI.md` files).
-  - **Sub-commands:**
-    - **`add`**:
-      - **Description:** Adds the following text to the AI's memory. Usage:
-        `/memory add <text to remember>`
-    - **`show`**:
-      - **Description:** Display the full, concatenated content of the current
-        hierarchical memory that has been loaded from all `GEMINI.md` files.
-        This lets you inspect the instructional context being provided to the
-        Gemini model.
-    - **`refresh`**:
-      - **Description:** Reload the hierarchical instructional memory from all
-        `GEMINI.md` files found in the configured locations (global,
-        project/ancestors, and sub-directories). This command updates the model
-        with the latest `GEMINI.md` content.
-    - **`list`**:
-      - **Description:** Lists the paths of the GEMINI.md files in use for
-        hierarchical memory.
-    - **Note:** For more details on how `GEMINI.md` files contribute to
-      hierarchical memory, see the
-      [CLI Configuration documentation](../get-started/configuration.md).
+- **操作**：使用 `Up/Down` 導航，`Space` 切換勾選狀態，`Enter` 儲存。
+- **作用**：當您在大型 Monorepo 中只想讓 AI 專注於某個子模組時，非常有用。
 
-- **`/restore`**
-  - **Description:** Restores the project files to the state they were in just
-    before a tool was executed. This is particularly useful for undoing file
-    edits made by a tool. If run without a tool call ID, it will list available
-    checkpoints to restore from.
-  - **Usage:** `/restore [tool_call_id]`
-  - **Note:** Only available if checkpointing is configured via
-    [settings](../get-started/configuration.md). See
-    [Checkpointing documentation](../cli/checkpointing.md) for more details.
-- **`/resume`**
-  - **Description:** Browse and resume previous conversation sessions. Opens an
-    interactive session browser where you can search, filter, and select from
-    automatically saved conversations.
-  - **Features:**
-    - **Session Browser:** Interactive interface showing all saved sessions with
-      timestamps, message counts, and first user message for context
-    - **Search:** Use `/` to search through conversation content across all
-      sessions
-    - **Sorting:** Sort sessions by date or message count
-    - **Management:** Delete unwanted sessions directly from the browser
-    - **Resume:** Select any session to resume and continue the conversation
-  - **Note:** All conversations are automatically saved as you chat - no manual
-    saving required. See [Session Management](../cli/session-management.md) for
-    complete details.
+### `/memory refresh`
 
-- [**`/settings`**](./settings.md)
-  - **Description:** Open the settings editor to view and modify Gemini CLI
-    settings.
-  - **Details:** This command provides a user-friendly interface for changing
-    settings that control the behavior and appearance of Gemini CLI. It is
-    equivalent to manually editing the `.gemini/settings.json` file, but with
-    validation and guidance to prevent errors. See the
-    [settings documentation](./settings.md) for a full list of available
-    settings.
-  - **Usage:** Simply run `/settings` and the editor will open. You can then
-    browse or search for specific settings, view their current values, and
-    modify them as desired. Changes to some settings are applied immediately,
-    while others require a restart.
+**功能**：強制 Citrux 重新掃描當前工作目錄及其父目錄的所有上下文檔案。
 
-- **`/stats`**
-  - **Description:** Display detailed statistics for the current Gemini CLI
-    session, including token usage, cached token savings (when available), and
-    session duration. Note: Cached token information is only displayed when
-    cached tokens are being used, which occurs with API key authentication but
-    not with OAuth authentication at this time.
+- **場景**：當您剛剛新增或大幅修改了專案中的 `CITRUX.md` 時使用。
 
-- [**`/theme`**](./themes.md)
-  - **Description:** Open a dialog that lets you change the visual theme of
-    Gemini CLI.
+### `/memory list`
 
-- **`/auth`**
-  - **Description:** Open a dialog that lets you change the authentication
-    method.
+**功能**：以純文字形式列出目前被載入 AI 記憶的所有檔案完整路徑。
 
-- **`/about`**
-  - **Description:** Show version info. Please share this information when
-    filing issues.
+---
 
-- [**`/tools`**](../tools/index.md)
-  - **Description:** Display a list of tools that are currently available within
-    Gemini CLI.
-  - **Usage:** `/tools [desc]`
-  - **Sub-commands:**
-    - **`desc`** or **`descriptions`**:
-      - **Description:** Show detailed descriptions of each tool, including each
-        tool's name with its full description as provided to the model.
-    - **`nodesc`** or **`nodescriptions`**:
-      - **Description:** Hide tool descriptions, showing only the tool names.
+## 對話控制
 
-- **`/privacy`**
-  - **Description:** Display the Privacy Notice and allow users to select
-    whether they consent to the collection of their data for service improvement
-    purposes.
+### `/chat reset`
 
-- **`/quit`** (or **`/exit`**)
-  - **Description:** Exit Gemini CLI.
+**功能**：清空目前的對話緩衝區。
 
-- **`/vim`**
-  - **Description:** Toggle vim mode on or off. When vim mode is enabled, the
-    input area supports vim-style navigation and editing commands in both NORMAL
-    and INSERT modes.
-  - **Features:**
-    - **NORMAL mode:** Navigate with `h`, `j`, `k`, `l`; jump by words with `w`,
-      `b`, `e`; go to line start/end with `0`, `$`, `^`; go to specific lines
-      with `G` (or `gg` for first line)
-    - **INSERT mode:** Standard text input with escape to return to NORMAL mode
-    - **Editing commands:** Delete with `x`, change with `c`, insert with `i`,
-      `a`, `o`, `O`; complex operations like `dd`, `cc`, `dw`, `cw`
-    - **Count support:** Prefix commands with numbers (e.g., `3h`, `5w`, `10G`)
-    - **Repeat last command:** Use `.` to repeat the last editing operation
-    - **Persistent setting:** Vim mode preference is saved to
-      `~/.gemini/settings.json` and restored between sessions
-  - **Status indicator:** When enabled, shows `[NORMAL]` or `[INSERT]` in the
-    footer
+- **注意**：這不會刪除已儲存的 Session，但會讓 AI 忘記剛才對話的細節，適用於切換任務。
 
-- **`/init`**
-  - **Description:** To help users easily create a `GEMINI.md` file, this
-    command analyzes the current directory and generates a tailored context
-    file, making it simpler for them to provide project-specific instructions to
-    the Gemini agent.
+### `/chat save [tag]`
 
-### Custom commands
+**功能**：將當前的對話流持久化儲存。
 
-Custom commands allow you to create personalized shortcuts for your most-used
-prompts. For detailed instructions on how to create, manage, and use them,
-please see the dedicated [Custom Commands documentation](./custom-commands.md).
+- 如果提供 `tag`，則以該標籤命名；否則將自動生成時間戳記。
 
-## Input prompt shortcuts
+---
 
-These shortcuts apply directly to the input prompt for text manipulation.
+## 診斷與監控
 
-- **Undo:**
-  - **Keyboard shortcut:** Press **Ctrl+z** to undo the last action in the input
-    prompt.
+### `/tools`
 
-- **Redo:**
-  - **Keyboard shortcut:** Press **Ctrl+Shift+Z** to redo the last undone action
-    in the input prompt.
+**功能**：列出目前 AI 獲權調用的所有原子工具。
 
-## At commands (`@`)
+- **詳情**：顯示各工具的環境變數需求、權限級別與目前狀態。
 
-At commands are used to include the content of files or directories as part of
-your prompt to Gemini. These commands include git-aware filtering.
+### `/stats`
 
-- **`@<path_to_file_or_directory>`**
-  - **Description:** Inject the content of the specified file or files into your
-    current prompt. This is useful for asking questions about specific code,
-    text, or collections of files.
-  - **Examples:**
-    - `@path/to/your/file.txt Explain this text.`
-    - `@src/my_project/ Summarize the code in this directory.`
-    - `What is this file about? @README.md`
-  - **Details:**
-    - If a path to a single file is provided, the content of that file is read.
-    - If a path to a directory is provided, the command attempts to read the
-      content of files within that directory and any subdirectories.
-    - Spaces in paths should be escaped with a backslash (e.g.,
-      `@My\ Documents/file.txt`).
-    - The command uses the `read_many_files` tool internally. The content is
-      fetched and then inserted into your query before being sent to the Gemini
-      model.
-    - **Git-aware filtering:** By default, git-ignored files (like
-      `node_modules/`, `dist/`, `.env`, `.git/`) are excluded. This behavior can
-      be changed via the `context.fileFiltering` settings.
-    - **File types:** The command is intended for text-based files. While it
-      might attempt to read any file, binary files or very large files might be
-      skipped or truncated by the underlying `read_many_files` tool to ensure
-      performance and relevance. The tool indicates if files were skipped.
-  - **Output:** The CLI will show a tool call message indicating that
-    `read_many_files` was used, along with a message detailing the status and
-    the path(s) that were processed.
+**功能**：顯示當前 Session 的 Token 統計。
 
-- **`@` (Lone at symbol)**
-  - **Description:** If you type a lone `@` symbol without a path, the query is
-    passed as-is to the Gemini model. This might be useful if you are
-    specifically talking _about_ the `@` symbol in your prompt.
+- **內容**：包括輸入、輸出 Token 數，以及基於所選模型的預估費用。
 
-### Error handling for `@` commands
+---
 
-- If the path specified after `@` is not found or is invalid, an error message
-  will be displayed, and the query might not be sent to the Gemini model, or it
-  will be sent without the file content.
-- If the `read_many_files` tool encounters an error (e.g., permission issues),
-  this will also be reported.
-
-## Shell mode and passthrough commands (`!`)
-
-The `!` prefix lets you interact with your system's shell directly from within
-Gemini CLI.
-
-- **`!<shell_command>`**
-  - **Description:** Execute the given `<shell_command>` using `bash` on
-    Linux/macOS or `powershell.exe -NoProfile -Command` on Windows (unless you
-    override `ComSpec`). Any output or errors from the command are displayed in
-    the terminal.
-  - **Examples:**
-    - `!ls -la` (executes `ls -la` and returns to Gemini CLI)
-    - `!git status` (executes `git status` and returns to Gemini CLI)
-
-- **`!` (Toggle shell mode)**
-  - **Description:** Typing `!` on its own toggles shell mode.
-    - **Entering shell mode:**
-      - When active, shell mode uses a different coloring and a "Shell Mode
-        Indicator".
-      - While in shell mode, text you type is interpreted directly as a shell
-        command.
-    - **Exiting shell mode:**
-      - When exited, the UI reverts to its standard appearance and normal Gemini
-        CLI behavior resumes.
-
-- **Caution for all `!` usage:** Commands you execute in shell mode have the
-  same permissions and impact as if you ran them directly in your terminal.
-
-- **Environment variable:** When a command is executed via `!` or in shell mode,
-  the `GEMINI_CLI=1` environment variable is set in the subprocess's
-  environment. This allows scripts or tools to detect if they are being run from
-  within the Gemini CLI.
+_下一步：[深入了解核心引擎原理](../core/context-engine.md)_

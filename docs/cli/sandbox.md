@@ -1,11 +1,11 @@
-# Sandboxing in the Gemini CLI
+# Sandboxing in the Citrux CLI
 
-This document provides a guide to sandboxing in the Gemini CLI, including
+This document provides a guide to sandboxing in the Citrux CLI, including
 prerequisites, quickstart, and configuration.
 
 ## Prerequisites
 
-Before using sandboxing, you need to install and set up the Gemini CLI:
+Before using sandboxing, you need to install and set up the Citrux CLI:
 
 ```bash
 npm install -g @google/gemini-cli
@@ -144,7 +144,7 @@ DEBUG=1 gemini -s -p "debug command"
 ```
 
 **Note:** If you have `DEBUG=true` in a project's `.env` file, it won't affect
-gemini-cli due to automatic exclusion. Use `.gemini/.env` files for gemini-cli
+gemini-cli due to automatic exclusion. Use `.citrux/.env` files for gemini-cli
 specific debug settings.
 
 ### Inspect sandbox

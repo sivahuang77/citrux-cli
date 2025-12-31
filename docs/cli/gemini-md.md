@@ -16,7 +16,7 @@ sends them to the model with every prompt. The CLI loads files in the following
 order:
 
 1.  **Global context file:**
-    - **Location:** `~/.gemini/GEMINI.md` (in your user home directory).
+    - **Location:** `~/.citrux/GEMINI.md` (in your user home directory).
     - **Scope:** Provides default instructions for all your projects.
 
 2.  **Project root and ancestor context files:**
@@ -28,7 +28,7 @@ order:
 3.  **Sub-directory context files:**
     - **Location:** The CLI also scans for `GEMINI.md` files in subdirectories
       below your current working directory. It respects rules in `.gitignore`
-      and `.geminiignore`.
+      and `.citruxignore`.
     - **Scope:** Lets you write highly specific instructions for a particular
       component or module.
 
@@ -66,7 +66,7 @@ You can interact with the loaded context files by using the `/memory` command.
 - **`/memory refresh`**: Forces a re-scan and reload of all `GEMINI.md` files
   from all configured locations.
 - **`/memory add <text>`**: Appends your text to your global
-  `~/.gemini/GEMINI.md` file. This lets you add persistent memories on the fly.
+  `~/.citrux/GEMINI.md` file. This lets you add persistent memories on the fly.
 
 ## Modularize context with imports
 

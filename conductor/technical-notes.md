@@ -1,34 +1,50 @@
 # Citrux CLI - Technical Notes & Architecture
 
 ## 1. Project Overview
-**Citrux CLI** is a custom AI Developer Assistant, retrofitted from `google-gemini/gemini-cli`. It features a unique Citrux brand identity and a multi-provider LLM architecture.
+
+**Citrux CLI** is a custom AI Developer Assistant, retrofitted from
+`google-gemini/gemini-cli`. It features a unique Citrux brand identity and a
+multi-provider LLM architecture.
 
 ## 2. Branded Configuration
+
 - **Version**: 0.1.0
-- **Storage Directory**: `~/.citrux/` (Isolated from `~/.gemini/`)
+- **Storage Directory**: `~/.citrux/` (Isolated from `~/.citrux/`)
 - **Context File**: `CITRUX.md`
 - **Ignore File**: `.citruxignore`
 - **Branded Colors**: Orange Gradient (#FFB347, #FF8C00, #FF4500)
 
-- **OpenAI Compatible**: Custom adapter (`OpenAIContentGenerator`) for OpenAI, DeepSeek, Groq, and Ollama. Supports real SSE streaming with tool call accumulation.
+- **OpenAI Compatible**: Custom adapter (`OpenAIContentGenerator`) for OpenAI,
+  DeepSeek, Groq, and Ollama. Supports real SSE streaming with tool call
+  accumulation.
 
 ## 4. Multi-Provider Architecture
+
 The system uses a translation layer to support multiple LLM backends:
+
 - **Google Gemini**: Default provider via Google AI SDK.
-- **OpenAI Compatible**: 
-    - **Streaming**: Uses `node:readline` to parse SSE chunks (`data: {...}`).
-    - **Tool Calls**: Accumulates partial JSON arguments from the stream and yields complete `functionCall` objects only when finished or when `finish_reason` is signaled.
-- **Dynamic Switching**: Managed via `/model` command or `CITRUX_PROVIDER` env var.
+- **OpenAI Compatible**:
+  - **Streaming**: Uses `node:readline` to parse SSE chunks (`data: {...}`).
+  - **Tool Calls**: Accumulates partial JSON arguments from the stream and
+    yields complete `functionCall` objects only when finished or when
+    `finish_reason` is signaled.
+- **Dynamic Switching**: Managed via `/model` command or `CITRUX_PROVIDER` env
+  var.
 
 ## 4. Environment Variables (Isolated)
+
 - `CITRUX_API_KEY`: Primary API key for the active provider.
 - `CITRUX_MODEL`: Preferred model name.
-- `OPENAI_API_BASE`: Custom URL for OpenAI-compatible proxies (e.g., DeepSeek, Ollama).
+- `OPENAI_API_BASE`: Custom URL for OpenAI-compatible proxies (e.g., DeepSeek,
+  Ollama).
 
 ## 6. Future Development Roadmap & Suggestions
-- **VS Code Branding**: Retrofit `vscode-ide-companion` to "Citrux Companion" with matching orange themes.
-- **Context Manager**: Implement an interactive tool to manage `CITRUX.md` file inclusions visually.
-- **Citrux Cloud Integration**: Built-in deployment tools for user servers (cloudGarage/citrux.ai).
+
+- **VS Code Branding**: Retrofit `vscode-ide-companion` to "Citrux Companion"
+  with matching orange themes.
+- **Context Manager**: Implement an interactive tool to manage `CITRUX.md` file
+  inclusions visually.
+- **Citrux Cloud Integration**: Built-in deployment tools for user servers
+  (cloudGarage/citrux.ai).
 - **Auto-updater**: Implement automatic version checking via GitHub API.
 - **Enhanced Telemetry**: Precise token usage tracking for non-Google providers.
-

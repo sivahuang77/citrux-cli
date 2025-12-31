@@ -1,15 +1,15 @@
-# Gemini CLI Architecture Overview
+# Citrux CLI Architecture Overview
 
-This document provides a high-level overview of the Gemini CLI's architecture.
+This document provides a high-level overview of the Citrux CLI's architecture.
 
 ## Core components
 
-The Gemini CLI is primarily composed of two main packages, along with a suite of
+The Citrux CLI is primarily composed of two main packages, along with a suite of
 tools that can be used by the system in the course of handling command-line
 input:
 
 1.  **CLI package (`packages/cli`):**
-    - **Purpose:** This contains the user-facing portion of the Gemini CLI, such
+    - **Purpose:** This contains the user-facing portion of the Citrux CLI, such
       as handling the initial user input, presenting the final output, and
       managing the overall user experience.
     - **Key functions contained in the package:**
@@ -20,7 +20,7 @@ input:
       - [CLI configuration settings](/docs/get-started/configuration.md)
 
 2.  **Core package (`packages/core`):**
-    - **Purpose:** This acts as the backend for the Gemini CLI. It receives
+    - **Purpose:** This acts as the backend for the Citrux CLI. It receives
       requests sent from `packages/cli`, orchestrates interactions with the
       Gemini API, and manages the execution of available tools.
     - **Key functions contained in the package:**
@@ -39,7 +39,7 @@ input:
 
 ## Interaction flow
 
-A typical interaction with the Gemini CLI follows this flow:
+A typical interaction with the Citrux CLI follows this flow:
 
 1.  **User input:** The user types a prompt or command into the terminal, which
     is managed by `packages/cli`.

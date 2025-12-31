@@ -67,15 +67,18 @@ export class Storage {
   }
 
   static getSystemSettingsPath(): string {
+    if (process.env['CITRUX_CLI_SYSTEM_SETTINGS_PATH']) {
+      return process.env['CITRUX_CLI_SYSTEM_SETTINGS_PATH'];
+    }
     if (process.env['GEMINI_CLI_SYSTEM_SETTINGS_PATH']) {
       return process.env['GEMINI_CLI_SYSTEM_SETTINGS_PATH'];
     }
     if (os.platform() === 'darwin') {
-      return '/Library/Application Support/GeminiCli/settings.json';
+      return '/Library/Application Support/CitruxCli/settings.json';
     } else if (os.platform() === 'win32') {
-      return 'C:\\ProgramData\\gemini-cli\\settings.json';
+      return 'C:\\ProgramData\\citrux-cli\\settings.json';
     } else {
-      return '/etc/gemini-cli/settings.json';
+      return '/etc/citrux-cli/settings.json';
     }
   }
 

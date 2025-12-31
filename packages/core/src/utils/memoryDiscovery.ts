@@ -482,6 +482,7 @@ export async function loadServerHierarchicalMemory(
   importFormat: 'flat' | 'tree' = 'tree',
   fileFilteringOptions?: FileFilteringOptions,
   maxDirs: number = 200,
+  disabledContextFiles: string[] = [],
 ): Promise<LoadServerHierarchicalMemoryResponse> {
   // FIX: Use real, canonical paths for a reliable comparison to handle symlinks.
   const realCwd = await fs.realpath(path.resolve(currentWorkingDirectory));
@@ -500,7 +501,7 @@ export async function loadServerHierarchicalMemory(
   // For the server, homedir() refers to the server process's home.
   // This is consistent with how MemoryTool already finds the global path.
   const userHomePath = homedir();
-  const filePaths = await getGeminiMdFilePathsInternal(
+  let filePaths = await getGeminiMdFilePathsInternal(
     currentWorkingDirectory,
     includeDirectoriesToReadGemini,
     userHomePath,
@@ -518,6 +519,14 @@ export async function loadServerHierarchicalMemory(
       .filter((ext) => ext.isActive)
       .flatMap((ext) => ext.contextFiles),
   );
+
+  // Filter out disabled files
+  if (disabledContextFiles.length > 0) {
+    const disabledSet = new Set(
+      disabledContextFiles.map((p) => path.resolve(p)),
+    );
+    filePaths = filePaths.filter((p) => !disabledSet.has(path.resolve(p)));
+  }
 
   if (filePaths.length === 0) {
     if (debugMode)
@@ -568,6 +577,7 @@ export async function refreshServerHierarchicalMemory(config: Config) {
     config.getImportFormat(),
     config.getFileFilteringOptions(),
     config.getDiscoveryMaxDirs(),
+    config.getDisabledContextFiles(),
   );
   const mcpInstructions =
     config.getMcpClientManager()?.getMcpInstructions() || '';

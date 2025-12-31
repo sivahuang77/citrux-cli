@@ -1,6 +1,6 @@
-# Writing hooks for Gemini CLI
+# Writing hooks for Citrux CLI
 
-This guide will walk you through creating hooks for Gemini CLI, from a simple
+This guide will walk you through creating hooks for Citrux CLI, from a simple
 logging hook to a comprehensive workflow assistant that demonstrates all hook
 events working together.
 
@@ -8,7 +8,7 @@ events working together.
 
 Before you start, make sure you have:
 
-- Gemini CLI installed and configured
+- Citrux CLI installed and configured
 - Basic understanding of shell scripting or JavaScript/Node.js
 - Familiarity with JSON for hook input/output
 
@@ -22,8 +22,8 @@ basics.
 Create a directory for hooks and a simple logging script:
 
 ```bash
-mkdir -p .gemini/hooks
-cat > .gemini/hooks/log-tools.sh << 'EOF'
+mkdir -p .citrux/hooks
+cat > .citrux/hooks/log-tools.sh << 'EOF'
 #!/usr/bin/env bash
 # Read hook input from stdin
 input=$(cat)
@@ -32,18 +32,18 @@ input=$(cat)
 tool_name=$(echo "$input" | jq -r '.tool_name')
 
 # Log to file
-echo "[$(date)] Tool executed: $tool_name" >> .gemini/tool-log.txt
+echo "[$(date)] Tool executed: $tool_name" >> .citrux/tool-log.txt
 
 # Return success (exit 0) - output goes to user in transcript mode
 echo "Logged: $tool_name"
 EOF
 
-chmod +x .gemini/hooks/log-tools.sh
+chmod +x .citrux/hooks/log-tools.sh
 ```
 
 ### Step 2: Configure the hook
 
-Add the hook configuration to `.gemini/settings.json`:
+Add the hook configuration to `.citrux/settings.json`:
 
 ```json
 {
@@ -55,7 +55,7 @@ Add the hook configuration to `.gemini/settings.json`:
           {
             "name": "tool-logger",
             "type": "command",
-            "command": "$GEMINI_PROJECT_DIR/.gemini/hooks/log-tools.sh",
+            "command": "$GEMINI_PROJECT_DIR/.citrux/hooks/log-tools.sh",
             "description": "Log all tool executions"
           }
         ]
@@ -67,7 +67,7 @@ Add the hook configuration to `.gemini/settings.json`:
 
 ### Step 3: Test your hook
 
-Run Gemini CLI and execute any command that uses tools:
+Run Citrux CLI and execute any command that uses tools:
 
 ```
 > Read the README.md file
@@ -77,7 +77,7 @@ Run Gemini CLI and execute any command that uses tools:
 Logged: read_file
 ```
 
-Check `.gemini/tool-log.txt` to see the logged tool executions.
+Check `.citrux/tool-log.txt` to see the logged tool executions.
 
 ## Practical examples
 
@@ -85,7 +85,7 @@ Check `.gemini/tool-log.txt` to see the logged tool executions.
 
 Prevent committing files containing API keys or passwords.
 
-**`.gemini/hooks/block-secrets.sh`:**
+**`.citrux/hooks/block-secrets.sh`:**
 
 ```bash
 #!/usr/bin/env bash
@@ -103,7 +103,7 @@ fi
 exit 0
 ```
 
-**`.gemini/settings.json`:**
+**`.citrux/settings.json`:**
 
 ```json
 {
@@ -115,7 +115,7 @@ exit 0
           {
             "name": "secret-scanner",
             "type": "command",
-            "command": "$GEMINI_PROJECT_DIR/.gemini/hooks/block-secrets.sh",
+            "command": "$GEMINI_PROJECT_DIR/.citrux/hooks/block-secrets.sh",
             "description": "Prevent committing secrets"
           }
         ]
@@ -129,7 +129,7 @@ exit 0
 
 Automatically run tests when code files are modified.
 
-**`.gemini/hooks/auto-test.sh`:**
+**`.citrux/hooks/auto-test.sh`:**
 
 ```bash
 #!/usr/bin/env bash
@@ -160,7 +160,7 @@ fi
 exit 0
 ```
 
-**`.gemini/settings.json`:**
+**`.citrux/settings.json`:**
 
 ```json
 {
@@ -172,7 +172,7 @@ exit 0
           {
             "name": "auto-test",
             "type": "command",
-            "command": "$GEMINI_PROJECT_DIR/.gemini/hooks/auto-test.sh",
+            "command": "$GEMINI_PROJECT_DIR/.citrux/hooks/auto-test.sh",
             "description": "Run tests after code changes"
           }
         ]
@@ -186,7 +186,7 @@ exit 0
 
 Add relevant project context before each agent interaction.
 
-**`.gemini/hooks/inject-context.sh`:**
+**`.citrux/hooks/inject-context.sh`:**
 
 ```bash
 #!/usr/bin/env bash
@@ -205,7 +205,7 @@ cat <<EOF
 EOF
 ```
 
-**`.gemini/settings.json`:**
+**`.citrux/settings.json`:**
 
 ```json
 {
@@ -217,7 +217,7 @@ EOF
           {
             "name": "git-context",
             "type": "command",
-            "command": "$GEMINI_PROJECT_DIR/.gemini/hooks/inject-context.sh",
+            "command": "$GEMINI_PROJECT_DIR/.citrux/hooks/inject-context.sh",
             "description": "Inject git commit history"
           }
         ]
@@ -315,25 +315,25 @@ SessionEnd → Extract and store memories
 **Prerequisites:**
 
 - Node.js 18+
-- Gemini CLI installed
+- Citrux CLI installed
 
 **Setup:**
 
 ```bash
 # Create hooks directory
-mkdir -p .gemini/hooks .gemini/memory
+mkdir -p .citrux/hooks .citrux/memory
 
 # Install dependencies
 npm install --save-dev chromadb @google/generative-ai
 
 # Copy hook scripts (shown below)
 # Make them executable
-chmod +x .gemini/hooks/*.js
+chmod +x .citrux/hooks/*.js
 ```
 
 ### Configuration
 
-**`.gemini/settings.json`:**
+**`.citrux/settings.json`:**
 
 ```json
 {
@@ -345,7 +345,7 @@ chmod +x .gemini/hooks/*.js
           {
             "name": "init-assistant",
             "type": "command",
-            "command": "node $GEMINI_PROJECT_DIR/.gemini/hooks/init.js",
+            "command": "node $GEMINI_PROJECT_DIR/.citrux/hooks/init.js",
             "description": "Initialize Smart Workflow Assistant"
           }
         ]
@@ -358,7 +358,7 @@ chmod +x .gemini/hooks/*.js
           {
             "name": "inject-memories",
             "type": "command",
-            "command": "node $GEMINI_PROJECT_DIR/.gemini/hooks/inject-memories.js",
+            "command": "node $GEMINI_PROJECT_DIR/.citrux/hooks/inject-memories.js",
             "description": "Inject relevant project memories"
           }
         ]
@@ -371,7 +371,7 @@ chmod +x .gemini/hooks/*.js
           {
             "name": "rag-filter",
             "type": "command",
-            "command": "node $GEMINI_PROJECT_DIR/.gemini/hooks/rag-filter.js",
+            "command": "node $GEMINI_PROJECT_DIR/.citrux/hooks/rag-filter.js",
             "description": "Filter tools using RAG"
           }
         ]
@@ -384,7 +384,7 @@ chmod +x .gemini/hooks/*.js
           {
             "name": "security-check",
             "type": "command",
-            "command": "node $GEMINI_PROJECT_DIR/.gemini/hooks/security.js",
+            "command": "node $GEMINI_PROJECT_DIR/.citrux/hooks/security.js",
             "description": "Prevent committing secrets"
           }
         ]
@@ -397,7 +397,7 @@ chmod +x .gemini/hooks/*.js
           {
             "name": "auto-test",
             "type": "command",
-            "command": "node $GEMINI_PROJECT_DIR/.gemini/hooks/auto-test.js",
+            "command": "node $GEMINI_PROJECT_DIR/.citrux/hooks/auto-test.js",
             "description": "Run tests after code changes"
           }
         ]
@@ -410,7 +410,7 @@ chmod +x .gemini/hooks/*.js
           {
             "name": "record-interaction",
             "type": "command",
-            "command": "node $GEMINI_PROJECT_DIR/.gemini/hooks/record.js",
+            "command": "node $GEMINI_PROJECT_DIR/.citrux/hooks/record.js",
             "description": "Record interaction for learning"
           }
         ]
@@ -423,7 +423,7 @@ chmod +x .gemini/hooks/*.js
           {
             "name": "consolidate-memories",
             "type": "command",
-            "command": "node $GEMINI_PROJECT_DIR/.gemini/hooks/consolidate.js",
+            "command": "node $GEMINI_PROJECT_DIR/.citrux/hooks/consolidate.js",
             "description": "Extract and store session learnings"
           }
         ]
@@ -437,7 +437,7 @@ chmod +x .gemini/hooks/*.js
 
 #### 1. Initialize (SessionStart)
 
-**`.gemini/hooks/init.js`:**
+**`.citrux/hooks/init.js`:**
 
 ```javascript
 #!/usr/bin/env node
@@ -447,7 +447,7 @@ const fs = require('fs');
 
 async function main() {
   const projectDir = process.env.GEMINI_PROJECT_DIR;
-  const chromaPath = path.join(projectDir, '.gemini', 'chroma');
+  const chromaPath = path.join(projectDir, '.citrux', 'chroma');
 
   // Ensure chroma directory exists
   fs.mkdirSync(chromaPath, { recursive: true });
@@ -488,7 +488,7 @@ readStdin().then(main).catch(console.error);
 
 #### 2. Inject memories (BeforeAgent)
 
-**`.gemini/hooks/inject-memories.js`:**
+**`.citrux/hooks/inject-memories.js`:**
 
 ```javascript
 #!/usr/bin/env node
@@ -513,7 +513,7 @@ async function main() {
   // Search memories
   const projectDir = process.env.GEMINI_PROJECT_DIR;
   const client = new ChromaClient({
-    path: path.join(projectDir, '.gemini', 'chroma'),
+    path: path.join(projectDir, '.citrux', 'chroma'),
   });
 
   try {
@@ -561,7 +561,7 @@ readStdin().then(main).catch(console.error);
 
 #### 3. RAG tool filter (BeforeToolSelection)
 
-**`.gemini/hooks/rag-filter.js`:**
+**`.citrux/hooks/rag-filter.js`:**
 
 ```javascript
 #!/usr/bin/env node
@@ -639,7 +639,7 @@ readStdin().then(main).catch(console.error);
 
 #### 4. Security validation (BeforeTool)
 
-**`.gemini/hooks/security.js`:**
+**`.citrux/hooks/security.js`:**
 
 ```javascript
 #!/usr/bin/env node
@@ -688,7 +688,7 @@ readStdin().then(main).catch(console.error);
 
 #### 5. Auto-test (AfterTool)
 
-**`.gemini/hooks/auto-test.js`:**
+**`.citrux/hooks/auto-test.js`:**
 
 ```javascript
 #!/usr/bin/env node
@@ -755,7 +755,7 @@ readStdin().then(main).catch(console.error);
 
 #### 6. Record interaction (AfterModel)
 
-**`.gemini/hooks/record.js`:**
+**`.citrux/hooks/record.js`:**
 
 ```javascript
 #!/usr/bin/env node
@@ -770,7 +770,7 @@ async function main() {
 
   const tempFile = path.join(
     projectDir,
-    '.gemini',
+    '.citrux',
     'memory',
     `session-${sessionId}.jsonl`,
   );
@@ -814,7 +814,7 @@ readStdin().then(main).catch(console.error);
 
 #### 7. Consolidate memories (SessionEnd)
 
-**`.gemini/hooks/consolidate.js`:**
+**`.citrux/hooks/consolidate.js`:**
 
 ````javascript
 #!/usr/bin/env node
@@ -830,7 +830,7 @@ async function main() {
 
   const tempFile = path.join(
     projectDir,
-    '.gemini',
+    '.citrux',
     'memory',
     `session-${sessionId}.jsonl`,
   );
@@ -874,7 +874,7 @@ JSON:`;
 
     // Store in ChromaDB
     const client = new ChromaClient({
-      path: path.join(projectDir, '.gemini', 'chroma'),
+      path: path.join(projectDir, '.citrux', 'chroma'),
     });
     const collection = await client.getCollection({ name: 'project_memories' });
     const embedModel = genai.getGenerativeModel({
@@ -1022,5 +1022,5 @@ const SECRET_PATTERNS = [
 
 - [Hooks Reference](index.md) - Complete API reference and configuration
 - [Best Practices](best-practices.md) - Security, performance, and debugging
-- [Configuration](../cli/configuration.md) - Gemini CLI settings
+- [Configuration](../cli/configuration.md) - Citrux CLI settings
 - [Custom Commands](../cli/custom-commands.md) - Create custom commands

@@ -1,6 +1,6 @@
-# Gemini CLI changelog
+# Citrux CLI changelog
 
-Gemini CLI has three major release channels: nightly, preview, and stable. For
+Citrux CLI has three major release channels: nightly, preview, and stable. For
 most users, we recommend the stable release.
 
 On this page, you can find information regarding the current releases and
@@ -22,10 +22,10 @@ on GitHub.
 
 ### Highlights
 
-- **⚡️⚡️⚡️ Gemini 3 Flash + Gemini CLI:** If you are a paid user, you can now
+- **⚡️⚡️⚡️ Gemini 3 Flash + Citrux CLI:** If you are a paid user, you can now
   enable Gemini 3 Pro and Gemini 3 Flash. Go to `/settings` and set **Preview
   Features** to `true` to enable Gemini 3. For more information:
-  [Gemini 3 Flash is now available in Gemini CLI](https://developers.googleblog.com/gemini-3-flash-is-now-available-in-gemini-cli/).
+  [Gemini 3 Flash is now available in Citrux CLI](https://developers.googleblog.com/gemini-3-flash-is-now-available-in-gemini-cli/).
 
 ### What's Changed
 
@@ -152,7 +152,7 @@ on GitHub.
   https://github.com/google-gemini/gemini-cli/pull/14593
 - Fully detach autoupgrade process by @scidomino in
   https://github.com/google-gemini/gemini-cli/pull/14595
-- Docs: Update Gemini 3 on Gemini CLI documentation by @jkcinouye in
+- Docs: Update Gemini 3 on Citrux CLI documentation by @jkcinouye in
   https://github.com/google-gemini/gemini-cli/pull/14601
 - Disallow floating promises. by @gundermanc in
   https://github.com/google-gemini/gemini-cli/pull/14605
@@ -163,7 +163,7 @@ on GitHub.
   https://github.com/google-gemini/gemini-cli/pull/14470
 - Add prompt_id propagation in a2a-server task by @koxkox111 in
   https://github.com/google-gemini/gemini-cli/pull/14581
-- Fix: Prevent freezing in non-interactive Gemini CLI when debug mode is enabled
+- Fix: Prevent freezing in non-interactive Citrux CLI when debug mode is enabled
   by @parthasaradhie in https://github.com/google-gemini/gemini-cli/pull/14580
 - fix(audio): improve reading of audio files by @jackwotherspoon in
   https://github.com/google-gemini/gemini-cli/pull/14658
@@ -239,7 +239,7 @@ https://github.com/google-gemini/gemini-cli/compare/v0.20.2...v0.21.0
 
 ### What's Changed
 
-- feat(ide): fallback to GEMINI_CLI_IDE_AUTH_TOKEN env var by @skeshive in
+- feat(ide): fallback to CITRUX_CLI_IDE_AUTH_TOKEN env var by @skeshive in
   https://github.com/google-gemini/gemini-cli/pull/14843
 - feat: display quota stats for unused models in /stats by @sehoon38 in
   https://github.com/google-gemini/gemini-cli/pull/14764
@@ -767,13 +767,13 @@ https://github.com/google-gemini/gemini-cli/compare/v0.18.0-preview.4...v0.19.0-
 ### Highlights
 
 - **Experimental permission improvements**: We're experimenting with a new
-  policy engine in Gemini CLI, letting users and administrators create
+  policy engine in Citrux CLI, letting users and administrators create
   fine-grained policies for tool calls. This setting is currently behind a flag.
   See our [policy engine documentation](../core/policy-engine.md) to learn how
   to use this feature.
 - **Gemini 3 support rolled out for some users**: Some users can now enable
   Gemini 3 by using the `/settings` flag and toggling **Preview Features**. See
-  our [Gemini 3 on Gemini CLI documentation](../get-started/gemini-3.md) to find
+  our [Gemini 3 on Citrux CLI documentation](../get-started/gemini-3.md) to find
   out more about using Gemini 3.
 - **Updated UI rollback:** We've temporarily rolled back a previous UI update,
   which enabled embedded scrolling and mouse support. This can be re-enabled by

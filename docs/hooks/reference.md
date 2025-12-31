@@ -1,14 +1,14 @@
 # Hooks Reference
 
-This document provides the technical specification for Gemini CLI hooks,
+This document provides the technical specification for Citrux CLI hooks,
 including the JSON schemas for input and output, exit code behaviors, and the
 stable model API.
 
 ## Communication Protocol
 
-Hooks communicate with Gemini CLI via standard streams and exit codes:
+Hooks communicate with Citrux CLI via standard streams and exit codes:
 
-- **Input**: Gemini CLI sends a JSON object to the hook's `stdin`.
+- **Input**: Citrux CLI sends a JSON object to the hook's `stdin`.
 - **Output**: The hook sends a JSON object (or plain text) to `stdout`.
 - **Exit Codes**: Used to signal success or blocking errors.
 
@@ -108,7 +108,7 @@ If the hook exits with `0`, the CLI attempts to parse `stdout` as JSON.
 
 ## Stable Model API
 
-Gemini CLI uses a decoupled format for model interactions to ensure hooks remain
+Citrux CLI uses a decoupled format for model interactions to ensure hooks remain
 stable even if the underlying Gemini SDK changes.
 
 ### `LLMRequest` Object

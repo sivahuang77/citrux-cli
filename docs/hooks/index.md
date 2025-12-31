@@ -1,6 +1,6 @@
-# Gemini CLI hooks
+# Citrux CLI hooks
 
-Hooks are scripts or programs that Gemini CLI executes at specific points in the
+Hooks are scripts or programs that Citrux CLI executes at specific points in the
 agentic loop, allowing you to intercept and customize behavior without modifying
 the CLI's source code.
 
@@ -25,13 +25,13 @@ With hooks, you can:
 - **Optimize behavior:** Dynamically adjust tool selection or model parameters
 
 Hooks run synchronously as part of the agent loop—when a hook event fires,
-Gemini CLI waits for all matching hooks to complete before continuing.
+Citrux CLI waits for all matching hooks to complete before continuing.
 
 ## Core concepts
 
 ### Hook events
 
-Hooks are triggered by specific events in Gemini CLI's lifecycle. The following
+Hooks are triggered by specific events in Citrux CLI's lifecycle. The following
 table lists all available hook events:
 
 | Event                 | When It Fires                                 | Common Use Cases                           |
@@ -50,13 +50,13 @@ table lists all available hook events:
 
 ### Hook types
 
-Gemini CLI currently supports **command hooks** that run shell commands or
+Citrux CLI currently supports **command hooks** that run shell commands or
 scripts:
 
 ```json
 {
   "type": "command",
-  "command": "$GEMINI_PROJECT_DIR/.gemini/hooks/my-hook.sh",
+  "command": "$GEMINI_PROJECT_DIR/.citrux/hooks/my-hook.sh",
   "timeout": 30000
 }
 ```
@@ -417,9 +417,9 @@ precedence rules.
 Hook configurations are applied in the following order of execution (lower
 numbers run first):
 
-1.  **Project settings:** `.gemini/settings.json` in your project directory
+1.  **Project settings:** `.citrux/settings.json` in your project directory
     (highest priority)
-2.  **User settings:** `~/.gemini/settings.json`
+2.  **User settings:** `~/.citrux/settings.json`
 3.  **System settings:** `/etc/gemini-cli/settings.json`
 4.  **Extensions:** Internal hooks defined by installed extensions (lowest
     priority)
@@ -427,7 +427,7 @@ numbers run first):
 #### Deduplication and shadowing
 
 If multiple hooks with the identical **name** and **command** are discovered
-across different configuration layers, Gemini CLI deduplicates them. The hook
+across different configuration layers, Citrux CLI deduplicates them. The hook
 from the higher-priority layer (e.g., Project) will be kept, and others will be
 ignored.
 
@@ -509,7 +509,7 @@ You can temporarily enable or disable individual hooks using commands:
 These commands allow you to control hook execution without editing configuration
 files. The hook name should match the `name` field in your hook configuration.
 Changes made via these commands are persisted to your global User settings
-(`~/.gemini/settings.json`).
+(`~/.citrux/settings.json`).
 
 ### Disabled hooks configuration
 
@@ -542,11 +542,11 @@ This command:
 - Converts event names (`PreToolUse` → `BeforeTool`, etc.)
 - Translates tool names (`Bash` → `run_shell_command`, `replace` → `replace`)
 - Updates matcher patterns
-- Writes to `.gemini/settings.json`
+- Writes to `.citrux/settings.json`
 
 ### Event name mapping
 
-| Claude Code        | Gemini CLI     |
+| Claude Code        | Citrux CLI     |
 | ------------------ | -------------- |
 | `PreToolUse`       | `BeforeTool`   |
 | `PostToolUse`      | `AfterTool`    |
@@ -559,7 +559,7 @@ This command:
 
 ### Tool name mapping
 
-| Claude Code | Gemini CLI            |
+| Claude Code | Citrux CLI            |
 | ----------- | --------------------- |
 | `Bash`      | `run_shell_command`   |
 | `Edit`      | `replace`             |
@@ -661,5 +661,5 @@ matchers:
 - [Best Practices](best-practices.md) - Security, performance, and debugging
 - [Custom Commands](../cli/custom-commands.md) - Create reusable prompt
   shortcuts
-- [Configuration](../cli/configuration.md) - Gemini CLI configuration options
+- [Configuration](../cli/configuration.md) - Citrux CLI configuration options
 - [Hooks Design Document](../hooks-design.md) - Technical architecture details

@@ -28,7 +28,7 @@ vi.mock('node:os', async (importOriginal) => {
 });
 
 vi.mock('@google/gemini-cli-core', () => ({
-  GEMINI_DIR: '.gemini',
+  GEMINI_DIR: '.citrux',
   debugLogger: {
     error: vi.fn(),
   },
@@ -41,8 +41,8 @@ describe('loadSettings', () => {
     os.tmpdir(),
     `gemini-workspace-${mocks.suffix}`,
   );
-  const mockGeminiHomeDir = path.join(mockHomeDir, '.gemini');
-  const mockGeminiWorkspaceDir = path.join(mockWorkspaceDir, '.gemini');
+  const mockGeminiHomeDir = path.join(mockHomeDir, '.citrux');
+  const mockGeminiWorkspaceDir = path.join(mockWorkspaceDir, '.citrux');
 
   beforeEach(() => {
     vi.clearAllMocks();

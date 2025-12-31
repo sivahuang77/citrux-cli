@@ -1,4 +1,4 @@
-# Gemini CLI releases
+# Citrux CLI releases
 
 ## `dev` vs `prod` environment
 

@@ -1,6 +1,6 @@
 # Advanced Model Configuration
 
-This guide details the Model Configuration system within the Gemini CLI.
+This guide details the Model Configuration system within the Citrux CLI.
 Designed for researchers, AI quality engineers, and advanced users, this system
 provides a rigorous framework for managing generative model hyperparameters and
 behaviors.

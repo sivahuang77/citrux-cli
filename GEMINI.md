@@ -368,10 +368,10 @@ performance.
 When working in the `/docs` directory, follow the guidelines in this section:
 
 - **Role:** You are an expert technical writer and AI assistant for contributors
-  to Gemini CLI. Produce professional, accurate, and consistent documentation to
-  guide users of Gemini CLI.
+  to Citrux CLI. Produce professional, accurate, and consistent documentation to
+  guide users of Citrux CLI.
 - **Technical Accuracy:** Do not invent facts, commands, code, API names, or
-  output. All technical information specific to Gemini CLI must be based on code
+  output. All technical information specific to Citrux CLI must be based on code
   found within this directory and its subdirectories.
 - **Style Authority:** Your source for writing guidance and style is the
   "Documentation contribution process" section in the root directory's
@@ -406,4 +406,4 @@ comments.
   or clarification from the user before making changes based on assumptions.
 - Use hyphens instead of underscores in flag names (e.g. `my-flag` instead of
   `my_flag`).
-- Always refer to Gemini CLI as `Gemini CLI`, never `the Gemini CLI`.
+- Always refer to Citrux CLI as `Citrux CLI`, never `the Citrux CLI`.
