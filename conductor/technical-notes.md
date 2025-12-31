@@ -1,50 +1,42 @@
-# Citrux CLI - Technical Notes & Architecture
+## 7. Suggested Future Actions (Post-v0.1.0)
 
-## 1. Project Overview
+The following initiatives are suggested to further enhance Citrux CLI's
+capabilities and ecosystem:
 
-**Citrux CLI** is a custom AI Developer Assistant, retrofitted from
-`google-gemini/gemini-cli`. It features a unique Citrux brand identity and a
-multi-provider LLM architecture.
+### 🚀 Citrux Cloud (Deployment & Ops)
 
-## 2. Branded Configuration
+- **Goal**: Transform CLI from a dev tool to a devops platform.
+- **Key Features**:
+  - `/deploy`: One-click deployment to user servers (e.g., cloudGarage).
+  - **SSH/Key Management**: Secure handling of remote server credentials.
+  - **Remote Dashboard**: Monitor CPU/Memory of remote instances via TUI.
 
-- **Version**: 0.1.0
-- **Storage Directory**: `~/.citrux/` (Isolated from `~/.citrux/`)
-- **Context File**: `CITRUX.md`
-- **Ignore File**: `.citruxignore`
-- **Branded Colors**: Orange Gradient (#FFB347, #FF8C00, #FF4500)
+### 🧠 Core Intelligence Enhancements
 
-- **OpenAI Compatible**: Custom adapter (`OpenAIContentGenerator`) for OpenAI,
-  DeepSeek, Groq, and Ollama. Supports real SSE streaming with tool call
-  accumulation.
+- **Local RAG (Vector Search)**: Integrate `sqlite-vec` or `duckdb` to index the
+  entire codebase, not just `CITRUX.md`. This allows the AI to answer questions
+  like "Where is the auth logic?" without manual file selection.
+- **Model Templates**: Optimize output formatting for specific reasoning models
+  (e.g., DeepSeek R1 chain-of-thought display).
 
-## 4. Multi-Provider Architecture
+### 🛡️ Security Fortification
 
-The system uses a translation layer to support multiple LLM backends:
+- **Local Key Vault**: Encrypt API keys at rest using system keychains (keytar)
+  instead of plain text JSON.
+- **Sensitive Data Scanner**: Pre-flight check for prompts to prevent accidental
+  leakage of secrets (e.g., `sk-` keys).
 
-- **Google Gemini**: Default provider via Google AI SDK.
-- **OpenAI Compatible**:
-  - **Streaming**: Uses `node:readline` to parse SSE chunks (`data: {...}`).
-  - **Tool Calls**: Accumulates partial JSON arguments from the stream and
-    yields complete `functionCall` objects only when finished or when
-    `finish_reason` is signaled.
-- **Dynamic Switching**: Managed via `/model` command or `CITRUX_PROVIDER` env
-  var.
+### 🧩 Ecosystem Expansion
 
-## 4. Environment Variables (Isolated)
+- **Extension Marketplace**: A CLI-based store (`/extensions browse`) to find
+  and install community plugins from GitHub.
+- **NPM Publishing**: Publish `@citrux/cli` to npm registry for easier
+  installation (`npm i -g @citrux/cli`).
+- **Web Presence**: Deploy `doc.html` to a public website (Vercel/GitHub Pages).
 
-- `CITRUX_API_KEY`: Primary API key for the active provider.
-- `CITRUX_MODEL`: Preferred model name.
-- `OPENAI_API_BASE`: Custom URL for OpenAI-compatible proxies (e.g., DeepSeek,
-  Ollama).
+### ⚡ Automation & Workflows
 
-## 6. Future Development Roadmap & Suggestions
-
-- **VS Code Branding**: Retrofit `vscode-ide-companion` to "Citrux Companion"
-  with matching orange themes.
-- **Context Manager**: Implement an interactive tool to manage `CITRUX.md` file
-  inclusions visually.
-- **Citrux Cloud Integration**: Built-in deployment tools for user servers
-  (cloudGarage/citrux.ai).
-- **Auto-updater**: Implement automatic version checking via GitHub API.
-- **Enhanced Telemetry**: Precise token usage tracking for non-Google providers.
+- **AI Pre-commit Hook**: A Git hook that runs Citrux to scan staged files for
+  bugs or style violations before commit.
+- **Custom Workflows**: Allow users to define macro commands (e.g., "Refactor &
+  Test" = `/chat "refactor this" && npm test`).
