@@ -12,6 +12,7 @@ import { startupProfiler } from '@google/gemini-cli-core';
 import { aboutCommand } from '../ui/commands/aboutCommand.js';
 import { authCommand } from '../ui/commands/authCommand.js';
 import { modelCommand } from '../ui/commands/modelCommand.js';
+import { devLoopCommand } from '../ui/commands/devLoopCommand.js';
 import { editorCommand } from '../ui/commands/editorCommand.js';
 import { extensionsCommand } from '../ui/commands/extensionsCommand.js';
 import { helpCommand } from '../ui/commands/helpCommand.js';
@@ -55,6 +56,7 @@ export class BuiltinCommandLoader implements ICommandLoader {
     const allDefinitions: Array<SlashCommand | null> = [
       aboutCommand,
       authCommand,
+      devLoopCommand,
       editorCommand,
       extensionsCommand(this.config?.getEnableExtensionReloading()),
       helpCommand,

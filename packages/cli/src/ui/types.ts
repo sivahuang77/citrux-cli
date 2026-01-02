@@ -273,6 +273,11 @@ export type HistoryItemHooksList = HistoryItemBase & {
   }>;
 };
 
+export type HistoryItemDevLoop = HistoryItemBase & {
+  type: 'dev_loop';
+  text: string;
+};
+
 // Using Omit<HistoryItem, 'id'> seems to have some issues with typescript's
 // type inference e.g. historyItem.type === 'tool_group' isn't auto-inferring that
 // 'tools' in historyItem.
@@ -299,7 +304,8 @@ export type HistoryItemWithoutId =
   | HistoryItemSkillsList
   | HistoryItemMcpStatus
   | HistoryItemChatList
-  | HistoryItemHooksList;
+  | HistoryItemHooksList
+  | HistoryItemDevLoop;
 
 export type HistoryItem = HistoryItemWithoutId & { id: number };
 
@@ -323,6 +329,7 @@ export enum MessageType {
   MCP_STATUS = 'mcp_status',
   CHAT_LIST = 'chat_list',
   HOOKS_LIST = 'hooks_list',
+  DEV_LOOP = 'dev_loop',
 }
 
 // Simplified message structure for internal feedback
@@ -393,6 +400,15 @@ export interface SubmitPromptResult {
   content: PartListUnion;
 }
 
+export interface DevLoopConfig {
+  task: string;
+  verifyCommand: string;
+  maxIterations: number;
+  iterationCount: number;
+  isActive: boolean;
+  planFilePath?: string;
+}
+
 /**
  * Defines the result of the slash command processor for its consumer (useGeminiStream).
  */
@@ -404,6 +420,10 @@ export type SlashCommandProcessorResult =
     }
   | {
       type: 'handled'; // Indicates the command was processed and no further action is needed.
+    }
+  | {
+      type: 'dev_loop';
+      config: DevLoopConfig;
     }
   | SubmitPromptResult;
 

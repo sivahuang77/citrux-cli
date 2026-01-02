@@ -5,6 +5,8 @@
  */
 
 import { useState, useRef, useCallback, useEffect, useMemo } from 'react';
+import * as fsSync from 'node:fs';
+const fs = fsSync.promises;
 import type {
   Config,
   EditorType,
@@ -40,6 +42,7 @@ import {
   processRestorableToolCalls,
   recordToolCallInteractions,
   ToolErrorType,
+  ShellExecutionService,
 } from '@google/gemini-cli-core';
 import { type Part, type PartListUnion, FinishReason } from '@google/genai';
 import type {
@@ -48,6 +51,7 @@ import type {
   HistoryItemToolGroup,
   SlashCommandProcessorResult,
   HistoryItemModel,
+  DevLoopConfig,
 } from '../types.js';
 import { StreamingState, MessageType, ToolCallStatus } from '../types.js';
 import { isAtCommand, isSlashCommand } from '../utils/commandUtils.js';
@@ -66,7 +70,6 @@ import {
   type TrackedCancelledToolCall,
   type TrackedWaitingToolCall,
 } from './useReactToolScheduler.js';
-import { promises as fs } from 'node:fs';
 import path from 'node:path';
 import { useSessionStats } from '../contexts/SessionContext.js';
 import { useKeypress } from './useKeypress.js';
@@ -117,6 +120,10 @@ export const useGeminiStream = (
   const turnCancelledRef = useRef(false);
   const activeQueryIdRef = useRef<string | null>(null);
   const [isResponding, setIsResponding] = useState<boolean>(false);
+  const [, devLoopConfigRef, setDevLoopConfig] =
+    useStateAndRef<DevLoopConfig | null>(null);
+  const hasScheduledToolsRef = useRef(false);
+  const lastVerificationOutputRef = useRef<string | null>(null);
   const [thought, setThought] = useState<ThoughtSummary | null>(null);
   const [pendingHistoryItem, pendingHistoryItemRef, setPendingHistoryItem] =
     useStateAndRef<HistoryItemWithoutId | null>(null);
@@ -458,6 +465,15 @@ export const useGeminiStream = (
               case 'handled': {
                 return { queryToSend: null, shouldProceed: false };
               }
+              case 'dev_loop': {
+                setDevLoopConfig(slashCommandResult.config);
+                localQueryToSendToGemini = `${slashCommandResult.config.task}\n\n[Dev Loop Mode] After you complete this task, I will automatically run verification: \`${slashCommandResult.config.verifyCommand}\`. If it fails, I will feed the error back to you for further fixes.`;
+
+                return {
+                  queryToSend: localQueryToSendToGemini,
+                  shouldProceed: true,
+                };
+              }
               default: {
                 const unreachable: never = slashCommandResult;
                 throw new Error(
@@ -523,6 +539,7 @@ export const useGeminiStream = (
       handleSlashCommand,
       logger,
       shellModeActive,
+      setDevLoopConfig,
       scheduleToolCalls,
     ],
   );
@@ -864,7 +881,10 @@ export const useGeminiStream = (
         }
       }
       if (toolCallRequests.length > 0) {
+        hasScheduledToolsRef.current = true;
         scheduleToolCalls(toolCallRequests, signal);
+      } else {
+        hasScheduledToolsRef.current = false;
       }
       return StreamProcessingStatus.Completed;
     },
@@ -906,6 +926,11 @@ export const useGeminiStream = (
           if (!options?.isContinuation) {
             setModelSwitchedFromQuotaError(false);
             config.setQuotaErrorOccurred(false);
+
+            if (devLoopConfigRef.current?.isActive) {
+              setDevLoopConfig(null);
+              lastVerificationOutputRef.current = null;
+            }
           }
 
           abortControllerRef.current = new AbortController();
@@ -1014,6 +1039,140 @@ export const useGeminiStream = (
                   },
                 });
               }
+
+              // DEV LOOP LOGIC
+              const currentDevLoopConfig = devLoopConfigRef.current;
+              if (
+                currentDevLoopConfig?.isActive &&
+                !hasScheduledToolsRef.current &&
+                !abortSignal.aborted
+              ) {
+                const iteration = currentDevLoopConfig.iterationCount + 1;
+
+                addItem(
+                  {
+                    type: MessageType.DEV_LOOP,
+                    text: `[Iteration ${iteration}/${currentDevLoopConfig.maxIterations}] Verifying: ${currentDevLoopConfig.verifyCommand}...`,
+                  },
+                  Date.now(),
+                );
+
+                try {
+                  const targetDir = config.getTargetDir();
+                  const shellExecutionConfig = {
+                    ...config.getShellExecutionConfig(),
+                    terminalWidth,
+                    terminalHeight,
+                  };
+
+                  const { result: verificationResultPromise } =
+                    await ShellExecutionService.execute(
+                      currentDevLoopConfig.verifyCommand,
+                      targetDir,
+                      () => {}, // Silent for now
+                      abortSignal,
+                      false, // Use child_process
+                      shellExecutionConfig,
+                    );
+
+                  const verificationResult = await verificationResultPromise;
+                  const isSuccess = verificationResult.exitCode === 0;
+                  const output =
+                    (verificationResult.output || '').trim() || '(No output)';
+
+                  const appendLogToPlanFile = (logMessage: string) => {
+                    if (currentDevLoopConfig.planFilePath) {
+                      try {
+                        const logEntry = `\n- [Iteration ${iteration}]: ${logMessage}\n`;
+                        fsSync.appendFileSync(
+                          currentDevLoopConfig.planFilePath,
+                          logEntry,
+                        );
+                      } catch (err) {
+                        debugLogger.warn(
+                          `Failed to update plan file: ${String(err)}`,
+                        );
+                      }
+                    }
+                  };
+
+                  if (isSuccess) {
+                    addItem(
+                      {
+                        type: MessageType.INFO,
+                        text: `✅ Verification passed!\n\nOutput:\n${output}`,
+                      },
+                      Date.now(),
+                    );
+                    appendLogToPlanFile('✅ SUCCESS - Verification passed.');
+                    setDevLoopConfig(null);
+                    lastVerificationOutputRef.current = null;
+                  } else {
+                    if (output === lastVerificationOutputRef.current) {
+                      addItem(
+                        {
+                          type: MessageType.WARNING,
+                          text: `Stagnation detected: Verification error output hasn't changed. Stopping loop to prevent infinite retry.`,
+                        },
+                        Date.now(),
+                      );
+                      appendLogToPlanFile(
+                        '🛑 STOPPED - Stagnation detected (error output unchanged).',
+                      );
+                      setDevLoopConfig(null);
+                      lastVerificationOutputRef.current = null;
+                      return;
+                    }
+                    lastVerificationOutputRef.current = output;
+
+                    addItem(
+                      {
+                        type: MessageType.INFO,
+                        text: `❌ Verification failed (Exit code: ${verificationResult.exitCode}).\n\nOutput:\n${output}`,
+                      },
+                      Date.now(),
+                    );
+
+                    if (iteration >= currentDevLoopConfig.maxIterations) {
+                      addItem(
+                        {
+                          type: MessageType.WARNING,
+                          text: `Reached maximum iterations (${currentDevLoopConfig.maxIterations}). Stopping loop.`,
+                        },
+                        Date.now(),
+                      );
+                      appendLogToPlanFile(
+                        `🛑 STOPPED - Reached max iterations (${currentDevLoopConfig.maxIterations}).`,
+                      );
+                      setDevLoopConfig(null);
+                    } else {
+                      appendLogToPlanFile(
+                        `❌ FAILED - Exit code ${verificationResult.exitCode}. Retrying...`,
+                      );
+                      const nextConfig = {
+                        ...currentDevLoopConfig,
+                        iterationCount: iteration,
+                      };
+                      setDevLoopConfig(nextConfig);
+
+                      const feedback = `The verification command \`${currentDevLoopConfig.verifyCommand}\` failed with exit code ${verificationResult.exitCode}. Output:\n\n\`\`\`\n${output}\n\`\`\`\n\nPlease fix the remaining issues and try again.`;
+
+                      // Trigger next turn
+                      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+                      submitQuery(feedback, { isContinuation: true });
+                    }
+                  }
+                } catch (e) {
+                  addItem(
+                    {
+                      type: MessageType.ERROR,
+                      text: `Error during verification: ${String(e)}`,
+                    },
+                    Date.now(),
+                  );
+                  setDevLoopConfig(null);
+                }
+              }
             } catch (error: unknown) {
               spanMetadata.error = error;
               if (error instanceof UnauthorizedError) {
@@ -1055,6 +1214,10 @@ export const useGeminiStream = (
       config,
       startNewPrompt,
       getPromptCount,
+      devLoopConfigRef,
+      setDevLoopConfig,
+      terminalHeight,
+      terminalWidth,
     ],
   );
 

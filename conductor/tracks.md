@@ -19,12 +19,22 @@
 - [x] Disable/Hide Sandbox features.
 - [x] Fix Shebang and packaging issues.
 
-## Track 4: Future Roadmap (In Progress)
+## Track 4: Advanced Features (Completed)
 
 - [x] **Enhanced Streaming**: Smooth token-by-token output for non-Google
       providers.
 - [x] **Enhanced Telemetry**: Precise token usage tracking for non-Google
-      providers. 7. [DONE] Interactive context manager for visual selection of
-      files in `CITRUX.md`. 8. [TODO] Built-in Citrux Cloud deployment tools.
+      providers.
+- [x] **Context Manager**: Interactive TUI for visual selection of files in
+      `CITRUX.md`.
 - [x] **Auto-updater**: Custom update check for Citrux releases.
 - [x] **VS Code Extension**: Branded version of the IDE companion.
+- [x] **Brand Cleanup Sweep**: Thorough isolation of env vars, paths, and
+      storage from Gemini CLI.
+
+## Track 5: Future Roadmap (Planned)
+
+- [ ] **Citrux Cloud Deployment**: Built-in tools for deploying to
+      cloudGarage/citrux.ai.
+- [ ] **Extension Marketplace**: Command to browse and install extensions from
+      GitHub.

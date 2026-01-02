@@ -33,6 +33,7 @@ import { McpStatus } from './views/McpStatus.js';
 import { ChatList } from './views/ChatList.js';
 import { HooksList } from './views/HooksList.js';
 import { ModelMessage } from './messages/ModelMessage.js';
+import { theme } from '../semantic-colors.js';
 
 interface HistoryItemDisplayProps {
   item: HistoryItem;
@@ -168,6 +169,13 @@ export const HistoryItemDisplay: React.FC<HistoryItemDisplayProps> = ({
       )}
       {itemForDisplay.type === 'hooks_list' && (
         <HooksList hooks={itemForDisplay.hooks} />
+      )}
+      {itemForDisplay.type === 'dev_loop' && (
+        <InfoMessage
+          text={itemForDisplay.text}
+          icon="🔄"
+          color={theme.text.accent}
+        />
       )}
     </Box>
   );

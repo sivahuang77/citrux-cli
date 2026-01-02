@@ -1,7 +1,7 @@
 {
   "name": "@citrux/core",
-  "version": "0.1.0",
-  "description": "Citrux CLI Core",
+  "version": "0.1.1",
+  "description": "Core logic for Citrux CLI",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",

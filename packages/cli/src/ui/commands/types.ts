@@ -9,6 +9,7 @@ import type {
   HistoryItemWithoutId,
   HistoryItem,
   ConfirmationRequest,
+  DevLoopConfig,
 } from '../types.js';
 import type {
   Config,
@@ -150,6 +151,14 @@ export interface LogoutActionReturn {
   type: 'logout';
 }
 
+/**
+ * The return type for a command action that starts a development loop.
+ */
+export interface DevLoopActionReturn {
+  type: 'dev_loop';
+  config: DevLoopConfig;
+}
+
 export type SlashCommandActionReturn =
   | CommandActionReturn<HistoryItemWithoutId[]>
   | QuitActionReturn
@@ -157,7 +166,8 @@ export type SlashCommandActionReturn =
   | ConfirmShellCommandsActionReturn
   | ConfirmActionReturn
   | OpenCustomDialogActionReturn
-  | LogoutActionReturn;
+  | LogoutActionReturn
+  | DevLoopActionReturn;
 
 export enum CommandKind {
   BUILT_IN = 'built-in',

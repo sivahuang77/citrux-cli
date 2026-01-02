@@ -29,7 +29,7 @@ import {
   createWorkingStdio,
   recordToolCallInteractions,
   ToolErrorType,
-} from '@google/gemini-cli-core';
+ ShellExecutionService } from '@google/gemini-cli-core';
 
 import type { Content, Part } from '@google/genai';
 import readline from 'node:readline';
@@ -45,6 +45,8 @@ import {
   handleMaxTurnsExceededError,
 } from './utils/errors.js';
 import { TextOutput } from './ui/utils/textOutput.js';
+import { type DevLoopConfig } from './ui/types.js';
+import * as fsSync from 'node:fs';
 
 interface RunNonInteractiveParams {
   config: Config;
@@ -73,6 +75,7 @@ export async function runNonInteractive({
     });
     const { stdout: workingStdout } = createWorkingStdio();
     const textOutput = new TextOutput(workingStdout);
+    process.stdout.write(`DEBUG: raw input: [${input}]\n`);
 
     const handleUserFeedback = (payload: UserFeedbackPayload) => {
       const prefix = payload.severity.toUpperCase();
@@ -215,6 +218,8 @@ export async function runNonInteractive({
       }
 
       let query: Part[] | undefined;
+      let devLoopConfig: DevLoopConfig | null = null;
+      let lastVerificationOutput: string | null = null;
 
       if (isSlashCommand(input)) {
         const slashCommandResult = await handleSlashCommand(
@@ -223,11 +228,29 @@ export async function runNonInteractive({
           config,
           settings,
         );
-        // If a slash command is found and returns a prompt, use it.
-        // Otherwise, slashCommandResult falls through to the default prompt
-        // handling.
         if (slashCommandResult) {
-          query = slashCommandResult as Part[];
+          process.stdout.write(
+            `DEBUG: slashCommandResult type: ${typeof slashCommandResult === 'object' && 'type' in slashCommandResult ? slashCommandResult.type : 'raw'}\n`,
+          );
+          if (
+            typeof slashCommandResult === 'object' &&
+            'type' in slashCommandResult &&
+            slashCommandResult.type === 'dev_loop'
+          ) {
+            devLoopConfig = (
+              slashCommandResult as { type: 'dev_loop'; config: DevLoopConfig }
+            ).config;
+            process.stdout.write(
+              `DEBUG: devLoopConfig Active: ${devLoopConfig.isActive}\n`,
+            );
+            query = [
+              {
+                text: `${devLoopConfig.task}\n\n[Dev Loop Mode] After you complete this task, I will automatically run verification: \`${devLoopConfig.verifyCommand}\`. If it fails, I will feed the error back to you for further fixes.`,
+              },
+            ];
+          } else {
+            query = slashCommandResult as Part[];
+          }
         }
       }
 
@@ -456,6 +479,106 @@ export async function runNonInteractive({
 
           currentMessages = [{ role: 'user', parts: toolResponseParts }];
         } else {
+          // NO MORE TOOLS -> CHECK FOR DEV LOOP
+          if (devLoopConfig?.isActive) {
+            const iteration = devLoopConfig.iterationCount + 1;
+            const msg = `\n[Iteration ${iteration}/${devLoopConfig.maxIterations}] Verifying: ${devLoopConfig.verifyCommand}...\n`;
+            if (config.getOutputFormat() === OutputFormat.TEXT) {
+              process.stdout.write(msg);
+            }
+
+            try {
+              const targetDir = config.getTargetDir();
+              const shellExecutionConfig = config.getShellExecutionConfig();
+
+              const { result: verificationResultPromise } =
+                await ShellExecutionService.execute(
+                  devLoopConfig.verifyCommand,
+                  targetDir,
+                  () => {},
+                  abortController.signal,
+                  false,
+                  shellExecutionConfig,
+                );
+
+              const verificationResult = await verificationResultPromise;
+              const isSuccess = verificationResult.exitCode === 0;
+              const output =
+                (verificationResult.output || '').trim() || '(No output)';
+
+              const appendLogToPlanFile = (logMessage: string) => {
+                if (devLoopConfig?.planFilePath) {
+                  try {
+                    const logEntry = `\n- [Iteration ${iteration}]: ${logMessage}\n`;
+                    fsSync.appendFileSync(devLoopConfig.planFilePath, logEntry);
+                  } catch (err) {
+                    debugLogger.warn(
+                      `Failed to update plan file: ${String(err)}`,
+                    );
+                  }
+                }
+              };
+
+              if (isSuccess) {
+                const successMsg = `✅ Verification passed!\n\nOutput:\n${output}\n`;
+                if (config.getOutputFormat() === OutputFormat.TEXT) {
+                  process.stdout.write(successMsg);
+                }
+                appendLogToPlanFile('✅ SUCCESS - Verification passed.');
+                devLoopConfig = null;
+              } else {
+                if (output === lastVerificationOutput) {
+                  const stagMsg = `🛑 Stagnation detected: Verification error output hasn't changed. Stopping loop.\n`;
+                  if (config.getOutputFormat() === OutputFormat.TEXT) {
+                    process.stdout.write(stagMsg);
+                  }
+                  appendLogToPlanFile(
+                    '🛑 STOPPED - Stagnation detected (error output unchanged).',
+                  );
+                  devLoopConfig = null;
+                } else {
+                  lastVerificationOutput = output;
+                  const failMsg = `❌ Verification failed (Exit code: ${verificationResult.exitCode}).\n\nOutput:\n${output}\n`;
+                  if (config.getOutputFormat() === OutputFormat.TEXT) {
+                    process.stdout.write(failMsg);
+                  }
+
+                  if (iteration >= devLoopConfig.maxIterations) {
+                    const maxMsg = `🛑 Reached maximum iterations (${devLoopConfig.maxIterations}). Stopping loop.\n`;
+                    if (config.getOutputFormat() === OutputFormat.TEXT) {
+                      process.stdout.write(maxMsg);
+                    }
+                    appendLogToPlanFile(
+                      `🛑 STOPPED - Reached max iterations (${devLoopConfig.maxIterations}).`,
+                    );
+                    devLoopConfig = null;
+                  } else {
+                    appendLogToPlanFile(
+                      `❌ FAILED - Exit code ${verificationResult.exitCode}. Retrying...`,
+                    );
+                    devLoopConfig = {
+                      ...devLoopConfig,
+                      iterationCount: iteration,
+                    };
+
+                    const feedback = `The verification command \`${devLoopConfig.verifyCommand}\` failed with exit code ${verificationResult.exitCode}. Output:\n\n\`\`\`\n${output}\n\`\`\`\n\nPlease fix the remaining issues and try again.`;
+
+                    // FEED BACK TO GEMINI
+                    currentMessages = [
+                      { role: 'user', parts: [{ text: feedback }] },
+                    ];
+                    continue; // RE-RUN THE OUTER WHILE LOOP
+                  }
+                }
+              }
+            } catch (e) {
+              const errMsg = `Error during verification: ${String(e)}\n`;
+              process.stderr.write(errMsg);
+              devLoopConfig = null;
+            }
+          }
+
+          // IF WE REACH HERE, THE TASK IS DONE OR LOOP STOPPED
           // Emit final result event for streaming JSON
           if (streamFormatter) {
             const metrics = uiTelemetryService.getMetrics();

@@ -18,7 +18,7 @@ import * as os from 'node:os';
 import { GEMINI_DIR } from '../packages/core/src/utils/paths.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const BUNDLE_PATH = join(__dirname, '..', 'bundle/gemini.js');
+const BUNDLE_PATH = join(__dirname, '..', 'bundle/citrux.js');
 
 // Get timeout based on environment
 function getDefaultTimeout() {
