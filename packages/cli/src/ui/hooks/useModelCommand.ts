@@ -12,8 +12,10 @@ interface UseModelCommandReturn {
   closeModelDialog: () => void;
 }
 
-export const useModelCommand = (): UseModelCommandReturn => {
-  const [isModelDialogOpen, setIsModelDialogOpen] = useState(false);
+export const useModelCommand = (
+  initialState = false,
+): UseModelCommandReturn => {
+  const [isModelDialogOpen, setIsModelDialogOpen] = useState(initialState);
 
   const openModelDialog = useCallback(() => {
     setIsModelDialogOpen(true);

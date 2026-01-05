@@ -23,6 +23,7 @@ interface OpenAIResponse {
 export class OpenAIContentGenerator implements ContentGenerator {
   private readonly apiKey: string;
   private readonly baseUrl: string;
+  private readonly chatCompletionPath: string;
   private readonly modelName: string;
 
   constructor(config: Config) {
@@ -31,10 +32,16 @@ export class OpenAIContentGenerator implements ContentGenerator {
 
     this.apiKey =
       (providerConfig.apiKey as string) || process.env['OPENAI_API_KEY'] || '';
-    this.baseUrl =
+    let baseUrl =
       (providerConfig.baseUrl as string) ||
       process.env['OPENAI_API_BASE'] ||
       'https://api.openai.com/v1';
+    if (baseUrl.endsWith('/')) {
+      baseUrl = baseUrl.slice(0, -1);
+    }
+    this.baseUrl = baseUrl;
+    this.chatCompletionPath =
+      (providerConfig.chatCompletionPath as string) || '/chat/completions';
     this.modelName = config.getModel();
   }
 
@@ -150,7 +157,7 @@ export class OpenAIContentGenerator implements ContentGenerator {
           .filter((t): t is OpenAITool => !!t) || undefined,
     };
 
-    const response = await fetch(`${this.baseUrl}/chat/completions`, {
+    const response = await fetch(`${this.baseUrl}${this.chatCompletionPath}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -251,7 +258,7 @@ export class OpenAIContentGenerator implements ContentGenerator {
           .filter((t): t is OpenAITool => !!t) || undefined,
     };
 
-    const response = await fetch(`${this.baseUrl}/chat/completions`, {
+    const response = await fetch(`${this.baseUrl}${this.chatCompletionPath}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

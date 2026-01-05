@@ -922,15 +922,36 @@
         "provider": {
           "title": "Active Provider",
           "description": "The key of the currently active LLM provider.",
-          "markdownDescription": "The key of the currently active LLM provider.\n\n- Category: `Model`\n- Requires restart: `yes`\n- Default: `gemini`",
-          "default": "gemini",
+          "markdownDescription": "The key of the currently active LLM provider.\n\n- Category: `Model`\n- Requires restart: `yes`\n- Default: `opencode`",
+          "default": "opencode",
           "type": "string"
         },
         "providers": {
           "title": "LLM Providers",
           "description": "Map of LLM provider configurations.",
-          "markdownDescription": "Map of LLM provider configurations.\n\n- Category: `Model`\n- Requires restart: `yes`\n- Default: `{}`",
-          "default": {},
+          "markdownDescription": "Map of LLM provider configurations.\n\n- Category: `Model`\n- Requires restart: `yes`\n- Default: `{\n  \"opencode\": {\n    \"label\": \"OpenCode Zen (Free Tier)\",\n    \"baseUrl\": \"https://opencode.ai/zen/v1\",\n    \"chatCompletionPath\": \"/responses\",\n    \"model\": \"opencode/grok-code-fast-1\",\n    \"apiKey\": \"\"\n  },\n  \"gemini\": {\n    \"label\": \"Google Gemini\"\n  },\n  \"openai\": {\n    \"label\": \"OpenAI\",\n    \"baseUrl\": \"https://api.openai.com/v1\",\n    \"chatCompletionPath\": \"/chat/completions\"\n  },\n  \"deepseek\": {\n    \"label\": \"DeepSeek\",\n    \"baseUrl\": \"https://api.deepseek.com/v1\",\n    \"chatCompletionPath\": \"/chat/completions\"\n  }\n}`",
+          "default": {
+            "opencode": {
+              "label": "OpenCode Zen (Free Tier)",
+              "baseUrl": "https://opencode.ai/zen/v1",
+              "chatCompletionPath": "/responses",
+              "model": "opencode/grok-code-fast-1",
+              "apiKey": ""
+            },
+            "gemini": {
+              "label": "Google Gemini"
+            },
+            "openai": {
+              "label": "OpenAI",
+              "baseUrl": "https://api.openai.com/v1",
+              "chatCompletionPath": "/chat/completions"
+            },
+            "deepseek": {
+              "label": "DeepSeek",
+              "baseUrl": "https://api.deepseek.com/v1",
+              "chatCompletionPath": "/chat/completions"
+            }
+          },
           "type": "object",
           "additionalProperties": {
             "type": "object",
@@ -957,6 +978,12 @@
                 "title": "Display Name",
                 "markdownDescription": "Description not provided.\n\n- Category: `Model`\n- Requires restart: `yes`\n- Default: ``",
                 "default": "",
+                "type": "string"
+              },
+              "chatCompletionPath": {
+                "title": "Chat Completion Path",
+                "markdownDescription": "Description not provided.\n\n- Category: `Model`\n- Requires restart: `yes`\n- Default: `/chat/completions`",
+                "default": "/chat/completions",
                 "type": "string"
               }
             },

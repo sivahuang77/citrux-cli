@@ -597,8 +597,8 @@ Logging in with Google... Restarting Gemini CLI to continue.
   const { isSettingsDialogOpen, openSettingsDialog, closeSettingsDialog } =
     useSettingsCommand();
 
-  const { isModelDialogOpen, openModelDialog, closeModelDialog } =
-    useModelCommand();
+  const { isModelDialogOpen, closeModelDialog, openModelDialog } =
+    useModelCommand(initializationResult.shouldOpenModelDialog);
 
   const { toggleVimEnabled } = useVimMode();
 
@@ -1448,6 +1448,7 @@ Logging in with Google... Restarting Gemini CLI to continue.
       isSettingsDialogOpen,
       isSessionBrowserOpen,
       isModelDialogOpen,
+      shouldOpenModelDialog: initializationResult.shouldOpenModelDialog,
       isPermissionsDialogOpen,
       permissionsDialogProps,
       slashCommands,
@@ -1612,6 +1613,7 @@ Logging in with Google... Restarting Gemini CLI to continue.
       bannerData,
       bannerVisible,
       config,
+      initializationResult.shouldOpenModelDialog,
     ],
   );
 

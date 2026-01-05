@@ -1393,6 +1393,7 @@ export class Config {
       apiKey?: string;
       model?: string;
       label?: string;
+      chatCompletionPath?: string;
     };
   }
 

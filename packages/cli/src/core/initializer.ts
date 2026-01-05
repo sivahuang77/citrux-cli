@@ -22,6 +22,7 @@ export interface InitializationResult {
   authError: string | null;
   themeError: string | null;
   shouldOpenAuthDialog: boolean;
+  shouldOpenModelDialog: boolean;
   geminiMdFileCount: number;
 }
 
@@ -36,16 +37,26 @@ export async function initializeApp(
   config: Config,
   settings: LoadedSettings,
 ): Promise<InitializationResult> {
+  const provider = config.getLlmProvider();
+  const providerConfig = config.getLlmProviderConfig(provider);
+  const isGemini = provider === 'gemini';
+
   const authHandle = startupProfiler.start('authenticate');
-  const authError = await performInitialAuth(
-    config,
-    settings.merged.security?.auth?.selectedType,
-  );
+  let authError = null;
+  if (isGemini) {
+    authError = await performInitialAuth(
+      config,
+      settings.merged.security?.auth?.selectedType,
+    );
+  }
   authHandle?.end();
   const themeError = validateTheme(settings);
 
   const shouldOpenAuthDialog =
-    settings.merged.security?.auth?.selectedType === undefined || !!authError;
+    isGemini &&
+    (settings.merged.security?.auth?.selectedType === undefined || !!authError);
+
+  const shouldOpenModelDialog = !isGemini && !providerConfig.apiKey;
 
   logCliConfiguration(
     config,
@@ -62,6 +73,7 @@ export async function initializeApp(
     authError,
     themeError,
     shouldOpenAuthDialog,
+    shouldOpenModelDialog,
     geminiMdFileCount: config.getGeminiMdFileCount(),
   };
 }

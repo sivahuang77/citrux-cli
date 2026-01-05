@@ -132,6 +132,14 @@ export interface SettingsSchema {
 export type MemoryImportFormat = 'tree' | 'flat';
 export type DnsResolutionOrder = 'ipv4first' | 'verbatim';
 
+export interface ProviderConfig {
+  baseUrl?: string;
+  apiKey?: string;
+  model?: string;
+  label?: string;
+  chatCompletionPath?: string;
+}
+
 /**
  * The canonical schema for all settings.
  * The structure of this object defines the structure of the `Settings` type.
@@ -779,7 +787,7 @@ const SETTINGS_SCHEMA = {
         label: 'Active Provider',
         category: 'Model',
         requiresRestart: true,
-        default: 'gemini',
+        default: 'opencode',
         description: 'The key of the currently active LLM provider.',
         showInDialog: true,
       },
@@ -788,7 +796,28 @@ const SETTINGS_SCHEMA = {
         label: 'LLM Providers',
         category: 'Model',
         requiresRestart: true,
-        default: {},
+        default: {
+          opencode: {
+            label: 'OpenCode Zen (Free Tier)',
+            baseUrl: 'https://opencode.ai/zen/v1',
+            chatCompletionPath: '/responses',
+            model: 'opencode/grok-code-fast-1',
+            apiKey: '',
+          },
+          gemini: {
+            label: 'Google Gemini',
+          },
+          openai: {
+            label: 'OpenAI',
+            baseUrl: 'https://api.openai.com/v1',
+            chatCompletionPath: '/chat/completions',
+          },
+          deepseek: {
+            label: 'DeepSeek',
+            baseUrl: 'https://api.deepseek.com/v1',
+            chatCompletionPath: '/chat/completions',
+          },
+        } as Record<string, ProviderConfig>,
         description: 'Map of LLM provider configurations.',
         showInDialog: false,
         additionalProperties: {
@@ -821,6 +850,13 @@ const SETTINGS_SCHEMA = {
               category: 'Model',
               requiresRestart: true,
               default: '',
+            },
+            chatCompletionPath: {
+              type: 'string',
+              label: 'Chat Completion Path',
+              category: 'Model',
+              requiresRestart: true,
+              default: '/chat/completions',
             },
           },
         },

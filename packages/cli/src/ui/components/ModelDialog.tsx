@@ -20,7 +20,7 @@ import { theme } from '../semantic-colors.js';
 import { DescriptiveRadioButtonSelect } from './shared/DescriptiveRadioButtonSelect.js';
 import { ConfigContext } from '../contexts/ConfigContext.js';
 import { useSettings } from '../contexts/SettingsContext.js';
-import { SettingScope } from '../../config/settings.js';
+import { SettingScope, type ProviderConfig } from '../../config/settings.js';
 import { TextInput } from './shared/TextInput.js';
 import { useTextBuffer } from './shared/text-buffer.js';
 
@@ -36,13 +36,6 @@ type DialogView =
   | 'config_key'
   | 'config_url'
   | 'config_model';
-
-interface ProviderConfig {
-  baseUrl?: string;
-  apiKey?: string;
-  model?: string;
-  label?: string;
-}
 
 export function ModelDialog({ onClose }: ModelDialogProps): React.JSX.Element {
   const config = useContext(ConfigContext);
@@ -143,7 +136,8 @@ export function ModelDialog({ onClose }: ModelDialogProps): React.JSX.Element {
     { isActive: true },
   );
 
-  const mainOptions = useMemo(() => [
+  const mainOptions = useMemo(
+    () => [
       {
         value: 'ChangeProvider',
         title: `Provider: ${currentProvider}`,
@@ -162,10 +156,18 @@ export function ModelDialog({ onClose }: ModelDialogProps): React.JSX.Element {
         description: 'Manually select a specific model',
         key: 'Manual',
       },
-    ], [currentProvider]);
+    ],
+    [currentProvider],
+  );
 
   const providerOptions = useMemo(() => {
     const options = [
+      {
+        value: 'opencode',
+        title: 'OpenCode Zen',
+        description: 'Free Tier AI Gateway',
+        key: 'opencode',
+      },
       {
         value: 'gemini',
         title: 'Google Gemini',
@@ -187,7 +189,7 @@ export function ModelDialog({ onClose }: ModelDialogProps): React.JSX.Element {
     ];
 
     Object.entries(customProviders).forEach(([key, p]) => {
-      if (key !== 'openai' && key !== 'deepseek') {
+      if (key !== 'openai' && key !== 'deepseek' && key !== 'opencode') {
         options.push({
           value: key,
           title: p.label || key,
@@ -250,6 +252,19 @@ export function ModelDialog({ onClose }: ModelDialogProps): React.JSX.Element {
       }
 
       if (view === 'provider') {
+        const prov = customProviders[value];
+        if (value !== 'gemini' && (!prov || !prov.apiKey)) {
+          setWizardData({
+            name: value,
+            url:
+              prov?.baseUrl ||
+              (value === 'opencode' ? 'https://opencode.ai/zen/v1' : ''),
+            key: prov?.apiKey || '',
+          });
+          setView('config_key');
+          buffer.setText(prov?.apiKey || '');
+          return;
+        }
         settings.setValue(SettingScope.User, 'llm.provider', value);
         if (config) {
           void config.refreshProvider();
@@ -265,7 +280,7 @@ export function ModelDialog({ onClose }: ModelDialogProps): React.JSX.Element {
       }
       onClose();
     },
-    [config, onClose, view, settings, buffer],
+    [config, onClose, view, settings, buffer, customProviders],
   );
 
   const getWizardTitle = () => {
