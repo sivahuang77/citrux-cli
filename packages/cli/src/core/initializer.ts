@@ -56,7 +56,7 @@ export async function initializeApp(
     isGemini &&
     (settings.merged.security?.auth?.selectedType === undefined || !!authError);
 
-  const shouldOpenModelDialog = !isGemini && !providerConfig.apiKey;
+  const shouldOpenModelDialog = !isGemini && !providerConfig['apiKey'];
 
   logCliConfiguration(
     config,

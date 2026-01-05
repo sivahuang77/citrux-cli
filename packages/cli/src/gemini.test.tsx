@@ -1327,6 +1327,7 @@ describe('startInteractiveUI', () => {
     authError: null,
     themeError: null,
     shouldOpenAuthDialog: false,
+    shouldOpenModelDialog: false,
     geminiMdFileCount: 0,
   };
 

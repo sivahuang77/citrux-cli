@@ -4,6 +4,54 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import type {
+  CountTokensParameters,
+  CountTokensResponse,
+  EmbedContentParameters,
+  EmbedContentResponse,
+  Content,
+  Part,
+  GenerateContentParameters,
+} from '@google/genai';
+import { GenerateContentResponse } from '@google/genai';
+import type { ContentGenerator } from './contentGenerator.js';
+import type { Config } from '../config/config.js';
+import { fetch } from 'undici';
+import * as readline from 'node:readline';
+import { Readable } from 'node:stream';
+import { toContents } from '../code_assist/converter.js';
+
+interface OpenAIMessage {
+  role: string;
+  content?: string;
+  tool_calls?: Array<{
+    id: string;
+    type: string;
+    function: {
+      name: string;
+      arguments: string;
+    };
+  }>;
+  tool_call_id?: string;
+}
+
+interface OpenAIRequest {
+  model: string;
+  messages: OpenAIMessage[];
+  stream?: boolean;
+  stream_options?: { include_usage: boolean };
+  tools?: OpenAITool[];
+}
+
+interface OpenAITool {
+  type: string;
+  function: {
+    name: string;
+    description: string | undefined;
+    parameters: object | undefined;
+  };
+}
+
 interface OpenAIResponse {
   choices: Array<{
     message: OpenAIMessage;
@@ -31,9 +79,11 @@ export class OpenAIContentGenerator implements ContentGenerator {
     const providerConfig = config.getLlmProviderConfig(provider) || {};
 
     this.apiKey =
-      (providerConfig.apiKey as string) || process.env['OPENAI_API_KEY'] || '';
+      (providerConfig['apiKey'] as string) ||
+      process.env['OPENAI_API_KEY'] ||
+      '';
     let baseUrl =
-      (providerConfig.baseUrl as string) ||
+      (providerConfig['baseUrl'] as string) ||
       process.env['OPENAI_API_BASE'] ||
       'https://api.openai.com/v1';
     if (baseUrl.endsWith('/')) {
@@ -41,7 +91,7 @@ export class OpenAIContentGenerator implements ContentGenerator {
     }
     this.baseUrl = baseUrl;
     this.chatCompletionPath =
-      (providerConfig.chatCompletionPath as string) || '/chat/completions';
+      (providerConfig['chatCompletionPath'] as string) || '/chat/completions';
     this.modelName = config.getModel();
   }
 
@@ -84,12 +134,12 @@ export class OpenAIContentGenerator implements ContentGenerator {
             tool_calls: [
               {
                 id:
-                  part.functionCall.name +
+                  (part.functionCall.name || 'unknown') +
                   '_' +
                   Math.random().toString(36).substring(7),
                 type: 'function',
                 function: {
-                  name: part.functionCall.name,
+                  name: part.functionCall.name || 'unknown',
                   arguments: JSON.stringify(part.functionCall.args),
                 },
               },
@@ -197,8 +247,9 @@ export class OpenAIContentGenerator implements ContentGenerator {
           role: 'model',
           parts,
         },
-        finishReason:
-          'STOP' as unknown as GenerateContentResponse['candidates'][0]['finishReason'],
+        finishReason: 'STOP' as unknown as NonNullable<
+          GenerateContentResponse['candidates']
+        >[0]['finishReason'],
       },
     ];
     result.usageMetadata = {
@@ -371,7 +422,9 @@ export class OpenAIContentGenerator implements ContentGenerator {
                   parts,
                 },
                 finishReason: (choice.finish_reason?.toUpperCase() ||
-                  undefined) as unknown as GenerateContentResponse['candidates'][0]['finishReason'],
+                  undefined) as unknown as NonNullable<
+                  GenerateContentResponse['candidates']
+                >[0]['finishReason'],
               },
             ];
             yield result;

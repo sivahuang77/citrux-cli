@@ -24,6 +24,7 @@ import { isWorkspaceTrusted } from './trustedFolders.js';
 import {
   type Settings,
   type MemoryImportFormat,
+  type ProviderConfig,
   type MergeStrategy,
   type SettingsSchema,
   type SettingDefinition,
@@ -60,7 +61,7 @@ function getMergeStrategyForPath(path: string[]): MergeStrategy | undefined {
   return current?.mergeStrategy;
 }
 
-export type { Settings, MemoryImportFormat };
+export type { Settings, MemoryImportFormat, ProviderConfig };
 
 export const USER_SETTINGS_PATH = Storage.getGlobalSettingsPath();
 export const USER_SETTINGS_DIR = path.dirname(USER_SETTINGS_PATH);

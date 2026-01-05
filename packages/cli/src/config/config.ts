@@ -35,6 +35,7 @@ import {
   type HookDefinition,
   type HookEventName,
   type OutputFormat,
+  type ConfigParameters,
 } from '@google/gemini-cli-core';
 import type { Settings } from './settings.js';
 import { saveModelChange, loadSettings } from './settings.js';
@@ -707,7 +708,7 @@ export async function loadCliConfig(
     hooks: settings.hooks || {},
     projectHooks: projectHooks || {},
     onModelChange: (model: string) => saveModelChange(loadedSettings, model),
-    llm: (settings.merged as { llm?: unknown }).llm as ConfigParameters['llm'],
+    llm: (settings as unknown as { llm: ConfigParameters['llm'] }).llm,
   });
 }
 
