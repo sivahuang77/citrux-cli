@@ -357,6 +357,18 @@ export interface ConfigParameters {
   disabledSkills?: string[];
   experimentalJitContext?: boolean;
   onModelChange?: (model: string) => void;
+  llm?: {
+    provider?: string;
+    providers?: Record<
+      string,
+      {
+        baseUrl?: string;
+        apiKey?: string;
+        model?: string;
+        label?: string;
+      }
+    >;
+  };
 }
 
 export class Config {
@@ -494,6 +506,7 @@ export class Config {
   private readonly experimentalJitContext: boolean;
   private contextManager?: ContextManager;
   private terminalBackground: string | undefined = undefined;
+  private llm: ConfigParameters['llm'];
 
   constructor(params: ConfigParameters) {
     this.sessionId = params.sessionId;
@@ -652,6 +665,7 @@ export class Config {
     this.projectHooks = params.projectHooks;
     this.experiments = params.experiments;
     this.onModelChange = params.onModelChange;
+    this.llm = params.llm;
 
     if (params.contextFileName) {
       setGeminiMdFilename(params.contextFileName);
@@ -1350,22 +1364,36 @@ export class Config {
   }
 
   getLlmProvider(): string {
-    return 'gemini';
+    return this.llm?.provider || 'gemini';
   }
 
-  getLlmProviderConfig(_provider: string): Record<string, unknown> {
-    return {};
+  getLlmProviderConfig(provider: string): Record<string, unknown> {
+    return (this.llm?.providers?.[provider] || {}) as Record<string, unknown>;
   }
 
-  setLlmProvider(_provider: string): void {
-    // No-op
+  setLlmProvider(provider: string): void {
+    if (!this.llm) {
+      this.llm = {};
+    }
+    this.llm.provider = provider;
   }
 
   setLlmProviderConfig(
-    _provider: string,
-    _config: Record<string, unknown>,
+    provider: string,
+    config: Record<string, unknown>,
   ): void {
-    // No-op
+    if (!this.llm) {
+      this.llm = {};
+    }
+    if (!this.llm.providers) {
+      this.llm.providers = {};
+    }
+    this.llm.providers[provider] = config as {
+      baseUrl?: string;
+      apiKey?: string;
+      model?: string;
+      label?: string;
+    };
   }
 
   async refreshProvider() {

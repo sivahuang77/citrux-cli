@@ -189,8 +189,8 @@
         },
         "showStatusInTitle": {
           "title": "Show Status in Title",
-          "description": "Show Citrux CLI status and thoughts in the terminal window title",
-          "markdownDescription": "Show Citrux CLI status and thoughts in the terminal window title\n\n- Category: `UI`\n- Requires restart: `no`\n- Default: `false`",
+          "description": "Show Gemini CLI status and thoughts in the terminal window title",
+          "markdownDescription": "Show Gemini CLI status and thoughts in the terminal window title\n\n- Category: `UI`\n- Requires restart: `no`\n- Default: `false`",
           "default": false,
           "type": "boolean"
         },
@@ -912,6 +912,60 @@
       },
       "additionalProperties": false
     },
+    "llm": {
+      "title": "LLM Configuration",
+      "description": "Configure multiple LLM providers and select the active one.",
+      "markdownDescription": "Configure multiple LLM providers and select the active one.\n\n- Category: `Model`\n- Requires restart: `yes`\n- Default: `{}`",
+      "default": {},
+      "type": "object",
+      "properties": {
+        "provider": {
+          "title": "Active Provider",
+          "description": "The key of the currently active LLM provider.",
+          "markdownDescription": "The key of the currently active LLM provider.\n\n- Category: `Model`\n- Requires restart: `yes`\n- Default: `gemini`",
+          "default": "gemini",
+          "type": "string"
+        },
+        "providers": {
+          "title": "LLM Providers",
+          "description": "Map of LLM provider configurations.",
+          "markdownDescription": "Map of LLM provider configurations.\n\n- Category: `Model`\n- Requires restart: `yes`\n- Default: `{}`",
+          "default": {},
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "baseUrl": {
+                "title": "Base URL",
+                "markdownDescription": "Description not provided.\n\n- Category: `Model`\n- Requires restart: `yes`\n- Default: ``",
+                "default": "",
+                "type": "string"
+              },
+              "apiKey": {
+                "title": "API Key",
+                "markdownDescription": "Description not provided.\n\n- Category: `Model`\n- Requires restart: `yes`\n- Default: ``",
+                "default": "",
+                "type": "string"
+              },
+              "model": {
+                "title": "Default Model",
+                "markdownDescription": "Description not provided.\n\n- Category: `Model`\n- Requires restart: `yes`\n- Default: ``",
+                "default": "",
+                "type": "string"
+              },
+              "label": {
+                "title": "Display Name",
+                "markdownDescription": "Description not provided.\n\n- Category: `Model`\n- Requires restart: `yes`\n- Default: ``",
+                "default": "",
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
+    },
     "context": {
       "title": "Context",
       "description": "Settings for managing context provided to the model.",
@@ -970,9 +1024,9 @@
               "type": "boolean"
             },
             "respectGeminiIgnore": {
-              "title": "Respect .citruxignore",
-              "description": "Respect .citruxignore files when searching",
-              "markdownDescription": "Respect .citruxignore files when searching\n\n- Category: `Context`\n- Requires restart: `yes`\n- Default: `true`",
+              "title": "Respect .geminiignore",
+              "description": "Respect .geminiignore files when searching",
+              "markdownDescription": "Respect .geminiignore files when searching\n\n- Category: `Context`\n- Requires restart: `yes`\n- Default: `true`",
               "default": true,
               "type": "boolean"
             },
@@ -1130,8 +1184,8 @@
         },
         "enableHooks": {
           "title": "Enable Hooks System",
-          "description": "Enable the hooks system for intercepting and customizing Citrux CLI behavior. When enabled, hooks configured in settings will execute at appropriate lifecycle events (BeforeTool, AfterTool, BeforeModel, etc.). Requires MessageBus integration.",
-          "markdownDescription": "Enable the hooks system for intercepting and customizing Citrux CLI behavior. When enabled, hooks configured in settings will execute at appropriate lifecycle events (BeforeTool, AfterTool, BeforeModel, etc.). Requires MessageBus integration.\n\n- Category: `Advanced`\n- Requires restart: `yes`\n- Default: `false`",
+          "description": "Enable the hooks system for intercepting and customizing Gemini CLI behavior. When enabled, hooks configured in settings will execute at appropriate lifecycle events (BeforeTool, AfterTool, BeforeModel, etc.). Requires MessageBus integration.",
+          "markdownDescription": "Enable the hooks system for intercepting and customizing Gemini CLI behavior. When enabled, hooks configured in settings will execute at appropriate lifecycle events (BeforeTool, AfterTool, BeforeModel, etc.). Requires MessageBus integration.\n\n- Category: `Advanced`\n- Requires restart: `yes`\n- Default: `false`",
           "default": false,
           "type": "boolean"
         }
@@ -1676,7 +1730,7 @@
         },
         "extension": {
           "type": "object",
-          "description": "Metadata describing the Citrux CLI extension that owns this MCP server.",
+          "description": "Metadata describing the Gemini CLI extension that owns this MCP server.",
           "additionalProperties": {
             "type": ["string", "boolean", "number"]
           }
@@ -1707,7 +1761,7 @@
     },
     "TelemetrySettings": {
       "type": "object",
-      "description": "Telemetry configuration for Citrux CLI.",
+      "description": "Telemetry configuration for Gemini CLI.",
       "additionalProperties": false,
       "properties": {
         "enabled": {
@@ -1770,7 +1824,7 @@
     },
     "CustomTheme": {
       "type": "object",
-      "description": "Custom theme definition used for styling Citrux CLI output. Colors are provided as hex strings or named ANSI colors.",
+      "description": "Custom theme definition used for styling Gemini CLI output. Colors are provided as hex strings or named ANSI colors.",
       "additionalProperties": false,
       "properties": {
         "type": {

@@ -707,6 +707,7 @@ export async function loadCliConfig(
     hooks: settings.hooks || {},
     projectHooks: projectHooks || {},
     onModelChange: (model: string) => saveModelChange(loadedSettings, model),
+    llm: (settings.merged as { llm?: unknown }).llm as ConfigParameters['llm'],
   });
 }
 

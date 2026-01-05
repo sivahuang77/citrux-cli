@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2025 Citrux
+ * Copyright 2025 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -28,15 +28,41 @@ interface ModelDialogProps {
   onClose: () => void;
 }
 
-type DialogView = 'main' | 'manual' | 'provider' | 'config_key' | 'config_url';
+type DialogView =
+  | 'main'
+  | 'manual'
+  | 'provider'
+  | 'config_name'
+  | 'config_key'
+  | 'config_url'
+  | 'config_model';
+
+interface ProviderConfig {
+  baseUrl?: string;
+  apiKey?: string;
+  model?: string;
+  label?: string;
+}
 
 export function ModelDialog({ onClose }: ModelDialogProps): React.JSX.Element {
   const config = useContext(ConfigContext);
   const settings = useSettings();
   const [view, setView] = useState<DialogView>('main');
-  const [selectedProvider, setSelectedProvider] = useState<string>('gemini');
+  const [wizardData, setWizardData] = useState<{
+    name?: string;
+    url?: string;
+    key?: string;
+  }>({});
 
-  const currentProvider = (settings.merged as any).llm?.provider || 'gemini';
+  const mergedSettings = settings.merged as {
+    llm?: { provider?: string; providers?: Record<string, ProviderConfig> };
+  };
+  const currentProvider = mergedSettings.llm?.provider || 'gemini';
+
+  const customProviders = useMemo(
+    () => mergedSettings.llm?.providers || {},
+    [mergedSettings.llm?.providers],
+  );
 
   const buffer = useTextBuffer({
     initialText: '',
@@ -50,27 +76,65 @@ export function ModelDialog({ onClose }: ModelDialogProps): React.JSX.Element {
       if (key.name === 'escape') {
         if (view === 'manual' || view === 'provider') {
           setView('main');
-        } else if (view === 'config_key' || view === 'config_url') {
+        } else if (view === 'config_name') {
           setView('provider');
+        } else if (view === 'config_url') {
+          setView('config_name');
+        } else if (view === 'config_key') {
+          setView('config_url');
+        } else if (view === 'config_model') {
+          setView('config_key');
         } else {
           onClose();
         }
       }
-      if (key.name === 'return' && (view === 'config_key' || view === 'config_url')) {
+      if (
+        key.name === 'return' &&
+        (view === 'config_name' ||
+          view === 'config_key' ||
+          view === 'config_url' ||
+          view === 'config_model')
+      ) {
         const value = buffer.text;
-        const path = view === 'config_key' 
-          ? `llm.providers.${selectedProvider}.apiKey` 
-          : `llm.providers.${selectedProvider}.baseUrl`;
-        
-        settings.setValue(SettingScope.User, path, value);
-        
-        if (view === 'config_key' && selectedProvider !== 'gemini') {
+
+        if (view === 'config_name') {
+          setWizardData({ ...wizardData, name: value });
           setView('config_url');
-          buffer.setText((settings.merged as any).llm?.providers?.[selectedProvider]?.baseUrl || '');
-        } else {
-          settings.setValue(SettingScope.User, 'llm.provider', selectedProvider);
+          buffer.setText('');
+        } else if (view === 'config_url') {
+          setWizardData({ ...wizardData, url: value });
+          setView('config_key');
+          buffer.setText('');
+        } else if (view === 'config_key') {
+          setWizardData({ ...wizardData, key: value });
+          setView('config_model');
+          buffer.setText('');
+        } else if (view === 'config_model') {
+          const finalName = wizardData.name || 'custom';
+          settings.setValue(
+            SettingScope.User,
+            `llm.providers.${finalName}.baseUrl`,
+            wizardData.url,
+          );
+          settings.setValue(
+            SettingScope.User,
+            `llm.providers.${finalName}.apiKey`,
+            wizardData.key,
+          );
+          settings.setValue(
+            SettingScope.User,
+            `llm.providers.${finalName}.model`,
+            value,
+          );
+          settings.setValue(
+            SettingScope.User,
+            `llm.providers.${finalName}.label`,
+            finalName,
+          );
+
+          settings.setValue(SettingScope.User, 'llm.provider', finalName);
           if (config) {
-            (config as any).refreshProvider?.();
+            void config.refreshProvider();
           }
           setView('main');
         }
@@ -79,8 +143,7 @@ export function ModelDialog({ onClose }: ModelDialogProps): React.JSX.Element {
     { isActive: true },
   );
 
-  const mainOptions = useMemo(() => {
-    const list = [
+  const mainOptions = useMemo(() => [
       {
         value: 'ChangeProvider',
         title: `Provider: ${currentProvider}`,
@@ -99,26 +162,75 @@ export function ModelDialog({ onClose }: ModelDialogProps): React.JSX.Element {
         description: 'Manually select a specific model',
         key: 'Manual',
       },
-    ];
-    return list;
-  }, [currentProvider]);
+    ], [currentProvider]);
 
-  const providerOptions = [
-    { value: 'gemini', title: 'Google Gemini', description: 'Default Google AI models', key: 'gemini' },
-    { value: 'openai', title: 'OpenAI', description: 'GPT-4o, GPT-4-turbo, etc.', key: 'openai' },
-    { value: 'deepseek', title: 'DeepSeek', description: 'DeepSeek V3 / R1 (OpenAI Compatible)', key: 'deepseek' },
-    { value: 'custom', title: 'Custom', description: 'Local LLM or other OpenAI-compatible API', key: 'custom' },
-  ];
+  const providerOptions = useMemo(() => {
+    const options = [
+      {
+        value: 'gemini',
+        title: 'Google Gemini',
+        description: 'Built-in Google AI',
+        key: 'gemini',
+      },
+      {
+        value: 'openai',
+        title: 'OpenAI',
+        description: 'Built-in OpenAI preset',
+        key: 'openai',
+      },
+      {
+        value: 'deepseek',
+        title: 'DeepSeek',
+        description: 'Built-in DeepSeek preset',
+        key: 'deepseek',
+      },
+    ];
+
+    Object.entries(customProviders).forEach(([key, p]) => {
+      if (key !== 'openai' && key !== 'deepseek') {
+        options.push({
+          value: key,
+          title: p.label || key,
+          description: `Custom: ${p.baseUrl}`,
+          key,
+        });
+      }
+    });
+
+    options.push({
+      value: 'AddNew',
+      title: '+ Add New Provider',
+      description: 'Configure a new OpenAI-compatible API',
+      key: 'AddNew',
+    });
+    return options;
+  }, [customProviders]);
 
   const manualOptions = useMemo(() => {
     const list = [
-      { value: DEFAULT_GEMINI_MODEL, title: DEFAULT_GEMINI_MODEL, key: DEFAULT_GEMINI_MODEL },
-      { value: DEFAULT_GEMINI_FLASH_MODEL, title: DEFAULT_GEMINI_FLASH_MODEL, key: DEFAULT_GEMINI_FLASH_MODEL },
-      { value: 'gpt-4o', title: 'gpt-4o', key: 'gpt-4o' },
-      { value: 'deepseek-chat', title: 'deepseek-chat', key: 'deepseek-chat' },
+      {
+        value: DEFAULT_GEMINI_MODEL,
+        title: DEFAULT_GEMINI_MODEL,
+        key: DEFAULT_GEMINI_MODEL,
+      },
+      {
+        value: DEFAULT_GEMINI_FLASH_MODEL,
+        title: DEFAULT_GEMINI_FLASH_MODEL,
+        key: DEFAULT_GEMINI_FLASH_MODEL,
+      },
     ];
+
+    const activeProv = mergedSettings.llm?.providers?.[currentProvider];
+    if (activeProv?.model) {
+      list.push({
+        value: activeProv.model,
+        title: activeProv.model,
+        key: activeProv.model,
+      });
+    }
+
     return list;
-  }, []);
+  }, [currentProvider, mergedSettings.llm?.providers]);
 
   const handleSelect = useCallback(
     (value: string) => {
@@ -130,20 +242,19 @@ export function ModelDialog({ onClose }: ModelDialogProps): React.JSX.Element {
         setView('provider');
         return;
       }
+      if (value === 'AddNew') {
+        setWizardData({});
+        setView('config_name');
+        buffer.setText('');
+        return;
+      }
 
       if (view === 'provider') {
-        setSelectedProvider(value);
-        if (value === 'gemini') {
-          settings.setValue(SettingScope.User, 'llm.provider', 'gemini');
-          if (config) {
-            (config as any).refreshProvider?.();
-          }
-          setView('main');
-        } else {
-          setView('config_key');
-          const existingKey = (settings.merged as any).llm?.providers?.[value]?.apiKey || '';
-          buffer.setText(existingKey);
+        settings.setValue(SettingScope.User, 'llm.provider', value);
+        if (config) {
+          void config.refreshProvider();
         }
+        setView('main');
         return;
       }
 
@@ -157,6 +268,21 @@ export function ModelDialog({ onClose }: ModelDialogProps): React.JSX.Element {
     [config, onClose, view, settings, buffer],
   );
 
+  const getWizardTitle = () => {
+    switch (view) {
+      case 'config_name':
+        return '1. Provider ID (e.g. ollama)';
+      case 'config_url':
+        return '2. Base URL (e.g. http://localhost:11434/v1)';
+      case 'config_key':
+        return '3. API Key (Optional)';
+      case 'config_model':
+        return '4. Default Model (e.g. llama3)';
+      default:
+        return '';
+    }
+  };
+
   return (
     <Box
       borderStyle="round"
@@ -167,31 +293,48 @@ export function ModelDialog({ onClose }: ModelDialogProps): React.JSX.Element {
     >
       <Text bold>Citrux Model & Provider Settings</Text>
 
-      {view === 'config_key' || view === 'config_url' ? (
+      {view.startsWith('config_') ? (
         <Box flexDirection="column" marginTop={1}>
-          <Text>Configuring <Text color="orange" bold>{selectedProvider.toUpperCase()}</Text></Text>
+          <Text color="orange" bold>
+            Add New LLM Provider
+          </Text>
           <Box marginTop={1}>
-            <Text>{view === 'config_key' ? 'Enter API Key:' : 'Enter Base URL:'}</Text>
+            <Text>{getWizardTitle()}:</Text>
           </Box>
-          <Box borderStyle="single" borderColor={theme.border.focused} paddingX={1} marginTop={1}>
+          <Box
+            borderStyle="single"
+            borderColor={theme.border.focused}
+            paddingX={1}
+            marginTop={1}
+          >
             <TextInput buffer={buffer} focus={true} />
           </Box>
           <Box marginTop={1}>
-            <Text color={theme.text.secondary}>(Press Enter to save, Esc to cancel)</Text>
+            <Text color={theme.text.secondary}>
+              (Press Enter to continue, Esc to go back)
+            </Text>
           </Box>
         </Box>
       ) : (
         <>
           <Box marginTop={1}>
             <DescriptiveRadioButtonSelect
-              items={view === 'main' ? mainOptions : view === 'manual' ? manualOptions : providerOptions}
+              items={
+                view === 'main'
+                  ? mainOptions
+                  : view === 'manual'
+                    ? manualOptions
+                    : providerOptions
+              }
               onSelect={handleSelect}
               initialIndex={0}
               showNumbers={true}
             />
           </Box>
           <Box marginTop={1}>
-            <Text color={theme.text.secondary}>(Press Esc to go back/close)</Text>
+            <Text color={theme.text.secondary}>
+              (Press Esc to go back/close)
+            </Text>
           </Box>
         </>
       )}

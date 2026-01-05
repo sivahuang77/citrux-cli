@@ -1,25 +1,21 @@
 /**
  * @license
- * Copyright 2025 Citrux
+ * Copyright 2025 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import type {
-  CountTokensParameters,
-  CountTokensResponse,
-  EmbedContentParameters,
-  EmbedContentResponse,
-  Content,
-  Part,
-  GenerateContentParameters,
-} from '@google/genai';
-import { GenerateContentResponse } from '@google/genai';
-import type { ContentGenerator } from './contentGenerator.js';
-import type { Config } from '../config/config.js';
-import { fetch } from 'undici';
-import * as readline from 'node:readline';
-import { Readable } from 'node:stream';
-import { toContents } from '../code_assist/converter.js';
+interface OpenAIResponse {
+  choices: Array<{
+    message: OpenAIMessage;
+    delta?: OpenAIMessage;
+    finish_reason?: string;
+  }>;
+  usage?: {
+    prompt_tokens: number;
+    completion_tokens: number;
+    total_tokens: number;
+  };
+}
 
 /**
  * A ContentGenerator implementation that uses OpenAI-compatible APIs.
@@ -30,11 +26,15 @@ export class OpenAIContentGenerator implements ContentGenerator {
   private readonly modelName: string;
 
   constructor(config: Config) {
-    const provider = (config as any).getLlmProvider?.() || 'openai';
-    const providerConfig = (config as any).getLlmProviderConfig?.(provider) || {};
-    
-    this.apiKey = providerConfig.apiKey || process.env['OPENAI_API_KEY'] || '';
-    this.baseUrl = providerConfig.baseUrl || process.env['OPENAI_API_BASE'] || 'https://api.openai.com/v1';
+    const provider = config.getLlmProvider() || 'openai';
+    const providerConfig = config.getLlmProviderConfig(provider) || {};
+
+    this.apiKey =
+      (providerConfig.apiKey as string) || process.env['OPENAI_API_KEY'] || '';
+    this.baseUrl =
+      (providerConfig.baseUrl as string) ||
+      process.env['OPENAI_API_BASE'] ||
+      'https://api.openai.com/v1';
     this.modelName = config.getModel();
   }
 
@@ -51,8 +51,11 @@ export class OpenAIContentGenerator implements ContentGenerator {
     }
   }
 
-  private convertContentsToMessages(contents: Content[], systemInstruction?: Content): any[] {
-    const messages: any[] = [];
+  private convertContentsToMessages(
+    contents: Content[],
+    systemInstruction?: Content,
+  ): OpenAIMessage[] {
+    const messages: OpenAIMessage[] = [];
 
     if (systemInstruction?.parts?.[0]?.text) {
       messages.push({
@@ -73,7 +76,10 @@ export class OpenAIContentGenerator implements ContentGenerator {
             role: 'assistant',
             tool_calls: [
               {
-                id: part.functionCall.name + '_' + Math.random().toString(36).substring(7),
+                id:
+                  part.functionCall.name +
+                  '_' +
+                  Math.random().toString(36).substring(7),
                 type: 'function',
                 function: {
                   name: part.functionCall.name,
@@ -102,30 +108,53 @@ export class OpenAIContentGenerator implements ContentGenerator {
     _userPromptId: string,
   ): Promise<GenerateContentResponse> {
     const contents = toContents(request.contents);
-    const systemInstruction = request.config?.systemInstruction ? 
-      (Array.isArray(request.config.systemInstruction) ? { parts: request.config.systemInstruction.map(p => typeof p === 'string' ? { text: p } : p) } : 
-       typeof request.config.systemInstruction === 'string' ? { parts: [{ text: request.config.systemInstruction }] } : request.config.systemInstruction) as Content : undefined;
+    const systemInstruction = request.config?.systemInstruction
+      ? ((Array.isArray(request.config.systemInstruction)
+          ? {
+              parts: request.config.systemInstruction.map((p) =>
+                typeof p === 'string' ? { text: p } : p,
+              ),
+            }
+          : typeof request.config.systemInstruction === 'string'
+            ? { parts: [{ text: request.config.systemInstruction }] }
+            : request.config.systemInstruction) as Content)
+      : undefined;
 
-    const messages = this.convertContentsToMessages(contents, systemInstruction);
-    
-    const body = {
+    const messages = this.convertContentsToMessages(
+      contents,
+      systemInstruction,
+    );
+
+    const body: OpenAIRequest = {
       model: this.modelName,
       messages,
-      tools: request.config?.tools?.flatMap((t: any) => t.functionDeclarations?.map((f: any) => ({
-        type: 'function',
-        function: {
-          name: f.name,
-          description: f.description,
-          parameters: f.parameters,
-        }
-      }))) || undefined,
+      tools:
+        request.config?.tools
+          ?.flatMap((t: unknown) => {
+            const tool = t as {
+              functionDeclarations?: Array<{
+                name: string;
+                description?: string;
+                parameters?: object;
+              }>;
+            };
+            return tool.functionDeclarations?.map((f) => ({
+              type: 'function',
+              function: {
+                name: f.name,
+                description: f.description,
+                parameters: f.parameters,
+              },
+            }));
+          })
+          .filter((t): t is OpenAITool => !!t) || undefined,
     };
 
     const response = await fetch(`${this.baseUrl}/chat/completions`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${this.apiKey}`,
+        Authorization: `Bearer ${this.apiKey}`,
       },
       body: JSON.stringify(body),
     });
@@ -135,7 +164,7 @@ export class OpenAIContentGenerator implements ContentGenerator {
       throw new Error(`OpenAI API error (${response.status}): ${errorText}`);
     }
 
-    const data = (await response.json()) as any;
+    const data = (await response.json()) as OpenAIResponse;
     const choice = data.choices[0];
     const message = choice.message;
 
@@ -161,7 +190,8 @@ export class OpenAIContentGenerator implements ContentGenerator {
           role: 'model',
           parts,
         },
-        finishReason: 'STOP' as any,
+        finishReason:
+          'STOP' as unknown as GenerateContentResponse['candidates'][0]['finishReason'],
       },
     ];
     result.usageMetadata = {
@@ -177,32 +207,55 @@ export class OpenAIContentGenerator implements ContentGenerator {
     _userPromptId: string,
   ): Promise<AsyncGenerator<GenerateContentResponse>> {
     const contents = toContents(request.contents);
-    const systemInstruction = request.config?.systemInstruction ? 
-      (Array.isArray(request.config.systemInstruction) ? { parts: request.config.systemInstruction.map(p => typeof p === 'string' ? { text: p } : p) } : 
-       typeof request.config.systemInstruction === 'string' ? { parts: [{ text: request.config.systemInstruction }] } : request.config.systemInstruction) as Content : undefined;
+    const systemInstruction = request.config?.systemInstruction
+      ? ((Array.isArray(request.config.systemInstruction)
+          ? {
+              parts: request.config.systemInstruction.map((p) =>
+                typeof p === 'string' ? { text: p } : p,
+              ),
+            }
+          : typeof request.config.systemInstruction === 'string'
+            ? { parts: [{ text: request.config.systemInstruction }] }
+            : request.config.systemInstruction) as Content)
+      : undefined;
 
-    const messages = this.convertContentsToMessages(contents, systemInstruction);
-    
-    const body = {
+    const messages = this.convertContentsToMessages(
+      contents,
+      systemInstruction,
+    );
+
+    const body: OpenAIRequest = {
       model: this.modelName,
       messages,
       stream: true,
       stream_options: { include_usage: true },
-      tools: request.config?.tools?.flatMap((t: any) => t.functionDeclarations?.map((f: any) => ({
-        type: 'function',
-        function: {
-          name: f.name,
-          description: f.description,
-          parameters: f.parameters,
-        }
-      }))) || undefined,
+      tools:
+        request.config?.tools
+          ?.flatMap((t: unknown) => {
+            const tool = t as {
+              functionDeclarations?: Array<{
+                name: string;
+                description?: string;
+                parameters?: object;
+              }>;
+            };
+            return tool.functionDeclarations?.map((f) => ({
+              type: 'function',
+              function: {
+                name: f.name,
+                description: f.description,
+                parameters: f.parameters,
+              },
+            }));
+          })
+          .filter((t): t is OpenAITool => !!t) || undefined,
     };
 
     const response = await fetch(`${this.baseUrl}/chat/completions`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${this.apiKey}`,
+        Authorization: `Bearer ${this.apiKey}`,
       },
       body: JSON.stringify(body),
     });
@@ -218,21 +271,26 @@ export class OpenAIContentGenerator implements ContentGenerator {
 
     return (async function* () {
       const rl = readline.createInterface({
-        input: Readable.fromWeb(response.body as any),
+        input: Readable.fromWeb(
+          response.body as unknown as import('stream/web').ReadableStream,
+        ),
         crlfDelay: Infinity,
       });
 
-      const accumulatedToolCalls: Map<number, { name?: string; arguments: string }> = new Map();
+      const accumulatedToolCalls: Map<
+        number,
+        { name?: string; arguments: string }
+      > = new Map();
 
       for await (const line of rl) {
         if (!line.startsWith('data: ')) continue;
-        
+
         const dataStr = line.slice(6).trim();
         if (dataStr === '[DONE]') break;
 
         try {
-          const chunk = JSON.parse(dataStr);
-          
+          const chunk = JSON.parse(dataStr) as OpenAIResponse;
+
           // Final usage chunk
           if (chunk.usage) {
             const result = new GenerateContentResponse();
@@ -257,22 +315,29 @@ export class OpenAIContentGenerator implements ContentGenerator {
 
           if (delta?.tool_calls) {
             for (const tc of delta.tool_calls) {
-              const index = tc.index ?? 0;
+              const toolCall = tc as unknown as {
+                index?: number;
+                function?: { name?: string; arguments?: string };
+              };
+              const index = toolCall.index ?? 0;
               let accumulated = accumulatedToolCalls.get(index);
               if (!accumulated) {
                 accumulated = { arguments: '' };
                 accumulatedToolCalls.set(index, accumulated);
               }
-              if (tc.function?.name) {
-                accumulated.name = tc.function.name;
+              if (toolCall.function?.name) {
+                accumulated.name = toolCall.function.name;
               }
-              if (tc.function?.arguments) {
-                accumulated.arguments += tc.function.arguments;
+              if (toolCall.function?.arguments) {
+                accumulated.arguments += toolCall.function.arguments;
               }
             }
           }
 
-          if (choice.finish_reason === 'tool_calls' || choice.finish_reason === 'stop') {
+          if (
+            choice.finish_reason === 'tool_calls' ||
+            choice.finish_reason === 'stop'
+          ) {
             for (const [_, tc] of accumulatedToolCalls) {
               if (tc.name) {
                 try {
@@ -282,7 +347,7 @@ export class OpenAIContentGenerator implements ContentGenerator {
                       args: tc.arguments ? JSON.parse(tc.arguments) : {},
                     },
                   });
-                } catch (e) {
+                } catch (_e) {
                   // Skip invalid partial JSON
                 }
               }
@@ -298,19 +363,22 @@ export class OpenAIContentGenerator implements ContentGenerator {
                   role: 'model',
                   parts,
                 },
-                finishReason: (choice.finish_reason?.toUpperCase() || undefined) as any,
+                finishReason: (choice.finish_reason?.toUpperCase() ||
+                  undefined) as unknown as GenerateContentResponse['candidates'][0]['finishReason'],
               },
             ];
             yield result;
           }
-        } catch (e) {
+        } catch (_e) {
           // Ignore parse errors for incomplete chunks
         }
       }
     })();
   }
 
-  async countTokens(request: CountTokensParameters): Promise<CountTokensResponse> {
+  async countTokens(
+    request: CountTokensParameters,
+  ): Promise<CountTokensResponse> {
     const contents = toContents(request.contents);
     let totalChars = 0;
     for (const content of contents) {
@@ -325,7 +393,9 @@ export class OpenAIContentGenerator implements ContentGenerator {
     return { totalTokens: estimatedTokens };
   }
 
-  async embedContent(_request: EmbedContentParameters): Promise<EmbedContentResponse> {
+  async embedContent(
+    _request: EmbedContentParameters,
+  ): Promise<EmbedContentResponse> {
     throw new Error('OpenAI embedContent not supported');
   }
 }
