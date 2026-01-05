@@ -28,9 +28,9 @@ export const Tips: React.FC<TipsProps> = ({ config }) => {
         <Text color={theme.text.primary}>
           3. Create{' '}
           <Text bold color={theme.text.accent}>
-'CITRUX.md',
+            &apos;CITRUX.md&apos;,
           </Text>{' '}
-          files to customize your interactions with Gemini.
+          files to customize your interactions with Citrux.
         </Text>
       )}
       <Text color={theme.text.primary}>

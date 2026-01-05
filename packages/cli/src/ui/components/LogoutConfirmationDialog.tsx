@@ -61,8 +61,8 @@ export const LogoutConfirmationDialog: React.FC<
           <Text bold color={theme.text.primary}>
             You are now logged out.
           </Text>
-          <Text color={theme.text.secondary}>
-            Login again to continue using Gemini CLI, or exit the application.
+          <Text color={theme.text.primary}>
+            Login again to continue using Citrux CLI, or exit the application.
           </Text>
         </Box>
 

@@ -39,7 +39,7 @@
 - [ ] **Extension Marketplace**: Command to browse and install extensions from
       GitHub.
 
-## Track 6: Open Flexibility (Proposed)
+## Track 6: Open Flexibility (Completed)
 
 Inspired by OpenCode, aiming for maximum developer ergonomics and openness:
 
@@ -47,5 +47,5 @@ Inspired by OpenCode, aiming for maximum developer ergonomics and openness:
       "Reviewer" modes (system prompts + tools).
 - [ ] **LSP Integration**: Add Language Server Protocol support for semantic
       code understanding (Go to Def, Find Refs).
-- [ ] **Dynamic Provider Config**: Interactive TUI wizard to add/edit custom
-      providers at runtime without JSON editing.
+- [x] **Dynamic Provider Config**: Interactive TUI wizard to add/edit custom
+      providers at runtime. Fully integrated with OpenCode Zen as default.

@@ -108,8 +108,8 @@ export const FolderTrustDialog: React.FC<FolderTrustDialogProps> = ({
       </Box>
       {isRestarting && (
         <Box marginLeft={1} marginTop={1}>
-          <Text color={theme.status.warning}>
-            Gemini CLI is restarting to apply the trust changes...
+          <Text color={theme.text.primary}>
+            Citrux CLI is restarting to apply the trust changes...
           </Text>
         </Box>
       )}

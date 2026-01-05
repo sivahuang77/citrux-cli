@@ -52,10 +52,8 @@ export const McpStatus: React.FC<McpStatusProps> = ({
         <Text>No MCP servers configured.</Text>
         <Text>
           Please view MCP documentation in your browser:{' '}
-          <Text color={theme.text.link}>
-            https://goo.gle/gemini-cli-docs-mcp
-          </Text>{' '}
-          or use the cli /docs command
+          <Text color={theme.text.link}>https://citruxcli.com/docs/mcp</Text> or
+          use the cli /docs command
         </Text>
       </Box>
     );

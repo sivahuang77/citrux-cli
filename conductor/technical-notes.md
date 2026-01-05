@@ -47,8 +47,8 @@ Analysis of `sst/opencode` features and how to apply them to Citrux:
 
 - **Provider Agnostic**:
   - _OpenCode_: Supports Claude, OpenAI, Google, Local.
-  - _Citrux_: Supported (Track 2). We should ensure adding new providers is
-    trivial via TUI.
+  - _Citrux_: Supported (Track 2 & 6). We now have a dynamic provider management
+    TUI.
 - **Agent Modes (Switchable)**:
   - _OpenCode_: Built-in agents switchable via Tab key.
   - _Citrux Proposal_: Implement "Personas" (e.g., Coder, Architect, QA) that
@@ -62,3 +62,16 @@ Analysis of `sst/opencode` features and how to apply them to Citrux:
   - _OpenCode_: Runs as a server, drivable remotely.
   - _Citrux Proposal_: Leverage `packages/a2a-server` to allow remote control
     (e.g., from a mobile app or web dashboard).
+
+## 9. Track 6 Implementation Details (Open Flexibility)
+
+- **OpenCode Zen Integration**: Set `opencode` as the default provider with
+  `https://opencode.ai/zen/v1` and `/responses` endpoint.
+- **Dynamic Configuration**: Refactored `settingsSchema.ts` to support
+  `llm.providers` as a map using `additionalProperties`.
+- **Zero-Config Onboarding**: Updated `initializer.ts` and `AppContainer.tsx` to
+  automatically trigger the `/model` configuration wizard if the active provider
+  (like OpenCode) is missing an API key on startup.
+- **TypeScript & Build Fixes**: Resolved significant compilation errors in
+  `openAIContentGenerator.ts` related to strict property access and missing type
+  imports.

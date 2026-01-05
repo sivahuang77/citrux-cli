@@ -1059,9 +1059,9 @@ export function SettingsDialog({
         </Box>
         {showRestartPrompt && (
           <Box marginX={1}>
-            <Text color={theme.status.warning}>
-              To see changes, Gemini CLI must be restarted. Press r to exit and
-              apply changes now.
+            <Text color={theme.text.primary}>
+              To see changes, Citrux CLI must be restarted. Press r to exit and
+              relaunch.
             </Text>
           </Box>
         )}

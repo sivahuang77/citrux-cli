@@ -27,9 +27,9 @@ interface HooksListProps {
 
 export const HooksList: React.FC<HooksListProps> = ({ hooks }) => (
   <Box flexDirection="column" marginTop={1} marginBottom={1}>
-    <Text>
-      Hooks are scripts or programs that Gemini CLI executes at specific points
-      in the agentic loop, allowing you to intercept and customize behavior.
+    <Text color={theme.text.primary}>
+      Hooks are scripts or programs that Citrux CLI executes at specific points
+      in its lifecycle.
     </Text>
 
     <Box marginTop={1} flexDirection="column">
@@ -45,7 +45,7 @@ export const HooksList: React.FC<HooksListProps> = ({ hooks }) => (
     <Box marginTop={1}>
       <Text>
         Learn more:{' '}
-        <Text color={theme.text.link}>https://geminicli.com/docs/hooks</Text>
+        <Text color={theme.text.link}>https://citruxcli.com/docs/hooks</Text>
       </Text>
     </Box>
 

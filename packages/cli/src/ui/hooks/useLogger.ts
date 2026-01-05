@@ -18,8 +18,8 @@ export const useLogger = (storage: Storage) => {
     const newLogger = new Logger(sessionId, storage);
     /**
      * Start async initialization, no need to await. Using await slows down the
-     * time from launch to see the gemini-cli prompt and it's better to not save
-     * messages than for the cli to hanging waiting for the logger to loading.
+     * time from launch to see the citrux-cli prompt and it's better to not save
+     * events than slow down the startup time.
      */
     newLogger
       .initialize()

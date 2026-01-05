@@ -1438,7 +1438,7 @@ describe('runNonInteractive', () => {
     });
 
     expect(processStderrSpy).toHaveBeenCalledWith(
-      'The --prompt (-p) flag has been deprecated and will be removed in a future version. Please use a positional argument for your prompt. See gemini --help for more information.\n',
+      'The --prompt (-p) flag has been deprecated and will be removed in a future version. Please use a positional argument for your prompt. See citrux --help for more information.\n',
     );
     expect(processStdoutSpy).toHaveBeenCalledWith('Final Answer');
   });
@@ -1465,7 +1465,7 @@ describe('runNonInteractive', () => {
     });
 
     const deprecateText =
-      'The --prompt (-p) flag has been deprecated and will be removed in a future version. Please use a positional argument for your prompt. See gemini --help for more information.\n';
+      'The --prompt (-p) flag has been deprecated and will be removed in a future version. Please use a positional argument for your prompt. See citrux --help for more information.\n';
     expect(processStderrSpy).toHaveBeenCalledWith(deprecateText);
   });
 

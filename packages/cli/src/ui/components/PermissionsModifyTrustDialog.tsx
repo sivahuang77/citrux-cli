@@ -131,9 +131,9 @@ export function PermissionsModifyTrustDialog({
       </Box>
       {needsRestart && (
         <Box marginLeft={1} marginTop={1}>
-          <Text color={theme.status.warning}>
-            To apply the trust changes, Gemini CLI must be restarted. Press
-            &apos;r&apos; to restart CLI now.
+          <Text color={theme.text.primary}>
+            To apply the trust changes, Citrux CLI must be restarted. Press
+            &apos;r&apos; to exit and relaunch.
           </Text>
         </Box>
       )}

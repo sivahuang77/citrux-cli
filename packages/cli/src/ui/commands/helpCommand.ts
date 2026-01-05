@@ -10,9 +10,8 @@ import { MessageType, type HistoryItemHelp } from '../types.js';
 
 export const helpCommand: SlashCommand = {
   name: 'help',
-  altNames: ['?'],
+  description: 'For help on citrux-cli',
   kind: CommandKind.BUILT_IN,
-  description: 'For help on gemini-cli',
   autoExecute: true,
   action: async (context) => {
     const helpItem: Omit<HistoryItemHelp, 'id'> = {
