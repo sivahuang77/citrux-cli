@@ -40,3 +40,25 @@ capabilities and ecosystem:
   bugs or style violations before commit.
 - **Custom Workflows**: Allow users to define macro commands (e.g., "Refactor &
   Test" = `/chat "refactor this" && npm test`).
+
+## 8. Competitive Analysis: OpenCode vs Citrux
+
+Analysis of `sst/opencode` features and how to apply them to Citrux:
+
+- **Provider Agnostic**:
+  - _OpenCode_: Supports Claude, OpenAI, Google, Local.
+  - _Citrux_: Supported (Track 2). We should ensure adding new providers is
+    trivial via TUI.
+- **Agent Modes (Switchable)**:
+  - _OpenCode_: Built-in agents switchable via Tab key.
+  - _Citrux Proposal_: Implement "Personas" (e.g., Coder, Architect, QA) that
+    change the system prompt and available tools. Toggle via TUI shortcut.
+- **LSP Integration**:
+  - _OpenCode_: "Out-of-the-box LSP support".
+  - _Citrux Proposal_: Investigate `vscode-languageserver-node` integration to
+    allow the agent to "Go to Definition" or "Find References" natively,
+    improving upon regex-based search.
+- **Client/Server Architecture**:
+  - _OpenCode_: Runs as a server, drivable remotely.
+  - _Citrux Proposal_: Leverage `packages/a2a-server` to allow remote control
+    (e.g., from a mobile app or web dashboard).

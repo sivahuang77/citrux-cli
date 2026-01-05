@@ -38,3 +38,14 @@
       cloudGarage/citrux.ai.
 - [ ] **Extension Marketplace**: Command to browse and install extensions from
       GitHub.
+
+## Track 6: Open Flexibility (Proposed)
+
+Inspired by OpenCode, aiming for maximum developer ergonomics and openness:
+
+- [ ] **Agent Switcher TUI**: UI to toggle between "Coder", "Architect",
+      "Reviewer" modes (system prompts + tools).
+- [ ] **LSP Integration**: Add Language Server Protocol support for semantic
+      code understanding (Go to Def, Find Refs).
+- [ ] **Dynamic Provider Config**: Interactive TUI wizard to add/edit custom
+      providers at runtime without JSON editing.
