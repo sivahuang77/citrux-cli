@@ -14,7 +14,7 @@ import {
   loadAgentsFromDirectory,
   AgentLoadError,
 } from './toml-loader.js';
-import { GEMINI_MODEL_ALIAS_PRO } from '../config/models.js';
+import { CITRUX_MODEL_ALIAS_PRO } from '../config/models.js';
 import type { LocalAgentDefinition } from './types.js';
 
 describe('toml-loader', () => {
@@ -293,7 +293,7 @@ describe('toml-loader', () => {
         name: 'test-agent',
         description: 'A test agent',
         model: {
-          model: GEMINI_MODEL_ALIAS_PRO,
+          model: CITRUX_MODEL_ALIAS_PRO,
         },
         prompts: {
           system_prompt: 'You are a test agent.',
@@ -301,7 +301,7 @@ describe('toml-loader', () => {
       };
 
       const result = tomlToAgentDefinition(toml) as LocalAgentDefinition;
-      expect(result.modelConfig.model).toBe(GEMINI_MODEL_ALIAS_PRO);
+      expect(result.modelConfig.model).toBe(CITRUX_MODEL_ALIAS_PRO);
     });
 
     it('should pass through unknown model names (e.g. auto)', () => {

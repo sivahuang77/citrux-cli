@@ -26,7 +26,7 @@ describe('extension reloading', () => {
 
   afterEach(async () => await rig.cleanup());
 
-  const sandboxEnv = env['GEMINI_SANDBOX'];
+  const sandboxEnv = env['CITRUX_SANDBOX'];
   // Fails in linux non-sandbox e2e tests
   // TODO(#14527): Re-enable this once fixed
   // Fails in sandbox mode, can't check for local extension updates.

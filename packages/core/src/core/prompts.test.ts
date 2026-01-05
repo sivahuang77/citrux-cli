@@ -12,13 +12,13 @@ import os from 'node:os';
 import path from 'node:path';
 import type { Config } from '../config/config.js';
 import { CodebaseInvestigatorAgent } from '../agents/codebase-investigator.js';
-import { GEMINI_DIR } from '../utils/paths.js';
+import { CITRUX_DIR } from '../utils/paths.js';
 import { debugLogger } from '../utils/debugLogger.js';
 import {
-  PREVIEW_GEMINI_MODEL,
-  PREVIEW_GEMINI_FLASH_MODEL,
-  DEFAULT_GEMINI_MODEL_AUTO,
-  DEFAULT_GEMINI_MODEL,
+  PREVIEW_CITRUX_MODEL,
+  PREVIEW_CITRUX_FLASH_MODEL,
+  DEFAULT_CITRUX_MODEL_AUTO,
+  DEFAULT_CITRUX_MODEL,
 } from '../config/models.js';
 
 // Mock tool names if they are dynamically generated or complex
@@ -54,8 +54,8 @@ describe('Core System Prompt (prompts.ts)', () => {
   let mockConfig: Config;
   beforeEach(() => {
     vi.resetAllMocks();
-    vi.stubEnv('GEMINI_SYSTEM_MD', undefined);
-    vi.stubEnv('GEMINI_WRITE_SYSTEM_MD', undefined);
+    vi.stubEnv('CITRUX_SYSTEM_MD', undefined);
+    vi.stubEnv('CITRUX_WRITE_SYSTEM_MD', undefined);
     mockConfig = {
       getToolRegistry: vi.fn().mockReturnValue({
         getAllToolNames: vi.fn().mockReturnValue([]),
@@ -66,8 +66,8 @@ describe('Core System Prompt (prompts.ts)', () => {
       },
       isInteractive: vi.fn().mockReturnValue(true),
       isInteractiveShellEnabled: vi.fn().mockReturnValue(true),
-      getModel: vi.fn().mockReturnValue(DEFAULT_GEMINI_MODEL_AUTO),
-      getActiveModel: vi.fn().mockReturnValue(DEFAULT_GEMINI_MODEL),
+      getModel: vi.fn().mockReturnValue(DEFAULT_CITRUX_MODEL_AUTO),
+      getActiveModel: vi.fn().mockReturnValue(DEFAULT_CITRUX_MODEL),
       getPreviewFeatures: vi.fn().mockReturnValue(false),
       getAgentRegistry: vi.fn().mockReturnValue({
         getDirectoryContext: vi.fn().mockReturnValue('Mock Agent Directory'),
@@ -76,7 +76,7 @@ describe('Core System Prompt (prompts.ts)', () => {
   });
 
   it('should use chatty system prompt for preview model', () => {
-    vi.mocked(mockConfig.getActiveModel).mockReturnValue(PREVIEW_GEMINI_MODEL);
+    vi.mocked(mockConfig.getActiveModel).mockReturnValue(PREVIEW_CITRUX_MODEL);
     const prompt = getCoreSystemPrompt(mockConfig);
     expect(prompt).toContain('You are an interactive CLI agent'); // Check for core content
     expect(prompt).not.toContain('No Chitchat:');
@@ -85,7 +85,7 @@ describe('Core System Prompt (prompts.ts)', () => {
 
   it('should use chatty system prompt for preview flash model', () => {
     vi.mocked(mockConfig.getActiveModel).mockReturnValue(
-      PREVIEW_GEMINI_FLASH_MODEL,
+      PREVIEW_CITRUX_FLASH_MODEL,
     );
     const prompt = getCoreSystemPrompt(mockConfig);
     expect(prompt).toContain('Do not call tools in silence');
@@ -170,7 +170,7 @@ describe('Core System Prompt (prompts.ts)', () => {
         isInteractive: vi.fn().mockReturnValue(false),
         isInteractiveShellEnabled: vi.fn().mockReturnValue(false),
         getModel: vi.fn().mockReturnValue('auto'),
-        getActiveModel: vi.fn().mockReturnValue(DEFAULT_GEMINI_MODEL),
+        getActiveModel: vi.fn().mockReturnValue(DEFAULT_CITRUX_MODEL),
         getPreviewFeatures: vi.fn().mockReturnValue(false),
         getAgentRegistry: vi.fn().mockReturnValue({
           getDirectoryContext: vi.fn().mockReturnValue('Mock Agent Directory'),
@@ -197,20 +197,20 @@ describe('Core System Prompt (prompts.ts)', () => {
     },
   );
 
-  describe('GEMINI_SYSTEM_MD environment variable', () => {
+  describe('CITRUX_SYSTEM_MD environment variable', () => {
     it.each(['false', '0'])(
-      'should use default prompt when GEMINI_SYSTEM_MD is "%s"',
+      'should use default prompt when CITRUX_SYSTEM_MD is "%s"',
       (value) => {
-        vi.stubEnv('GEMINI_SYSTEM_MD', value);
+        vi.stubEnv('CITRUX_SYSTEM_MD', value);
         const prompt = getCoreSystemPrompt(mockConfig);
         expect(fs.readFileSync).not.toHaveBeenCalled();
         expect(prompt).not.toContain('custom system prompt');
       },
     );
 
-    it('should throw error if GEMINI_SYSTEM_MD points to a non-existent file', () => {
+    it('should throw error if CITRUX_SYSTEM_MD points to a non-existent file', () => {
       const customPath = '/non/existent/path/system.md';
-      vi.stubEnv('GEMINI_SYSTEM_MD', customPath);
+      vi.stubEnv('CITRUX_SYSTEM_MD', customPath);
       vi.mocked(fs.existsSync).mockReturnValue(false);
       expect(() => getCoreSystemPrompt(mockConfig)).toThrow(
         `missing system prompt file '${path.resolve(customPath)}'`,
@@ -218,10 +218,10 @@ describe('Core System Prompt (prompts.ts)', () => {
     });
 
     it.each(['true', '1'])(
-      'should read from default path when GEMINI_SYSTEM_MD is "%s"',
+      'should read from default path when CITRUX_SYSTEM_MD is "%s"',
       (value) => {
-        const defaultPath = path.resolve(path.join(GEMINI_DIR, 'system.md'));
-        vi.stubEnv('GEMINI_SYSTEM_MD', value);
+        const defaultPath = path.resolve(path.join(CITRUX_DIR, 'system.md'));
+        vi.stubEnv('CITRUX_SYSTEM_MD', value);
         vi.mocked(fs.existsSync).mockReturnValue(true);
         vi.mocked(fs.readFileSync).mockReturnValue('custom system prompt');
 
@@ -231,9 +231,9 @@ describe('Core System Prompt (prompts.ts)', () => {
       },
     );
 
-    it('should read from custom path when GEMINI_SYSTEM_MD provides one, preserving case', () => {
+    it('should read from custom path when CITRUX_SYSTEM_MD provides one, preserving case', () => {
       const customPath = path.resolve('/custom/path/SyStEm.Md');
-      vi.stubEnv('GEMINI_SYSTEM_MD', customPath);
+      vi.stubEnv('CITRUX_SYSTEM_MD', customPath);
       vi.mocked(fs.existsSync).mockReturnValue(true);
       vi.mocked(fs.readFileSync).mockReturnValue('custom system prompt');
 
@@ -242,12 +242,12 @@ describe('Core System Prompt (prompts.ts)', () => {
       expect(prompt).toBe('custom system prompt');
     });
 
-    it('should expand tilde in custom path when GEMINI_SYSTEM_MD is set', () => {
+    it('should expand tilde in custom path when CITRUX_SYSTEM_MD is set', () => {
       const homeDir = '/Users/test';
       vi.spyOn(os, 'homedir').mockReturnValue(homeDir);
       const customPath = '~/custom/system.md';
       const expectedPath = path.join(homeDir, 'custom/system.md');
-      vi.stubEnv('GEMINI_SYSTEM_MD', customPath);
+      vi.stubEnv('CITRUX_SYSTEM_MD', customPath);
       vi.mocked(fs.existsSync).mockReturnValue(true);
       vi.mocked(fs.readFileSync).mockReturnValue('custom system prompt');
 
@@ -260,21 +260,21 @@ describe('Core System Prompt (prompts.ts)', () => {
     });
   });
 
-  describe('GEMINI_WRITE_SYSTEM_MD environment variable', () => {
+  describe('CITRUX_WRITE_SYSTEM_MD environment variable', () => {
     it.each(['false', '0'])(
-      'should not write to file when GEMINI_WRITE_SYSTEM_MD is "%s"',
+      'should not write to file when CITRUX_WRITE_SYSTEM_MD is "%s"',
       (value) => {
-        vi.stubEnv('GEMINI_WRITE_SYSTEM_MD', value);
+        vi.stubEnv('CITRUX_WRITE_SYSTEM_MD', value);
         getCoreSystemPrompt(mockConfig);
         expect(fs.writeFileSync).not.toHaveBeenCalled();
       },
     );
 
     it.each(['true', '1'])(
-      'should write to default path when GEMINI_WRITE_SYSTEM_MD is "%s"',
+      'should write to default path when CITRUX_WRITE_SYSTEM_MD is "%s"',
       (value) => {
-        const defaultPath = path.resolve(path.join(GEMINI_DIR, 'system.md'));
-        vi.stubEnv('GEMINI_WRITE_SYSTEM_MD', value);
+        const defaultPath = path.resolve(path.join(CITRUX_DIR, 'system.md'));
+        vi.stubEnv('CITRUX_WRITE_SYSTEM_MD', value);
         getCoreSystemPrompt(mockConfig);
         expect(fs.writeFileSync).toHaveBeenCalledWith(
           defaultPath,
@@ -283,9 +283,9 @@ describe('Core System Prompt (prompts.ts)', () => {
       },
     );
 
-    it('should write to custom path when GEMINI_WRITE_SYSTEM_MD provides one', () => {
+    it('should write to custom path when CITRUX_WRITE_SYSTEM_MD provides one', () => {
       const customPath = path.resolve('/custom/path/system.md');
-      vi.stubEnv('GEMINI_WRITE_SYSTEM_MD', customPath);
+      vi.stubEnv('CITRUX_WRITE_SYSTEM_MD', customPath);
       getCoreSystemPrompt(mockConfig);
       expect(fs.writeFileSync).toHaveBeenCalledWith(
         customPath,
@@ -297,14 +297,14 @@ describe('Core System Prompt (prompts.ts)', () => {
       ['~/custom/system.md', 'custom/system.md'],
       ['~', ''],
     ])(
-      'should expand tilde in custom path when GEMINI_WRITE_SYSTEM_MD is "%s"',
+      'should expand tilde in custom path when CITRUX_WRITE_SYSTEM_MD is "%s"',
       (customPath, relativePath) => {
         const homeDir = '/Users/test';
         vi.spyOn(os, 'homedir').mockReturnValue(homeDir);
         const expectedPath = relativePath
           ? path.join(homeDir, relativePath)
           : homeDir;
-        vi.stubEnv('GEMINI_WRITE_SYSTEM_MD', customPath);
+        vi.stubEnv('CITRUX_WRITE_SYSTEM_MD', customPath);
         getCoreSystemPrompt(mockConfig);
         expect(fs.writeFileSync).toHaveBeenCalledWith(
           path.resolve(expectedPath),

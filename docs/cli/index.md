@@ -34,12 +34,12 @@ overview of Citrux CLI, see the [main documentation page](../index.md).
 - **[Token caching](./token-caching.md):** Optimize API costs by caching tokens.
 - **[Trusted folders](./trusted-folders.md):** A security feature to control
   which projects can use the full capabilities of the CLI.
-- **[Ignoring files (.citruxignore)](./gemini-ignore.md):** Exclude specific
+- **[Ignoring files (.citruxignore)](./citrux-ignore.md):** Exclude specific
   files and directories from being accessed by tools.
-- **[Context files (GEMINI.md)](./gemini-md.md):** Provide persistent,
+- **[Context files (CITRUX.md)](./citrux-md.md):** Provide persistent,
   hierarchical context to the model.
 - **[System prompt override](./system-prompt.md):** Replace the built‑in system
-  instructions using `GEMINI_SYSTEM_MD`.
+  instructions using `CITRUX_SYSTEM_MD`.
 
 ## Non-interactive mode
 

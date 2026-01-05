@@ -16,11 +16,11 @@ import { makeChatCompressionEvent } from '../telemetry/types.js';
 import { getInitialChatHistory } from '../utils/environmentContext.js';
 import { calculateRequestTokenCount } from '../utils/tokenCalculation.js';
 import {
-  DEFAULT_GEMINI_FLASH_LITE_MODEL,
-  DEFAULT_GEMINI_FLASH_MODEL,
-  DEFAULT_GEMINI_MODEL,
-  PREVIEW_GEMINI_MODEL,
-  PREVIEW_GEMINI_FLASH_MODEL,
+  DEFAULT_CITRUX_FLASH_LITE_MODEL,
+  DEFAULT_CITRUX_FLASH_MODEL,
+  DEFAULT_CITRUX_MODEL,
+  PREVIEW_CITRUX_MODEL,
+  PREVIEW_CITRUX_FLASH_MODEL,
 } from '../config/models.js';
 import { firePreCompressHook } from '../core/sessionHookTriggers.js';
 import { PreCompressTrigger } from '../hooks/types.js';
@@ -87,15 +87,15 @@ export function findCompressSplitPoint(
 
 export function modelStringToModelConfigAlias(model: string): string {
   switch (model) {
-    case PREVIEW_GEMINI_MODEL:
+    case PREVIEW_CITRUX_MODEL:
       return 'chat-compression-3-pro';
-    case PREVIEW_GEMINI_FLASH_MODEL:
+    case PREVIEW_CITRUX_FLASH_MODEL:
       return 'chat-compression-3-flash';
-    case DEFAULT_GEMINI_MODEL:
+    case DEFAULT_CITRUX_MODEL:
       return 'chat-compression-2.5-pro';
-    case DEFAULT_GEMINI_FLASH_MODEL:
+    case DEFAULT_CITRUX_FLASH_MODEL:
       return 'chat-compression-2.5-flash';
-    case DEFAULT_GEMINI_FLASH_LITE_MODEL:
+    case DEFAULT_CITRUX_FLASH_LITE_MODEL:
       return 'chat-compression-2.5-flash-lite';
     default:
       return 'chat-compression-default';

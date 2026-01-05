@@ -19,9 +19,9 @@ import {
   getModelPolicyChain,
 } from './policyCatalog.js';
 import {
-  DEFAULT_GEMINI_MODEL,
-  DEFAULT_GEMINI_MODEL_AUTO,
-  PREVIEW_GEMINI_MODEL_AUTO,
+  DEFAULT_CITRUX_MODEL,
+  DEFAULT_CITRUX_MODEL_AUTO,
+  PREVIEW_CITRUX_MODEL_AUTO,
   resolveModel,
 } from '../config/models.js';
 import type { ModelSelectionResult } from './modelAvailabilityService.js';
@@ -42,11 +42,11 @@ export function resolvePolicyChain(
   let chain;
 
   if (
-    config.getModel() === PREVIEW_GEMINI_MODEL_AUTO ||
-    config.getModel() === DEFAULT_GEMINI_MODEL_AUTO
+    config.getModel() === PREVIEW_CITRUX_MODEL_AUTO ||
+    config.getModel() === DEFAULT_CITRUX_MODEL_AUTO
   ) {
     chain = getModelPolicyChain({
-      previewEnabled: config.getModel() === PREVIEW_GEMINI_MODEL_AUTO,
+      previewEnabled: config.getModel() === PREVIEW_CITRUX_MODEL_AUTO,
       userTier: config.getUserTier(),
     });
   } else {
@@ -143,7 +143,7 @@ export function selectModelForAvailability(
   if (selection.selectedModel) return selection;
 
   const backupModel =
-    chain.find((p) => p.isLastResort)?.model ?? DEFAULT_GEMINI_MODEL;
+    chain.find((p) => p.isLastResort)?.model ?? DEFAULT_CITRUX_MODEL;
 
   return { selectedModel: backupModel, skipped: [] };
 }

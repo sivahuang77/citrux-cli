@@ -31,7 +31,7 @@ export async function setup() {
   }
   // We also need to set the config dir explicitly, since the code might
   // construct the path before the HOME env var is set.
-  process.env['GEMINI_CONFIG_DIR'] = join(runDir, '.citrux');
+  process.env['CITRUX_CONFIG_DIR'] = join(runDir, '.citrux');
 
   // Download ripgrep to avoid race conditions in parallel tests
   const available = await canUseRipgrep();
@@ -58,9 +58,9 @@ export async function setup() {
   }
 
   process.env['INTEGRATION_TEST_FILE_DIR'] = runDir;
-  process.env['GEMINI_CLI_INTEGRATION_TEST'] = 'true';
+  process.env['CITRUX_CLI_INTEGRATION_TEST'] = 'true';
   // Force file storage to avoid keychain prompts/hangs in CI, especially on macOS
-  process.env['GEMINI_FORCE_FILE_STORAGE'] = 'true';
+  process.env['CITRUX_FORCE_FILE_STORAGE'] = 'true';
   process.env['TELEMETRY_LOG_FILE'] = join(runDir, 'telemetry.log');
 
   if (process.env['KEEP_OUTPUT']) {

@@ -14,9 +14,9 @@ import {
   isFunctionResponse,
 } from '../../utils/messageInspectors.js';
 import {
-  DEFAULT_GEMINI_FLASH_MODEL,
-  DEFAULT_GEMINI_MODEL,
-  DEFAULT_GEMINI_MODEL_AUTO,
+  DEFAULT_CITRUX_FLASH_MODEL,
+  DEFAULT_CITRUX_MODEL,
+  DEFAULT_CITRUX_MODEL_AUTO,
 } from '../../config/models.js';
 import { promptIdContext } from '../../utils/promptIdContext.js';
 import type { Content } from '@google/genai';
@@ -51,7 +51,7 @@ describe('ClassifierStrategy', () => {
       modelConfigService: {
         getResolvedConfig: vi.fn().mockReturnValue(mockResolvedConfig),
       },
-      getModel: () => DEFAULT_GEMINI_MODEL_AUTO,
+      getModel: () => DEFAULT_CITRUX_MODEL_AUTO,
       getPreviewFeatures: () => false,
     } as unknown as Config;
     mockBaseLlmClient = {
@@ -97,7 +97,7 @@ describe('ClassifierStrategy', () => {
 
     expect(mockBaseLlmClient.generateJson).toHaveBeenCalledOnce();
     expect(decision).toEqual({
-      model: DEFAULT_GEMINI_FLASH_MODEL,
+      model: DEFAULT_CITRUX_FLASH_MODEL,
       metadata: {
         source: 'Classifier',
         latencyMs: expect.any(Number),
@@ -124,7 +124,7 @@ describe('ClassifierStrategy', () => {
 
     expect(mockBaseLlmClient.generateJson).toHaveBeenCalledOnce();
     expect(decision).toEqual({
-      model: DEFAULT_GEMINI_MODEL,
+      model: DEFAULT_CITRUX_MODEL,
       metadata: {
         source: 'Classifier',
         latencyMs: expect.any(Number),

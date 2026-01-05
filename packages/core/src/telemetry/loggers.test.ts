@@ -13,7 +13,7 @@ import type {
 import {
   AuthType,
   EditTool,
-  GeminiClient,
+  CitruxClient,
   ToolConfirmationOutcome,
   ToolErrorType,
   ToolRegistry,
@@ -975,7 +975,7 @@ describe('loggers', () => {
     const cfg1 = {
       getSessionId: () => 'test-session-id',
       getTargetDir: () => 'target-dir',
-      getGeminiClient: () => mockGeminiClient,
+      getCitruxClient: () => mockCitruxClient,
     } as Config;
     const cfg2 = {
       getSessionId: () => 'test-session-id',
@@ -1004,11 +1004,11 @@ describe('loggers', () => {
       getUserMemory: () => 'user-memory',
     } as unknown as Config;
 
-    const mockGeminiClient = new GeminiClient(cfg2);
+    const mockCitruxClient = new CitruxClient(cfg2);
     const mockConfig = {
       getSessionId: () => 'test-session-id',
       getTargetDir: () => 'target-dir',
-      getGeminiClient: () => mockGeminiClient,
+      getCitruxClient: () => mockCitruxClient,
       getUsageStatisticsEnabled: () => true,
       getTelemetryEnabled: () => true,
       getTelemetryLogPromptsEnabled: () => true,

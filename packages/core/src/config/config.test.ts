@@ -24,7 +24,7 @@ import {
   AuthType,
   createContentGeneratorConfig,
 } from '../core/contentGenerator.js';
-import { GeminiClient } from '../core/client.js';
+import { CitruxClient } from '../core/client.js';
 import { GitService } from '../services/gitService.js';
 import { ShellTool } from '../tools/shell.js';
 import { ReadFileTool } from '../tools/read-file.js';
@@ -35,10 +35,10 @@ import { RipgrepFallbackEvent } from '../telemetry/types.js';
 import { ToolRegistry } from '../tools/tool-registry.js';
 import { DEFAULT_MODEL_CONFIGS } from './defaultModelConfigs.js';
 import {
-  DEFAULT_GEMINI_MODEL,
-  DEFAULT_GEMINI_MODEL_AUTO,
-  PREVIEW_GEMINI_MODEL,
-  PREVIEW_GEMINI_MODEL_AUTO,
+  DEFAULT_CITRUX_MODEL,
+  DEFAULT_CITRUX_MODEL_AUTO,
+  PREVIEW_CITRUX_MODEL,
+  PREVIEW_CITRUX_MODEL_AUTO,
 } from './models.js';
 
 vi.mock('fs', async (importOriginal) => {
@@ -94,15 +94,15 @@ vi.mock('../tools/read-many-files');
 vi.mock('../tools/memoryTool', () => ({
   MemoryTool: vi.fn(),
   setGeminiMdFilename: vi.fn(),
-  getCurrentGeminiMdFilename: vi.fn(() => 'GEMINI.md'), // Mock the original filename
-  DEFAULT_CONTEXT_FILENAME: 'GEMINI.md',
-  GEMINI_DIR: '.gemini',
+  getCurrentGeminiMdFilename: vi.fn(() => 'CITRUX.md'), // Mock the original filename
+  DEFAULT_CONTEXT_FILENAME: 'CITRUX.md',
+  CITRUX_DIR: '.citrux',
 }));
 
 vi.mock('../core/contentGenerator.js');
 
 vi.mock('../core/client.js', () => ({
-  GeminiClient: vi.fn().mockImplementation(() => ({
+  CitruxClient: vi.fn().mockImplementation(() => ({
     initialize: vi.fn().mockResolvedValue(undefined),
     stripThoughtsFromHistory: vi.fn(),
   })),
@@ -194,7 +194,7 @@ vi.mock('../code_assist/codeAssist.js');
 vi.mock('../code_assist/experiments/experiments.js');
 
 describe('Server Config (config.ts)', () => {
-  const MODEL = DEFAULT_GEMINI_MODEL;
+  const MODEL = DEFAULT_CITRUX_MODEL;
   const SANDBOX: SandboxConfig = {
     command: 'docker',
     image: 'gemini-cli-sandbox',
@@ -363,7 +363,7 @@ describe('Server Config (config.ts)', () => {
       );
       // Verify that contentGeneratorConfig is updated
       expect(config.getContentGeneratorConfig()).toEqual(mockContentConfig);
-      expect(GeminiClient).toHaveBeenCalledWith(config);
+      expect(CitruxClient).toHaveBeenCalledWith(config);
     });
 
     it('should reset model availability status', async () => {
@@ -394,7 +394,7 @@ describe('Server Config (config.ts)', () => {
       await config.refreshAuth(AuthType.LOGIN_WITH_GOOGLE);
 
       expect(
-        config.getGeminiClient().stripThoughtsFromHistory,
+        config.getCitruxClient().stripThoughtsFromHistory,
       ).toHaveBeenCalledWith();
     });
 
@@ -411,7 +411,7 @@ describe('Server Config (config.ts)', () => {
       await config.refreshAuth(AuthType.USE_VERTEX_AI);
 
       expect(
-        config.getGeminiClient().stripThoughtsFromHistory,
+        config.getCitruxClient().stripThoughtsFromHistory,
       ).toHaveBeenCalledWith();
     });
 
@@ -428,7 +428,7 @@ describe('Server Config (config.ts)', () => {
       await config.refreshAuth(AuthType.USE_GEMINI);
 
       expect(
-        config.getGeminiClient().stripThoughtsFromHistory,
+        config.getCitruxClient().stripThoughtsFromHistory,
       ).not.toHaveBeenCalledWith();
     });
   });
@@ -1638,9 +1638,9 @@ describe('Config getHooks', () => {
         onModelChange,
       });
 
-      config.setModel(DEFAULT_GEMINI_MODEL);
+      config.setModel(DEFAULT_CITRUX_MODEL);
 
-      expect(onModelChange).toHaveBeenCalledWith(DEFAULT_GEMINI_MODEL);
+      expect(onModelChange).toHaveBeenCalledWith(DEFAULT_CITRUX_MODEL);
     });
 
     it('should NOT call onModelChange when a new model is set as a fallback', () => {
@@ -1650,7 +1650,7 @@ describe('Config getHooks', () => {
         onModelChange,
       });
 
-      config.setModel(DEFAULT_GEMINI_MODEL, true);
+      config.setModel(DEFAULT_CITRUX_MODEL, true);
 
       expect(onModelChange).not.toHaveBeenCalled();
     });
@@ -1832,7 +1832,7 @@ describe('Config Quota & Preview Model Access', () => {
   describe('refreshUserQuota', () => {
     it('should update hasAccessToPreviewModel to true if quota includes preview model', async () => {
       mockCodeAssistServer.retrieveUserQuota.mockResolvedValue({
-        buckets: [{ modelId: PREVIEW_GEMINI_MODEL }],
+        buckets: [{ modelId: PREVIEW_CITRUX_MODEL }],
       });
 
       await config.refreshUserQuota();
@@ -1876,11 +1876,11 @@ describe('Config Quota & Preview Model Access', () => {
   describe('setPreviewFeatures', () => {
     it('should reset model to default auto if disabling preview features while using a preview model', () => {
       config.setPreviewFeatures(true);
-      config.setModel(PREVIEW_GEMINI_MODEL);
+      config.setModel(PREVIEW_CITRUX_MODEL);
 
       config.setPreviewFeatures(false);
 
-      expect(config.getModel()).toBe(DEFAULT_GEMINI_MODEL_AUTO);
+      expect(config.getModel()).toBe(DEFAULT_CITRUX_MODEL_AUTO);
     });
 
     it('should NOT reset model if disabling preview features while NOT using a preview model', () => {
@@ -1895,20 +1895,20 @@ describe('Config Quota & Preview Model Access', () => {
 
     it('should switch to preview auto model if enabling preview features while using default auto model', () => {
       config.setPreviewFeatures(false);
-      config.setModel(DEFAULT_GEMINI_MODEL_AUTO);
+      config.setModel(DEFAULT_CITRUX_MODEL_AUTO);
 
       config.setPreviewFeatures(true);
 
-      expect(config.getModel()).toBe(PREVIEW_GEMINI_MODEL_AUTO);
+      expect(config.getModel()).toBe(PREVIEW_CITRUX_MODEL_AUTO);
     });
 
     it('should NOT reset model if enabling preview features', () => {
       config.setPreviewFeatures(false);
-      config.setModel(PREVIEW_GEMINI_MODEL); // Just pretending it was set somehow
+      config.setModel(PREVIEW_CITRUX_MODEL); // Just pretending it was set somehow
 
       config.setPreviewFeatures(true);
 
-      expect(config.getModel()).toBe(PREVIEW_GEMINI_MODEL);
+      expect(config.getModel()).toBe(PREVIEW_CITRUX_MODEL);
     });
   });
 });
@@ -1930,7 +1930,7 @@ describe('Config JIT Initialization', () => {
       getEnvironmentMemory: vi
         .fn()
         .mockReturnValue('Environment Memory\n\nMCP Instructions'),
-      getLoadedPaths: vi.fn().mockReturnValue(new Set(['/path/to/GEMINI.md'])),
+      getLoadedPaths: vi.fn().mockReturnValue(new Set(['/path/to/CITRUX.md'])),
     };
     (ContextManager as unknown as Mock).mockImplementation(
       () => mockContextManager,
@@ -1959,7 +1959,7 @@ describe('Config JIT Initialization', () => {
 
     // Verify state update (delegated to ContextManager)
     expect(config.getGeminiMdFileCount()).toBe(1);
-    expect(config.getGeminiMdFilePaths()).toEqual(['/path/to/GEMINI.md']);
+    expect(config.getGeminiMdFilePaths()).toEqual(['/path/to/CITRUX.md']);
   });
 
   it('should NOT initialize ContextManager when experimentalJitContext is disabled', async () => {

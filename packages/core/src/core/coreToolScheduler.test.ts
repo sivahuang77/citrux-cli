@@ -39,7 +39,7 @@ import {
 } from '../test-utils/mock-tool.js';
 import * as modifiableToolModule from '../tools/modifiable-tool.js';
 import { isShellInvocationAllowlisted } from '../utils/shell-permissions.js';
-import { DEFAULT_GEMINI_MODEL } from '../config/models.js';
+import { DEFAULT_CITRUX_MODEL } from '../config/models.js';
 
 vi.mock('fs/promises', () => ({
   writeFile: vi.fn(),
@@ -254,9 +254,9 @@ function createMockConfig(overrides: Partial<Config> = {}): Config {
       DEFAULT_TRUNCATE_TOOL_OUTPUT_THRESHOLD,
     getTruncateToolOutputLines: () => DEFAULT_TRUNCATE_TOOL_OUTPUT_LINES,
     getToolRegistry: () => defaultToolRegistry,
-    getActiveModel: () => DEFAULT_GEMINI_MODEL,
+    getActiveModel: () => DEFAULT_CITRUX_MODEL,
     getUseSmartEdit: () => false,
-    getGeminiClient: () => null,
+    getCitruxClient: () => null,
     getMessageBus: () => createMockMessageBus(),
     getEnableHooks: () => false,
     getPolicyEngine: () => null,

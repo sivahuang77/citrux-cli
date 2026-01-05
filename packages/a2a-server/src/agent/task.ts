@@ -6,7 +6,7 @@
 
 import {
   CoreToolScheduler,
-  type GeminiClient,
+  type CitruxClient,
   GeminiEventType,
   ToolConfirmationOutcome,
   ApprovalMode,
@@ -64,7 +64,7 @@ export class Task {
   contextId: string;
   scheduler: CoreToolScheduler;
   config: Config;
-  geminiClient: GeminiClient;
+  geminiClient: CitruxClient;
   pendingToolConfirmationDetails: Map<string, ToolCallConfirmationDetails>;
   taskState: TaskState;
   eventBus?: ExecutionEventBus;
@@ -94,7 +94,7 @@ export class Task {
     this.contextId = contextId;
     this.config = config;
     this.scheduler = this.createScheduler();
-    this.geminiClient = this.config.getGeminiClient();
+    this.geminiClient = this.config.getCitruxClient();
     this.pendingToolConfirmationDetails = new Map();
     this.taskState = 'submitted';
     this.eventBus = eventBus;

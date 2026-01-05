@@ -20,7 +20,7 @@ import {
   DEFAULT_CONTEXT_FILENAME,
 } from '../tools/memoryTool.js';
 import { FileDiscoveryService } from '../services/fileDiscoveryService.js';
-import { GEMINI_DIR } from './paths.js';
+import { CITRUX_DIR } from './paths.js';
 import { Config, type GeminiCLIExtension } from '../config/config.js';
 import { Storage } from '../config/storage.js';
 import { SimpleExtensionLoader } from './extensionLoader.js';
@@ -119,7 +119,7 @@ describe('memoryDiscovery', () => {
         'Src directory memory', // Untrusted
       );
 
-      const filepath = path.join(homedir, GEMINI_DIR, DEFAULT_CONTEXT_FILENAME);
+      const filepath = path.join(homedir, CITRUX_DIR, DEFAULT_CONTEXT_FILENAME);
       await createTestFile(filepath, 'default context content'); // In user home dir (outside untrusted space).
       const { fileCount, memoryContent, filePaths } =
         await loadServerHierarchicalMemory(
@@ -156,7 +156,7 @@ describe('memoryDiscovery', () => {
 
   it('should load only the global context file if present and others are not (default filename)', async () => {
     const defaultContextFile = await createTestFile(
-      path.join(homedir, GEMINI_DIR, DEFAULT_CONTEXT_FILENAME),
+      path.join(homedir, CITRUX_DIR, DEFAULT_CONTEXT_FILENAME),
       'default context content',
     );
 
@@ -183,7 +183,7 @@ default context content
     setGeminiMdFilename(customFilename);
 
     const customContextFile = await createTestFile(
-      path.join(homedir, GEMINI_DIR, customFilename),
+      path.join(homedir, CITRUX_DIR, customFilename),
       'custom context content',
     );
 
@@ -275,7 +275,7 @@ Subdir custom memory
     });
   });
 
-  it('should load ORIGINAL_GEMINI_MD_FILENAME files by upward traversal from CWD to project root', async () => {
+  it('should load ORIGINAL_CITRUX_MD_FILENAME files by upward traversal from CWD to project root', async () => {
     const projectRootGeminiFile = await createTestFile(
       path.join(projectRoot, DEFAULT_CONTEXT_FILENAME),
       'Project root memory',
@@ -307,7 +307,7 @@ Src directory memory
     });
   });
 
-  it('should load ORIGINAL_GEMINI_MD_FILENAME files by downward traversal from CWD', async () => {
+  it('should load ORIGINAL_CITRUX_MD_FILENAME files by downward traversal from CWD', async () => {
     const subDirGeminiFile = await createTestFile(
       path.join(cwd, 'subdir', DEFAULT_CONTEXT_FILENAME),
       'Subdir memory',
@@ -339,9 +339,9 @@ Subdir memory
     });
   });
 
-  it('should load and correctly order global, upward, and downward ORIGINAL_GEMINI_MD_FILENAME files', async () => {
+  it('should load and correctly order global, upward, and downward ORIGINAL_CITRUX_MD_FILENAME files', async () => {
     const defaultContextFile = await createTestFile(
-      path.join(homedir, GEMINI_DIR, DEFAULT_CONTEXT_FILENAME),
+      path.join(homedir, CITRUX_DIR, DEFAULT_CONTEXT_FILENAME),
       'default context content',
     );
     const rootGeminiFile = await createTestFile(
@@ -424,7 +424,7 @@ Subdir memory
       'tree',
       {
         respectGitIgnore: true,
-        respectGeminiIgnore: true,
+        respectCitruxIgnore: true,
       },
       200, // maxDirs parameter
     );
@@ -460,7 +460,7 @@ My code memory
       'tree', // importFormat
       {
         respectGitIgnore: true,
-        respectGeminiIgnore: true,
+        respectCitruxIgnore: true,
       },
       1, // maxDirs
     );
@@ -490,7 +490,7 @@ My code memory
 
   it('should load extension context file paths', async () => {
     const extensionFilePath = await createTestFile(
-      path.join(testRootDir, 'extensions/ext1/GEMINI.md'),
+      path.join(testRootDir, 'extensions/ext1/CITRUX.md'),
       'Extension memory content',
     );
 
@@ -545,7 +545,7 @@ included directory memory
   });
 
   it('should handle multiple directories and files in parallel correctly', async () => {
-    // Create multiple test directories with GEMINI.md files
+    // Create multiple test directories with CITRUX.md files
     const numDirs = 5;
     const createdFiles: string[] = [];
 
@@ -625,7 +625,7 @@ included directory memory
   describe('loadGlobalMemory', () => {
     it('should load global memory file if it exists', async () => {
       const globalMemoryFile = await createTestFile(
-        path.join(homedir, GEMINI_DIR, DEFAULT_CONTEXT_FILENAME),
+        path.join(homedir, CITRUX_DIR, DEFAULT_CONTEXT_FILENAME),
         'Global memory content',
       );
 
@@ -646,7 +646,7 @@ included directory memory
   describe('loadEnvironmentMemory', () => {
     it('should load extension memory', async () => {
       const extFile = await createTestFile(
-        path.join(testRootDir, 'ext', 'GEMINI.md'),
+        path.join(testRootDir, 'ext', 'CITRUX.md'),
         'Extension content',
       );
       const mockExtensionLoader = new SimpleExtensionLoader([

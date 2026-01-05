@@ -1647,8 +1647,8 @@ describe('RipGrepTool', () => {
       expect(result.llmContent).toContain('L1: secret log entry');
     });
 
-    it('should add .geminiignore when enabled and patterns exist', async () => {
-      const geminiIgnorePath = path.join(tempRootDir, '.geminiignore');
+    it('should add .citruxignore when enabled and patterns exist', async () => {
+      const geminiIgnorePath = path.join(tempRootDir, '.citruxignore');
       await fs.writeFile(geminiIgnorePath, 'ignored.log');
       const configWithGeminiIgnore = {
         getTargetDir: () => tempRootDir,
@@ -1684,8 +1684,8 @@ describe('RipGrepTool', () => {
       );
     });
 
-    it('should skip .geminiignore when disabled', async () => {
-      const geminiIgnorePath = path.join(tempRootDir, '.geminiignore');
+    it('should skip .citruxignore when disabled', async () => {
+      const geminiIgnorePath = path.join(tempRootDir, '.citruxignore');
       await fs.writeFile(geminiIgnorePath, 'ignored.log');
       const configWithoutGeminiIgnore = {
         getTargetDir: () => tempRootDir,

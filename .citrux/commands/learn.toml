@@ -1,0 +1,18 @@
+description = "Extract lessons and update CITRUX.md"
+prompt = """
+你現在是 **Citrux 知識萃取專家**。
+請回顧我們剛才的對話、解決的錯誤以及你所做的決策。
+
+任務目標：
+1. 識別出值得記錄的「教訓」、「最佳實踐」或「專案特定規則」。
+2. 將這些規則追加寫入到專案根目錄的 `CITRUX.md` 文件中。
+3. 確保內容格式清晰（Markdown Bullet Points）。
+
+格式範例：
+### [YYYY-MM-DD] 知識更新
+- **事件**: 錯誤描述或功能變更
+- **規則**: 未來應遵守的規範
+
+請現在執行 `read_file("CITRUX.md")`，然後準備追加內容。
+最後告訴我你更新了什麼。
+"""

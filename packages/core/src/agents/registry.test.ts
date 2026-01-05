@@ -13,11 +13,11 @@ import { debugLogger } from '../utils/debugLogger.js';
 import { coreEvents, CoreEvent } from '../utils/events.js';
 import { A2AClientManager } from './a2a-client-manager.js';
 import {
-  DEFAULT_GEMINI_FLASH_LITE_MODEL,
-  GEMINI_MODEL_ALIAS_AUTO,
-  PREVIEW_GEMINI_FLASH_MODEL,
-  PREVIEW_GEMINI_MODEL,
-  PREVIEW_GEMINI_MODEL_AUTO,
+  DEFAULT_CITRUX_FLASH_LITE_MODEL,
+  CITRUX_MODEL_ALIAS_AUTO,
+  PREVIEW_CITRUX_FLASH_MODEL,
+  PREVIEW_CITRUX_MODEL,
+  PREVIEW_CITRUX_MODEL_AUTO,
 } from '../config/models.js';
 import * as tomlLoader from './toml-loader.js';
 
@@ -105,10 +105,10 @@ describe('AgentRegistry', () => {
 
     it('should use preview flash model for codebase investigator if main model is preview pro', async () => {
       const previewConfig = makeFakeConfig({
-        model: PREVIEW_GEMINI_MODEL,
+        model: PREVIEW_CITRUX_MODEL,
         codebaseInvestigatorSettings: {
           enabled: true,
-          model: GEMINI_MODEL_ALIAS_AUTO,
+          model: CITRUX_MODEL_ALIAS_AUTO,
         },
       });
       const previewRegistry = new TestableAgentRegistry(previewConfig);
@@ -120,16 +120,16 @@ describe('AgentRegistry', () => {
       ) as LocalAgentDefinition;
       expect(investigatorDef).toBeDefined();
       expect(investigatorDef?.modelConfig.model).toBe(
-        PREVIEW_GEMINI_FLASH_MODEL,
+        PREVIEW_CITRUX_FLASH_MODEL,
       );
     });
 
     it('should use preview flash model for codebase investigator if main model is preview auto', async () => {
       const previewConfig = makeFakeConfig({
-        model: PREVIEW_GEMINI_MODEL_AUTO,
+        model: PREVIEW_CITRUX_MODEL_AUTO,
         codebaseInvestigatorSettings: {
           enabled: true,
-          model: GEMINI_MODEL_ALIAS_AUTO,
+          model: CITRUX_MODEL_ALIAS_AUTO,
         },
       });
       const previewRegistry = new TestableAgentRegistry(previewConfig);
@@ -141,16 +141,16 @@ describe('AgentRegistry', () => {
       ) as LocalAgentDefinition;
       expect(investigatorDef).toBeDefined();
       expect(investigatorDef?.modelConfig.model).toBe(
-        PREVIEW_GEMINI_FLASH_MODEL,
+        PREVIEW_CITRUX_FLASH_MODEL,
       );
     });
 
     it('should use the model from the investigator settings', async () => {
       const previewConfig = makeFakeConfig({
-        model: PREVIEW_GEMINI_MODEL,
+        model: PREVIEW_CITRUX_MODEL,
         codebaseInvestigatorSettings: {
           enabled: true,
-          model: DEFAULT_GEMINI_FLASH_LITE_MODEL,
+          model: DEFAULT_CITRUX_FLASH_LITE_MODEL,
         },
       });
       const previewRegistry = new TestableAgentRegistry(previewConfig);
@@ -162,7 +162,7 @@ describe('AgentRegistry', () => {
       ) as LocalAgentDefinition;
       expect(investigatorDef).toBeDefined();
       expect(investigatorDef?.modelConfig.model).toBe(
-        DEFAULT_GEMINI_FLASH_LITE_MODEL,
+        DEFAULT_CITRUX_FLASH_LITE_MODEL,
       );
     });
 

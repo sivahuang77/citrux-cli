@@ -8,14 +8,14 @@ import * as fs from 'node:fs';
 import * as path from 'node:path';
 import ignore from 'ignore';
 
-export interface GeminiIgnoreFilter {
+export interface CitruxIgnoreFilter {
   isIgnored(filePath: string): boolean;
   getPatterns(): string[];
   getIgnoreFilePath(): string | null;
   hasPatterns(): boolean;
 }
 
-export class GeminiIgnoreParser implements GeminiIgnoreFilter {
+export class CitruxIgnoreParser implements CitruxIgnoreFilter {
   private projectRoot: string;
   private patterns: string[] = [];
   private ig = ignore();
@@ -82,7 +82,7 @@ export class GeminiIgnoreParser implements GeminiIgnoreFilter {
   }
 
   /**
-   * Returns the path to .geminiignore file if it exists and has patterns.
+   * Returns the path to .citruxignore file if it exists and has patterns.
    * Useful for tools like ripgrep that support --ignore-file flag.
    */
   getIgnoreFilePath(): string | null {
@@ -93,7 +93,7 @@ export class GeminiIgnoreParser implements GeminiIgnoreFilter {
   }
 
   /**
-   * Returns true if .geminiignore exists and has patterns.
+   * Returns true if .citruxignore exists and has patterns.
    */
   hasPatterns(): boolean {
     if (this.patterns.length === 0) {

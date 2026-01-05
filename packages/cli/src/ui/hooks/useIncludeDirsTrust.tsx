@@ -42,7 +42,7 @@ async function finishAddingDirectories(
   }
 
   if (added.length > 0) {
-    const gemini = config.getGeminiClient();
+    const gemini = config.getCitruxClient();
     if (gemini) {
       await gemini.addDirectoryContext();
     }

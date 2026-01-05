@@ -5,7 +5,7 @@
  */
 
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { main } from './gemini.js';
+import { main } from './citrux.js';
 import { debugLogger } from '@google/gemini-cli-core';
 import { type Config } from '@google/gemini-cli-core';
 
@@ -145,11 +145,11 @@ vi.mock('./utils/sessionCleanup.js', async (importOriginal) => {
 describe('gemini.tsx main function cleanup', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    process.env['GEMINI_CLI_NO_RELAUNCH'] = 'true';
+    process.env['CITRUX_CLI_NO_RELAUNCH'] = 'true';
   });
 
   afterEach(() => {
-    delete process.env['GEMINI_CLI_NO_RELAUNCH'];
+    delete process.env['CITRUX_CLI_NO_RELAUNCH'];
     vi.restoreAllMocks();
   });
 

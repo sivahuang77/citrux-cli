@@ -122,7 +122,7 @@ const saveCommand: SlashCommand = {
       }
     }
 
-    const chat = config?.getGeminiClient()?.getChat();
+    const chat = config?.getCitruxClient()?.getChat();
     if (!chat) {
       return {
         type: 'message',
@@ -326,7 +326,7 @@ const shareCommand: SlashCommand = {
       };
     }
 
-    const chat = context.services.config?.getGeminiClient()?.getChat();
+    const chat = context.services.config?.getCitruxClient()?.getChat();
     if (!chat) {
       return {
         type: 'message',

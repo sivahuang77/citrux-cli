@@ -343,10 +343,10 @@ describe('settings-validation', () => {
       if (result.error) {
         const formatted = formatValidationError(
           result.error,
-          '~/.gemini/settings.json',
+          '~/.citrux/settings.json',
         );
 
-        expect(formatted).toContain('~/.gemini/settings.json');
+        expect(formatted).toContain('~/.citrux/settings.json');
         expect(formatted).toContain('model.summarizeToolOutput');
       }
     });

@@ -125,7 +125,7 @@ export class McpClientManager {
       } finally {
         // This is required to update the content generator configuration with the
         // new tool configuration.
-        const geminiClient = this.cliConfig.getGeminiClient();
+        const geminiClient = this.cliConfig.getCitruxClient();
         if (geminiClient.isInitialized()) {
           await geminiClient.setTools();
         }
@@ -184,7 +184,7 @@ export class McpClientManager {
               this.cliConfig.getDebugMode(),
               async () => {
                 debugLogger.log('Tools changed, updating Gemini context...');
-                const geminiClient = this.cliConfig.getGeminiClient();
+                const geminiClient = this.cliConfig.getCitruxClient();
                 if (geminiClient.isInitialized()) {
                   await geminiClient.setTools();
                 }
@@ -215,7 +215,7 @@ export class McpClientManager {
         } finally {
           // This is required to update the content generator configuration with the
           // new tool configuration.
-          const geminiClient = this.cliConfig.getGeminiClient();
+          const geminiClient = this.cliConfig.getCitruxClient();
           if (geminiClient.isInitialized()) {
             await geminiClient.setTools();
           }

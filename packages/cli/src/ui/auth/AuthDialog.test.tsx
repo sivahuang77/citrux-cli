@@ -119,10 +119,10 @@ describe('AuthDialog', () => {
         desc: 'in Cloud Shell',
       },
       {
-        env: { GEMINI_CLI_USE_COMPUTE_ADC: 'true' },
+        env: { CITRUX_CLI_USE_COMPUTE_ADC: 'true' },
         shouldContain: [computeAdcItem(metadataServerLabel)],
         shouldNotContain: [computeAdcItem(cloudShellLabel)],
-        desc: 'with GEMINI_CLI_USE_COMPUTE_ADC',
+        desc: 'with CITRUX_CLI_USE_COMPUTE_ADC',
       },
       {
         env: {},
@@ -176,17 +176,17 @@ describe('AuthDialog', () => {
       },
       {
         setup: () => {
-          process.env['GEMINI_DEFAULT_AUTH_TYPE'] = AuthType.USE_GEMINI;
+          process.env['CITRUX_DEFAULT_AUTH_TYPE'] = AuthType.USE_GEMINI;
         },
         expected: AuthType.USE_GEMINI,
-        desc: 'from GEMINI_DEFAULT_AUTH_TYPE env var',
+        desc: 'from CITRUX_DEFAULT_AUTH_TYPE env var',
       },
       {
         setup: () => {
-          process.env['GEMINI_API_KEY'] = 'test-key';
+          process.env['CITRUX_API_KEY'] = 'test-key';
         },
         expected: AuthType.USE_GEMINI,
-        desc: 'from GEMINI_API_KEY env var',
+        desc: 'from CITRUX_API_KEY env var',
       },
       {
         setup: () => {},
@@ -219,7 +219,7 @@ describe('AuthDialog', () => {
 
     it('skips API key dialog on initial setup if env var is present', async () => {
       mockedValidateAuthMethod.mockReturnValue(null);
-      process.env['GEMINI_API_KEY'] = 'test-key-from-env';
+      process.env['CITRUX_API_KEY'] = 'test-key-from-env';
       // props.settings.merged.security.auth.selectedType is undefined here, simulating initial setup
 
       renderWithProviders(<AuthDialog {...props} />);
@@ -234,7 +234,7 @@ describe('AuthDialog', () => {
 
     it('skips API key dialog if env var is present but empty', async () => {
       mockedValidateAuthMethod.mockReturnValue(null);
-      process.env['GEMINI_API_KEY'] = ''; // Empty string
+      process.env['CITRUX_API_KEY'] = ''; // Empty string
       // props.settings.merged.security.auth.selectedType is undefined here
 
       renderWithProviders(<AuthDialog {...props} />);
@@ -249,7 +249,7 @@ describe('AuthDialog', () => {
 
     it('shows API key dialog on initial setup if no env var is present', async () => {
       mockedValidateAuthMethod.mockReturnValue(null);
-      // process.env['GEMINI_API_KEY'] is not set
+      // process.env['CITRUX_API_KEY'] is not set
       // props.settings.merged.security.auth.selectedType is undefined here, simulating initial setup
 
       renderWithProviders(<AuthDialog {...props} />);
@@ -264,7 +264,7 @@ describe('AuthDialog', () => {
 
     it('skips API key dialog on re-auth if env var is present (cannot edit)', async () => {
       mockedValidateAuthMethod.mockReturnValue(null);
-      process.env['GEMINI_API_KEY'] = 'test-key-from-env';
+      process.env['CITRUX_API_KEY'] = 'test-key-from-env';
       // Simulate that the user has already authenticated once
       props.settings.merged.security!.auth!.selectedType =
         AuthType.LOGIN_WITH_GOOGLE;

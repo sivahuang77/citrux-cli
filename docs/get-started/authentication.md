@@ -76,11 +76,11 @@ To authenticate and use Citrux CLI with a Gemini API key:
 1. Obtain your API key from
    [Google AI Studio](https://aistudio.google.com/app/apikey).
 
-2. Set the `GEMINI_API_KEY` environment variable to your key. For example:
+2. Set the `CITRUX_API_KEY` environment variable to your key. For example:
 
    ```bash
-   # Replace YOUR_GEMINI_API_KEY with the key from AI Studio
-   export GEMINI_API_KEY="YOUR_GEMINI_API_KEY"
+   # Replace YOUR_CITRUX_API_KEY with the key from AI Studio
+   export CITRUX_API_KEY="YOUR_CITRUX_API_KEY"
    ```
 
    To make this setting persistent, see
@@ -127,11 +127,11 @@ To make any Vertex AI environment variable settings persistent, see
 
 Consider this authentication method if you have Google Cloud CLI installed.
 
-> **Note:** If you have previously set `GOOGLE_API_KEY` or `GEMINI_API_KEY`, you
+> **Note:** If you have previously set `GOOGLE_API_KEY` or `CITRUX_API_KEY`, you
 > must unset them to use ADC:
 >
 > ```bash
-> unset GOOGLE_API_KEY GEMINI_API_KEY
+> unset GOOGLE_API_KEY CITRUX_API_KEY
 > ```
 
 1. Verify you have a Google Cloud project and Vertex AI API is enabled.
@@ -157,11 +157,11 @@ Consider this authentication method if you have Google Cloud CLI installed.
 Consider this method of authentication in non-interactive environments, CI/CD
 pipelines, or if your organization restricts user-based ADC or API key creation.
 
-> **Note:** If you have previously set `GOOGLE_API_KEY` or `GEMINI_API_KEY`, you
+> **Note:** If you have previously set `GOOGLE_API_KEY` or `CITRUX_API_KEY`, you
 > must unset them:
 >
 > ```bash
-> unset GOOGLE_API_KEY GEMINI_API_KEY
+> unset GOOGLE_API_KEY CITRUX_API_KEY
 > ```
 
 1.  [Create a service account and key](https://cloud.google.com/iam/docs/keys-create-delete)
@@ -282,7 +282,7 @@ persist them with the following methods:
     mkdir -p ~/.citrux
     cat >> ~/.citrux/.env <<'EOF'
     GOOGLE_CLOUD_PROJECT="your-project-id"
-    # Add other variables like GEMINI_API_KEY as needed
+    # Add other variables like CITRUX_API_KEY as needed
     EOF
     ```
 

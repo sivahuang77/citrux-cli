@@ -12,7 +12,7 @@ import {
   getErrorMessage,
   isWithinRoot,
   ideContextStore,
-  GEMINI_DIR,
+  CITRUX_DIR,
 } from '@google/gemini-cli-core';
 import type { Settings } from './settings.js';
 import stripJsonComments from 'strip-json-comments';
@@ -20,12 +20,12 @@ import stripJsonComments from 'strip-json-comments';
 export const TRUSTED_FOLDERS_FILENAME = 'trustedFolders.json';
 
 export function getUserSettingsDir(): string {
-  return path.join(homedir(), GEMINI_DIR);
+  return path.join(homedir(), CITRUX_DIR);
 }
 
 export function getTrustedFoldersPath(): string {
-  if (process.env['GEMINI_CLI_TRUSTED_FOLDERS_PATH']) {
-    return process.env['GEMINI_CLI_TRUSTED_FOLDERS_PATH'];
+  if (process.env['CITRUX_CLI_TRUSTED_FOLDERS_PATH']) {
+    return process.env['CITRUX_CLI_TRUSTED_FOLDERS_PATH'];
   }
   return path.join(getUserSettingsDir(), TRUSTED_FOLDERS_FILENAME);
 }

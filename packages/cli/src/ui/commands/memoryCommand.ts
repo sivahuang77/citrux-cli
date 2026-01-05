@@ -138,8 +138,8 @@ export const memoryCommand: SlashCommand = {
 
         const messageContent =
           fileCount > 0
-            ? `There are ${fileCount} GEMINI.md file(s) in use:\n\n${filePaths.join('\n')}`
-            : 'No GEMINI.md files in use.';
+            ? `There are ${fileCount} CITRUX.md file(s) in use:\n\n${filePaths.join('\n')}`
+            : 'No CITRUX.md files in use.';
 
         context.ui.addItem(
           {

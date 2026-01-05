@@ -143,7 +143,7 @@ const authCommand: SlashCommand = {
         await mcpClientManager.restartServer(serverName);
       }
       // Update the client with the new tools
-      const geminiClient = config.getGeminiClient();
+      const geminiClient = config.getCitruxClient();
       if (geminiClient?.isInitialized()) {
         await geminiClient.setTools();
       }
@@ -346,7 +346,7 @@ const refreshCommand: SlashCommand = {
     await mcpClientManager.restart();
 
     // Update the client with the new tools
-    const geminiClient = config.getGeminiClient();
+    const geminiClient = config.getCitruxClient();
     if (geminiClient?.isInitialized()) {
       await geminiClient.setTools();
     }

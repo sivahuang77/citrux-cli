@@ -79,13 +79,13 @@ describe('telemetry/config helpers', () => {
         useCollector: false,
       };
       const env = {
-        GEMINI_TELEMETRY_ENABLED: '1',
-        GEMINI_TELEMETRY_TARGET: 'gcp',
-        GEMINI_TELEMETRY_OTLP_ENDPOINT: 'http://env:4317',
-        GEMINI_TELEMETRY_OTLP_PROTOCOL: 'http',
-        GEMINI_TELEMETRY_LOG_PROMPTS: 'true',
-        GEMINI_TELEMETRY_OUTFILE: 'env.log',
-        GEMINI_TELEMETRY_USE_COLLECTOR: 'true',
+        CITRUX_TELEMETRY_ENABLED: '1',
+        CITRUX_TELEMETRY_TARGET: 'gcp',
+        CITRUX_TELEMETRY_OTLP_ENDPOINT: 'http://env:4317',
+        CITRUX_TELEMETRY_OTLP_PROTOCOL: 'http',
+        CITRUX_TELEMETRY_LOG_PROMPTS: 'true',
+        CITRUX_TELEMETRY_OUTFILE: 'env.log',
+        CITRUX_TELEMETRY_USE_COLLECTOR: 'true',
       } as Record<string, string>;
       const argv = {
         telemetry: false,
@@ -134,7 +134,7 @@ describe('telemetry/config helpers', () => {
 
     it('resolves useCliAuth from env', async () => {
       const env = {
-        GEMINI_TELEMETRY_USE_CLI_AUTH: 'true',
+        CITRUX_TELEMETRY_USE_CLI_AUTH: 'true',
       };
       const resolved = await resolveTelemetrySettings({ env });
       expect(resolved.useCliAuth).toBe(true);
@@ -145,7 +145,7 @@ describe('telemetry/config helpers', () => {
         useCliAuth: false,
       };
       const env = {
-        GEMINI_TELEMETRY_USE_CLI_AUTH: 'true',
+        CITRUX_TELEMETRY_USE_CLI_AUTH: 'true',
       };
       const resolved = await resolveTelemetrySettings({ env, settings });
       expect(resolved.useCliAuth).toBe(true);
@@ -161,7 +161,7 @@ describe('telemetry/config helpers', () => {
     });
 
     it('throws on unknown protocol values', async () => {
-      const env = { GEMINI_TELEMETRY_OTLP_PROTOCOL: 'unknown' } as Record<
+      const env = { CITRUX_TELEMETRY_OTLP_PROTOCOL: 'unknown' } as Record<
         string,
         string
       >;
@@ -171,7 +171,7 @@ describe('telemetry/config helpers', () => {
     });
 
     it('throws on unknown target values', async () => {
-      const env = { GEMINI_TELEMETRY_TARGET: 'unknown' } as Record<
+      const env = { CITRUX_TELEMETRY_TARGET: 'unknown' } as Record<
         string,
         string
       >;

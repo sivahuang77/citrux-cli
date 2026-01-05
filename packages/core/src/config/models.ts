@@ -4,30 +4,30 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-export const PREVIEW_GEMINI_MODEL = 'gemini-3-pro-preview';
-export const PREVIEW_GEMINI_FLASH_MODEL = 'gemini-3-flash-preview';
-export const DEFAULT_GEMINI_MODEL = 'gemini-2.5-pro';
-export const DEFAULT_GEMINI_FLASH_MODEL = 'gemini-2.5-flash';
-export const DEFAULT_GEMINI_FLASH_LITE_MODEL = 'gemini-2.5-flash-lite';
+export const PREVIEW_CITRUX_MODEL = 'gemini-3-pro-preview';
+export const PREVIEW_CITRUX_FLASH_MODEL = 'gemini-3-flash-preview';
+export const DEFAULT_CITRUX_MODEL = 'gemini-2.5-pro';
+export const DEFAULT_CITRUX_FLASH_MODEL = 'gemini-2.5-flash';
+export const DEFAULT_CITRUX_FLASH_LITE_MODEL = 'gemini-2.5-flash-lite';
 
-export const VALID_GEMINI_MODELS = new Set([
-  PREVIEW_GEMINI_MODEL,
-  PREVIEW_GEMINI_FLASH_MODEL,
-  DEFAULT_GEMINI_MODEL,
-  DEFAULT_GEMINI_FLASH_MODEL,
-  DEFAULT_GEMINI_FLASH_LITE_MODEL,
+export const VALID_CITRUX_MODELS = new Set([
+  PREVIEW_CITRUX_MODEL,
+  PREVIEW_CITRUX_FLASH_MODEL,
+  DEFAULT_CITRUX_MODEL,
+  DEFAULT_CITRUX_FLASH_MODEL,
+  DEFAULT_CITRUX_FLASH_LITE_MODEL,
 ]);
 
-export const PREVIEW_GEMINI_MODEL_AUTO = 'auto-gemini-3';
-export const DEFAULT_GEMINI_MODEL_AUTO = 'auto-gemini-2.5';
+export const PREVIEW_CITRUX_MODEL_AUTO = 'auto-gemini-3';
+export const DEFAULT_CITRUX_MODEL_AUTO = 'auto-gemini-2.5';
 
 // Model aliases for user convenience.
-export const GEMINI_MODEL_ALIAS_AUTO = 'auto';
-export const GEMINI_MODEL_ALIAS_PRO = 'pro';
-export const GEMINI_MODEL_ALIAS_FLASH = 'flash';
-export const GEMINI_MODEL_ALIAS_FLASH_LITE = 'flash-lite';
+export const CITRUX_MODEL_ALIAS_AUTO = 'auto';
+export const CITRUX_MODEL_ALIAS_PRO = 'pro';
+export const CITRUX_MODEL_ALIAS_FLASH = 'flash';
+export const CITRUX_MODEL_ALIAS_FLASH_LITE = 'flash-lite';
 
-export const DEFAULT_GEMINI_EMBEDDING_MODEL = 'gemini-embedding-001';
+export const DEFAULT_CITRUX_EMBEDDING_MODEL = 'gemini-embedding-001';
 
 // Cap the thinking at 8192 to prevent run-away thinking loops.
 export const DEFAULT_THINKING_MODE = 8192;
@@ -45,24 +45,24 @@ export function resolveModel(
   previewFeaturesEnabled: boolean = false,
 ): string {
   switch (requestedModel) {
-    case PREVIEW_GEMINI_MODEL_AUTO: {
-      return PREVIEW_GEMINI_MODEL;
+    case PREVIEW_CITRUX_MODEL_AUTO: {
+      return PREVIEW_CITRUX_MODEL;
     }
-    case DEFAULT_GEMINI_MODEL_AUTO: {
-      return DEFAULT_GEMINI_MODEL;
+    case DEFAULT_CITRUX_MODEL_AUTO: {
+      return DEFAULT_CITRUX_MODEL;
     }
-    case GEMINI_MODEL_ALIAS_PRO: {
+    case CITRUX_MODEL_ALIAS_PRO: {
       return previewFeaturesEnabled
-        ? PREVIEW_GEMINI_MODEL
-        : DEFAULT_GEMINI_MODEL;
+        ? PREVIEW_CITRUX_MODEL
+        : DEFAULT_CITRUX_MODEL;
     }
-    case GEMINI_MODEL_ALIAS_FLASH: {
+    case CITRUX_MODEL_ALIAS_FLASH: {
       return previewFeaturesEnabled
-        ? PREVIEW_GEMINI_FLASH_MODEL
-        : DEFAULT_GEMINI_FLASH_MODEL;
+        ? PREVIEW_CITRUX_FLASH_MODEL
+        : DEFAULT_CITRUX_FLASH_MODEL;
     }
-    case GEMINI_MODEL_ALIAS_FLASH_LITE: {
-      return DEFAULT_GEMINI_FLASH_LITE_MODEL;
+    case CITRUX_MODEL_ALIAS_FLASH_LITE: {
+      return DEFAULT_CITRUX_FLASH_LITE_MODEL;
     }
     default: {
       return requestedModel;
@@ -83,20 +83,20 @@ export function resolveClassifierModel(
   modelAlias: string,
   previewFeaturesEnabled: boolean = false,
 ): string {
-  if (modelAlias === GEMINI_MODEL_ALIAS_FLASH) {
+  if (modelAlias === CITRUX_MODEL_ALIAS_FLASH) {
     if (
-      requestedModel === DEFAULT_GEMINI_MODEL_AUTO ||
-      requestedModel === DEFAULT_GEMINI_MODEL
+      requestedModel === DEFAULT_CITRUX_MODEL_AUTO ||
+      requestedModel === DEFAULT_CITRUX_MODEL
     ) {
-      return DEFAULT_GEMINI_FLASH_MODEL;
+      return DEFAULT_CITRUX_FLASH_MODEL;
     }
     if (
-      requestedModel === PREVIEW_GEMINI_MODEL_AUTO ||
-      requestedModel === PREVIEW_GEMINI_MODEL
+      requestedModel === PREVIEW_CITRUX_MODEL_AUTO ||
+      requestedModel === PREVIEW_CITRUX_MODEL
     ) {
-      return PREVIEW_GEMINI_FLASH_MODEL;
+      return PREVIEW_CITRUX_FLASH_MODEL;
     }
-    return resolveModel(GEMINI_MODEL_ALIAS_FLASH, previewFeaturesEnabled);
+    return resolveModel(CITRUX_MODEL_ALIAS_FLASH, previewFeaturesEnabled);
   }
   return resolveModel(requestedModel, previewFeaturesEnabled);
 }
@@ -105,19 +105,19 @@ export function getDisplayString(
   previewFeaturesEnabled: boolean = false,
 ) {
   switch (model) {
-    case PREVIEW_GEMINI_MODEL_AUTO:
+    case PREVIEW_CITRUX_MODEL_AUTO:
       return 'Auto (Gemini 3)';
-    case DEFAULT_GEMINI_MODEL_AUTO:
+    case DEFAULT_CITRUX_MODEL_AUTO:
       return 'Auto (Gemini 2.5)';
-    case GEMINI_MODEL_ALIAS_PRO:
+    case CITRUX_MODEL_ALIAS_PRO:
       return `Manual (${
-        previewFeaturesEnabled ? PREVIEW_GEMINI_MODEL : DEFAULT_GEMINI_MODEL
+        previewFeaturesEnabled ? PREVIEW_CITRUX_MODEL : DEFAULT_CITRUX_MODEL
       })`;
-    case GEMINI_MODEL_ALIAS_FLASH:
+    case CITRUX_MODEL_ALIAS_FLASH:
       return `Manual (${
         previewFeaturesEnabled
-          ? PREVIEW_GEMINI_FLASH_MODEL
-          : DEFAULT_GEMINI_FLASH_MODEL
+          ? PREVIEW_CITRUX_FLASH_MODEL
+          : DEFAULT_CITRUX_FLASH_MODEL
       })`;
     default:
       return `Manual (${model})`;
@@ -132,9 +132,9 @@ export function getDisplayString(
  */
 export function isPreviewModel(model: string): boolean {
   return (
-    model === PREVIEW_GEMINI_MODEL ||
-    model === PREVIEW_GEMINI_FLASH_MODEL ||
-    model === PREVIEW_GEMINI_MODEL_AUTO
+    model === PREVIEW_CITRUX_MODEL ||
+    model === PREVIEW_CITRUX_FLASH_MODEL ||
+    model === PREVIEW_CITRUX_MODEL_AUTO
   );
 }
 

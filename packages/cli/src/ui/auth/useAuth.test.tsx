@@ -40,8 +40,8 @@ vi.mock('../../config/auth.js', () => ({
 describe('useAuth', () => {
   beforeEach(() => {
     vi.resetAllMocks();
-    delete process.env['GEMINI_API_KEY'];
-    delete process.env['GEMINI_DEFAULT_AUTH_TYPE'];
+    delete process.env['CITRUX_API_KEY'];
+    delete process.env['CITRUX_DEFAULT_AUTH_TYPE'];
   });
 
   afterEach(() => {
@@ -159,14 +159,14 @@ describe('useAuth', () => {
     });
 
     it('should set error if no auth type is selected but env key exists', async () => {
-      process.env['GEMINI_API_KEY'] = 'env-key';
+      process.env['CITRUX_API_KEY'] = 'env-key';
       const { result } = renderHook(() =>
         useAuthCommand(createSettings(undefined), mockConfig),
       );
 
       await waitFor(() => {
         expect(result.current.authError).toContain(
-          'Existing API key detected (GEMINI_API_KEY)',
+          'Existing API key detected (CITRUX_API_KEY)',
         );
         expect(result.current.authState).toBe(AuthState.Updating);
       });
@@ -200,7 +200,7 @@ describe('useAuth', () => {
 
     it('should authenticate if USE_GEMINI and env key is found', async () => {
       mockLoadApiKey.mockResolvedValue(null);
-      process.env['GEMINI_API_KEY'] = 'env-key';
+      process.env['CITRUX_API_KEY'] = 'env-key';
       const { result } = renderHook(() =>
         useAuthCommand(createSettings(AuthType.USE_GEMINI), mockConfig),
       );
@@ -216,7 +216,7 @@ describe('useAuth', () => {
 
     it('should prioritize env key over stored key when both are present', async () => {
       mockLoadApiKey.mockResolvedValue('stored-key');
-      process.env['GEMINI_API_KEY'] = 'env-key';
+      process.env['CITRUX_API_KEY'] = 'env-key';
       const { result } = renderHook(() =>
         useAuthCommand(createSettings(AuthType.USE_GEMINI), mockConfig),
       );
@@ -243,15 +243,15 @@ describe('useAuth', () => {
       });
     });
 
-    it('should set error if GEMINI_DEFAULT_AUTH_TYPE is invalid', async () => {
-      process.env['GEMINI_DEFAULT_AUTH_TYPE'] = 'INVALID_TYPE';
+    it('should set error if CITRUX_DEFAULT_AUTH_TYPE is invalid', async () => {
+      process.env['CITRUX_DEFAULT_AUTH_TYPE'] = 'INVALID_TYPE';
       const { result } = renderHook(() =>
         useAuthCommand(createSettings(AuthType.LOGIN_WITH_GOOGLE), mockConfig),
       );
 
       await waitFor(() => {
         expect(result.current.authError).toContain(
-          'Invalid value for GEMINI_DEFAULT_AUTH_TYPE',
+          'Invalid value for CITRUX_DEFAULT_AUTH_TYPE',
         );
         expect(result.current.authState).toBe(AuthState.Updating);
       });

@@ -94,7 +94,7 @@ describe('GeminiAgent', () => {
       initialize: vi.fn(),
       getFileSystemService: vi.fn(),
       setFileSystemService: vi.fn(),
-      getGeminiClient: vi.fn().mockReturnValue({
+      getCitruxClient: vi.fn().mockReturnValue({
         startChat: vi.fn().mockResolvedValue({}),
       }),
     } as unknown as Mocked<Awaited<ReturnType<typeof loadCliConfig>>>;
@@ -150,7 +150,7 @@ describe('GeminiAgent', () => {
     expect(response.sessionId).toBe('test-session-id');
     expect(loadCliConfig).toHaveBeenCalled();
     expect(mockConfig.initialize).toHaveBeenCalled();
-    expect(mockConfig.getGeminiClient).toHaveBeenCalled();
+    expect(mockConfig.getCitruxClient).toHaveBeenCalled();
   });
 
   it('should create a new session with mcp servers', async () => {

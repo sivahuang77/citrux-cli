@@ -47,7 +47,7 @@ vi.mock('node:path', async () => {
 });
 
 vi.mock('@google/gemini-cli-core', () => ({
-  GEMINI_DIR: '.gemini',
+  CITRUX_DIR: '.citrux',
   Storage: {
     getGlobalTempDir: () => '/mock/temp',
   },

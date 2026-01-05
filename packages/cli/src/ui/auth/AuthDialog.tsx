@@ -55,7 +55,7 @@ export function AuthDialog({
             key: AuthType.COMPUTE_ADC,
           },
         ]
-      : process.env['GEMINI_CLI_USE_COMPUTE_ADC'] === 'true'
+      : process.env['CITRUX_CLI_USE_COMPUTE_ADC'] === 'true'
         ? [
             {
               label: 'Use metadata server application default credentials',
@@ -83,7 +83,7 @@ export function AuthDialog({
   }
 
   let defaultAuthType = null;
-  const defaultAuthTypeEnv = process.env['GEMINI_DEFAULT_AUTH_TYPE'];
+  const defaultAuthTypeEnv = process.env['CITRUX_DEFAULT_AUTH_TYPE'];
   if (
     defaultAuthTypeEnv &&
     Object.values(AuthType).includes(defaultAuthTypeEnv as AuthType)
@@ -100,7 +100,7 @@ export function AuthDialog({
       return item.value === defaultAuthType;
     }
 
-    if (process.env['GEMINI_API_KEY']) {
+    if (process.env['CITRUX_API_KEY']) {
       return item.value === AuthType.USE_GEMINI;
     }
 
@@ -132,7 +132,7 @@ export function AuthDialog({
         }
 
         if (authType === AuthType.USE_GEMINI) {
-          if (process.env['GEMINI_API_KEY'] !== undefined) {
+          if (process.env['CITRUX_API_KEY'] !== undefined) {
             setAuthState(AuthState.Unauthenticated);
             return;
           } else {

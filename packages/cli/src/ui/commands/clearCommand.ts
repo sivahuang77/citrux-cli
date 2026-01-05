@@ -22,10 +22,10 @@ export const clearCommand: SlashCommand = {
   kind: CommandKind.BUILT_IN,
   autoExecute: true,
   action: async (context, _args) => {
-    const geminiClient = context.services.config?.getGeminiClient();
+    const geminiClient = context.services.config?.getCitruxClient();
     const config = context.services.config;
     const chatRecordingService = context.services.config
-      ?.getGeminiClient()
+      ?.getCitruxClient()
       ?.getChat()
       .getChatRecordingService();
     const messageBus = config?.getMessageBus();

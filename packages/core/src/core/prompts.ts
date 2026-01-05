@@ -22,7 +22,7 @@ import process from 'node:process';
 import { isGitRepository } from '../utils/gitUtils.js';
 import { CodebaseInvestigatorAgent } from '../agents/codebase-investigator.js';
 import type { Config } from '../config/config.js';
-import { GEMINI_DIR } from '../utils/paths.js';
+import { CITRUX_DIR } from '../utils/paths.js';
 import { debugLogger } from '../utils/debugLogger.js';
 import { WriteTodosTool } from '../tools/write-todos.js';
 import { resolveModel, isPreviewModel } from '../config/models.js';
@@ -84,10 +84,10 @@ export function getCoreSystemPrompt(
   // A flag to indicate whether the system prompt override is active.
   let systemMdEnabled = false;
   // The default path for the system prompt file. This can be overridden.
-  let systemMdPath = path.resolve(path.join(GEMINI_DIR, 'system.md'));
+  let systemMdPath = path.resolve(path.join(CITRUX_DIR, 'system.md'));
   // Resolve the environment variable to get either a path or a switch value.
   const systemMdResolution = resolvePathFromEnv(
-    process.env['GEMINI_SYSTEM_MD'],
+    process.env['CITRUX_SYSTEM_MD'],
   );
 
   // Proceed only if the environment variable is set and is not disabled.
@@ -351,9 +351,9 @@ Your core function is efficient and safe assistance. Balance extreme conciseness
     );
 
     // By default, all prompts are enabled. A prompt is disabled if its corresponding
-    // GEMINI_PROMPT_<NAME> environment variable is set to "0" or "false".
+    // CITRUX_PROMPT_<NAME> environment variable is set to "0" or "false".
     const enabledPrompts = orderedPrompts.filter((key) => {
-      const envVar = process.env[`GEMINI_PROMPT_${key.toUpperCase()}`];
+      const envVar = process.env[`CITRUX_PROMPT_${key.toUpperCase()}`];
       const lowerEnvVar = envVar?.trim().toLowerCase();
       return lowerEnvVar !== '0' && lowerEnvVar !== 'false';
     });
@@ -361,9 +361,9 @@ Your core function is efficient and safe assistance. Balance extreme conciseness
     basePrompt = enabledPrompts.map((key) => promptConfig[key]).join('\n');
   }
 
-  // if GEMINI_WRITE_SYSTEM_MD is set (and not 0|false), write base system prompt to file
+  // if CITRUX_WRITE_SYSTEM_MD is set (and not 0|false), write base system prompt to file
   const writeSystemMdResolution = resolvePathFromEnv(
-    process.env['GEMINI_WRITE_SYSTEM_MD'],
+    process.env['CITRUX_WRITE_SYSTEM_MD'],
   );
 
   // Check if the feature is enabled. This proceeds only if the environment

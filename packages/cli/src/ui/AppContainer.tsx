@@ -163,7 +163,7 @@ const SHELL_HEIGHT_PADDING = 10;
 export const AppContainer = (props: AppContainerProps) => {
   const { config, initializationResult, resumedSessionData } = props;
   const historyManager = useHistory({
-    chatRecordingService: config.getGeminiClient()?.getChatRecordingService(),
+    chatRecordingService: config.getCitruxClient()?.getChatRecordingService(),
   });
   useMemoryMonitor(historyManager);
   const settings = useSettings();
@@ -452,13 +452,13 @@ export const AppContainer = (props: AppContainerProps) => {
   const isAuthenticating = authState === AuthState.Unauthenticated;
 
   // Session browser and resume functionality
-  const isGeminiClientInitialized = config.getGeminiClient()?.isInitialized();
+  const isCitruxClientInitialized = config.getCitruxClient()?.isInitialized();
 
   const { loadHistoryForResume } = useSessionResume({
     config,
     historyManager,
     refreshStatic,
-    isGeminiClientInitialized,
+    isCitruxClientInitialized,
     setQuittingMessages,
     resumedSessionData,
     isAuthenticating,
@@ -670,7 +670,7 @@ Logging in with Google... Restarting Gemini CLI to continue.
     historyManager.addItem(
       {
         type: MessageType.INFO,
-        text: 'Refreshing hierarchical memory (GEMINI.md or other context files)...',
+        text: 'Refreshing hierarchical memory (CITRUX.md or other context files)...',
       },
       Date.now(),
     );
@@ -758,7 +758,7 @@ Logging in with Google... Restarting Gemini CLI to continue.
     loopDetectionConfirmationRequest,
     lastOutputTime,
   } = useGeminiStream(
-    config.getGeminiClient(),
+    config.getCitruxClient(),
     historyManager.history,
     historyManager.addItem,
     config,
@@ -909,7 +909,7 @@ Logging in with Google... Restarting Gemini CLI to continue.
   // Initial prompt handling
   const initialPrompt = useMemo(() => config.getQuestion(), [config]);
   const initialPromptSubmitted = useRef(false);
-  const geminiClient = config.getGeminiClient();
+  const geminiClient = config.getCitruxClient();
 
   useEffect(() => {
     if (activePtyId) {

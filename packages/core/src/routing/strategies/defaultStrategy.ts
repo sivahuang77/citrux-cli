@@ -11,7 +11,7 @@ import type {
   RoutingDecision,
   TerminalStrategy,
 } from '../routingStrategy.js';
-import { DEFAULT_GEMINI_MODEL } from '../../config/models.js';
+import { DEFAULT_CITRUX_MODEL } from '../../config/models.js';
 
 export class DefaultStrategy implements TerminalStrategy {
   readonly name = 'default';
@@ -22,11 +22,11 @@ export class DefaultStrategy implements TerminalStrategy {
     _baseLlmClient: BaseLlmClient,
   ): Promise<RoutingDecision> {
     return {
-      model: DEFAULT_GEMINI_MODEL,
+      model: DEFAULT_CITRUX_MODEL,
       metadata: {
         source: this.name,
         latencyMs: 0,
-        reasoning: `Routing to default model: ${DEFAULT_GEMINI_MODEL}`,
+        reasoning: `Routing to default model: ${DEFAULT_CITRUX_MODEL}`,
       },
     };
   }

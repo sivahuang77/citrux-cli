@@ -19,7 +19,7 @@ import {
   DEFAULT_TRUNCATE_TOOL_OUTPUT_LINES,
   DEFAULT_TRUNCATE_TOOL_OUTPUT_THRESHOLD,
   DEFAULT_MODEL_CONFIGS,
-  GEMINI_MODEL_ALIAS_AUTO,
+  CITRUX_MODEL_ALIAS_AUTO,
 } from '@google/gemini-cli-core';
 import type { CustomTheme } from '../ui/themes/theme.js';
 import type { SessionRetentionSettings } from './settings.js';
@@ -417,7 +417,7 @@ const SETTINGS_SCHEMA = {
         requiresRestart: false,
         default: false,
         description:
-          'Hide the context summary (GEMINI.md, MCP servers) above the input.',
+          'Hide the context summary (CITRUX.md, MCP servers) above the input.',
         showInDialog: true,
       },
       footer: {
@@ -923,7 +923,7 @@ const SETTINGS_SCHEMA = {
         requiresRestart: false,
         default: false,
         description: oneLine`
-          Controls how /memory refresh loads GEMINI.md files.
+          Controls how /memory refresh loads CITRUX.md files.
           When true, include directories are scanned; when false, only the current directory is used.
         `,
         showInDialog: true,
@@ -946,13 +946,13 @@ const SETTINGS_SCHEMA = {
             description: 'Respect .gitignore files when searching',
             showInDialog: true,
           },
-          respectGeminiIgnore: {
+          respectCitruxIgnore: {
             type: 'boolean',
-            label: 'Respect .geminiignore',
+            label: 'Respect .citruxignore',
             category: 'Context',
             requiresRestart: true,
             default: true,
-            description: 'Respect .geminiignore files when searching',
+            description: 'Respect .citruxignore files when searching',
             showInDialog: true,
           },
           enableRecursiveFileSearch: {
@@ -1544,7 +1544,7 @@ const SETTINGS_SCHEMA = {
             label: 'Model',
             category: 'Experimental',
             requiresRestart: true,
-            default: GEMINI_MODEL_ALIAS_AUTO,
+            default: CITRUX_MODEL_ALIAS_AUTO,
             description:
               'The model to use for the Codebase Investigator agent.',
             showInDialog: false,

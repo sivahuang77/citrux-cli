@@ -10,7 +10,7 @@ import { AppHeader } from './AppHeader.js';
 import { HistoryItemDisplay } from './HistoryItemDisplay.js';
 import { QuittingDisplay } from './QuittingDisplay.js';
 import { useAppContext } from '../contexts/AppContext.js';
-import { MAX_GEMINI_MESSAGE_LINES } from '../constants.js';
+import { MAX_CITRUX_MESSAGE_LINES } from '../constants.js';
 
 export const AlternateBufferQuittingDisplay = () => {
   const { version } = useAppContext();
@@ -33,7 +33,7 @@ export const AlternateBufferQuittingDisplay = () => {
         <HistoryItemDisplay
           terminalWidth={uiState.mainAreaWidth}
           availableTerminalHeight={undefined}
-          availableTerminalHeightGemini={MAX_GEMINI_MESSAGE_LINES}
+          availableTerminalHeightGemini={MAX_CITRUX_MESSAGE_LINES}
           key={h.id}
           item={h}
           isPending={false}

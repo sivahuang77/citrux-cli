@@ -257,7 +257,7 @@ export class ShellExecutionService {
         detached: !isWindows,
         env: {
           ...sanitizeEnvironment(process.env, sanitizationConfig),
-          GEMINI_CLI: '1',
+          CITRUX_CLI: '1',
           TERM: 'xterm-256color',
           PAGER: 'cat',
           GIT_PAGER: 'cat',
@@ -342,7 +342,7 @@ export class ShellExecutionService {
             stdout + (stderr ? (stdout ? separator : '') + stderr : '');
 
           if (stdoutTruncated || stderrTruncated) {
-            const truncationMessage = `\n[GEMINI_CLI_WARNING: Output truncated. The buffer is limited to ${
+            const truncationMessage = `\n[CITRUX_CLI_WARNING: Output truncated. The buffer is limited to ${
               MAX_CHILD_PROCESS_BUFFER_SIZE / (1024 * 1024)
             }MB.]`;
             combinedOutput += truncationMessage;
@@ -474,7 +474,7 @@ export class ShellExecutionService {
             process.env,
             shellExecutionConfig.sanitizationConfig,
           ),
-          GEMINI_CLI: '1',
+          CITRUX_CLI: '1',
           TERM: 'xterm-256color',
           PAGER: shellExecutionConfig.pager ?? 'cat',
           GIT_PAGER: shellExecutionConfig.pager ?? 'cat',
@@ -734,7 +734,7 @@ export class ShellExecutionService {
         onOutputEvent({
           type: 'data',
           chunk:
-            '[GEMINI_CLI_WARNING] PTY execution failed, falling back to child_process. This may be due to sandbox restrictions.\n',
+            '[CITRUX_CLI_WARNING] PTY execution failed, falling back to child_process. This may be due to sandbox restrictions.\n',
         });
         throw e;
       } else {

@@ -86,7 +86,7 @@ export class GeminiAgent {
         id: AuthType.USE_GEMINI,
         name: 'Use Gemini API key',
         description:
-          'Requires setting the `GEMINI_API_KEY` environment variable',
+          'Requires setting the `CITRUX_API_KEY` environment variable',
       },
       {
         id: AuthType.USE_VERTEX_AI,
@@ -166,7 +166,7 @@ export class GeminiAgent {
       config.setFileSystemService(acpFileSystemService);
     }
 
-    const geminiClient = config.getGeminiClient();
+    const geminiClient = config.getCitruxClient();
     const chat = await geminiClient.startChat();
     const session = new Session(sessionId, chat, config, this.connection);
     this.sessions.set(sessionId, session);

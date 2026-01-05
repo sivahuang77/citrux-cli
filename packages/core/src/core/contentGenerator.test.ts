@@ -151,13 +151,13 @@ describe('createContentGenerator', () => {
     );
   });
 
-  it('should include custom headers from GEMINI_CLI_CUSTOM_HEADERS for Code Assist requests', async () => {
+  it('should include custom headers from CITRUX_CLI_CUSTOM_HEADERS for Code Assist requests', async () => {
     const mockGenerator = {} as unknown as ContentGenerator;
     vi.mocked(createCodeAssistContentGenerator).mockResolvedValue(
       mockGenerator as never,
     );
     vi.stubEnv(
-      'GEMINI_CLI_CUSTOM_HEADERS',
+      'CITRUX_CLI_CUSTOM_HEADERS',
       'X-Test-Header: test-value, Another-Header: another value',
     );
 
@@ -182,7 +182,7 @@ describe('createContentGenerator', () => {
     );
   });
 
-  it('should include custom headers from GEMINI_CLI_CUSTOM_HEADERS for GoogleGenAI requests without inferring auth mechanism', async () => {
+  it('should include custom headers from CITRUX_CLI_CUSTOM_HEADERS for GoogleGenAI requests without inferring auth mechanism', async () => {
     const mockConfig = {
       getModel: vi.fn().mockReturnValue('gemini-pro'),
       getProxy: vi.fn().mockReturnValue(undefined),
@@ -195,7 +195,7 @@ describe('createContentGenerator', () => {
     } as unknown as GoogleGenAI;
     vi.mocked(GoogleGenAI).mockImplementation(() => mockGenerator as never);
     vi.stubEnv(
-      'GEMINI_CLI_CUSTOM_HEADERS',
+      'CITRUX_CLI_CUSTOM_HEADERS',
       'X-Test-Header: test, Another: value',
     );
 
@@ -229,7 +229,7 @@ describe('createContentGenerator', () => {
     );
   });
 
-  it('should pass api key as Authorization Header when GEMINI_API_KEY_AUTH_MECHANISM is set to bearer', async () => {
+  it('should pass api key as Authorization Header when CITRUX_API_KEY_AUTH_MECHANISM is set to bearer', async () => {
     const mockConfig = {
       getModel: vi.fn().mockReturnValue('gemini-pro'),
       getProxy: vi.fn().mockReturnValue(undefined),
@@ -241,7 +241,7 @@ describe('createContentGenerator', () => {
       models: {},
     } as unknown as GoogleGenAI;
     vi.mocked(GoogleGenAI).mockImplementation(() => mockGenerator as never);
-    vi.stubEnv('GEMINI_API_KEY_AUTH_MECHANISM', 'bearer');
+    vi.stubEnv('CITRUX_API_KEY_AUTH_MECHANISM', 'bearer');
 
     await createContentGenerator(
       {
@@ -263,7 +263,7 @@ describe('createContentGenerator', () => {
     });
   });
 
-  it('should not pass api key as Authorization Header when GEMINI_API_KEY_AUTH_MECHANISM is not set (default behavior)', async () => {
+  it('should not pass api key as Authorization Header when CITRUX_API_KEY_AUTH_MECHANISM is not set (default behavior)', async () => {
     const mockConfig = {
       getModel: vi.fn().mockReturnValue('gemini-pro'),
       getProxy: vi.fn().mockReturnValue(undefined),
@@ -275,7 +275,7 @@ describe('createContentGenerator', () => {
       models: {},
     } as unknown as GoogleGenAI;
     vi.mocked(GoogleGenAI).mockImplementation(() => mockGenerator as never);
-    // GEMINI_API_KEY_AUTH_MECHANISM is not stubbed, so it will be undefined, triggering default 'x-goog-api-key'
+    // CITRUX_API_KEY_AUTH_MECHANISM is not stubbed, so it will be undefined, triggering default 'x-goog-api-key'
 
     await createContentGenerator(
       {
@@ -356,8 +356,8 @@ describe('createContentGeneratorConfig', () => {
     vi.unstubAllEnvs();
   });
 
-  it('should configure for Gemini using GEMINI_API_KEY when set', async () => {
-    vi.stubEnv('GEMINI_API_KEY', 'env-gemini-key');
+  it('should configure for Gemini using CITRUX_API_KEY when set', async () => {
+    vi.stubEnv('CITRUX_API_KEY', 'env-gemini-key');
     const config = await createContentGeneratorConfig(
       mockConfig,
       AuthType.USE_GEMINI,
@@ -366,8 +366,8 @@ describe('createContentGeneratorConfig', () => {
     expect(config.vertexai).toBe(false);
   });
 
-  it('should not configure for Gemini if GEMINI_API_KEY is empty', async () => {
-    vi.stubEnv('GEMINI_API_KEY', '');
+  it('should not configure for Gemini if CITRUX_API_KEY is empty', async () => {
+    vi.stubEnv('CITRUX_API_KEY', '');
     const config = await createContentGeneratorConfig(
       mockConfig,
       AuthType.USE_GEMINI,
@@ -376,8 +376,8 @@ describe('createContentGeneratorConfig', () => {
     expect(config.vertexai).toBeUndefined();
   });
 
-  it('should not configure for Gemini if GEMINI_API_KEY is not set and storage is empty', async () => {
-    vi.stubEnv('GEMINI_API_KEY', '');
+  it('should not configure for Gemini if CITRUX_API_KEY is not set and storage is empty', async () => {
+    vi.stubEnv('CITRUX_API_KEY', '');
     vi.mocked(loadApiKey).mockResolvedValue(null);
     const config = await createContentGeneratorConfig(
       mockConfig,

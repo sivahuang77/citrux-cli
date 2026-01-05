@@ -12,7 +12,7 @@ export const SHELL_NAME = 'Shell';
 // issues in the worst case if we somehow get an enormous response from Gemini.
 // This threshold is arbitrary but should be high enough to never impact normal
 // usage.
-export const MAX_GEMINI_MESSAGE_LINES = 65536;
+export const MAX_CITRUX_MESSAGE_LINES = 65536;
 
 export const SHELL_FOCUS_HINT_DELAY_MS = 5000;
 

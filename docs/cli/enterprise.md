@@ -186,15 +186,15 @@ export CITRUX_CLI_SYSTEM_SETTINGS_PATH="/etc/gemini-cli/settings.json"
 # Find the original gemini executable.
 # This is a simple example; a more robust solution might be needed
 # depending on the installation method.
-REAL_GEMINI_PATH=$(type -aP gemini | grep -v "^$(type -P gemini)$" | head -n 1)
+REAL_CITRUX_PATH=$(type -aP gemini | grep -v "^$(type -P gemini)$" | head -n 1)
 
-if [ -z "$REAL_GEMINI_PATH" ]; then
+if [ -z "$REAL_CITRUX_PATH" ]; then
   echo "Error: The original 'gemini' executable was not found." >&2
   exit 1
 fi
 
 # Pass all arguments to the real Citrux CLI executable.
-exec "$REAL_GEMINI_PATH" "$@"
+exec "$REAL_CITRUX_PATH" "$@"
 ```
 
 By deploying this script, the `CITRUX_CLI_SYSTEM_SETTINGS_PATH` is set within

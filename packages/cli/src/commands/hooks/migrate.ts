@@ -77,11 +77,11 @@ function migrateClaudeHook(claudeHook: unknown): unknown {
   if ('command' in hook) {
     migrated['command'] = hook['command'];
 
-    // Replace CLAUDE_PROJECT_DIR with GEMINI_PROJECT_DIR in command
+    // Replace CLAUDE_PROJECT_DIR with CITRUX_PROJECT_DIR in command
     if (typeof migrated['command'] === 'string') {
       migrated['command'] = migrated['command'].replace(
         /\$CLAUDE_PROJECT_DIR/g,
-        '$GEMINI_PROJECT_DIR',
+        '$CITRUX_PROJECT_DIR',
       );
     }
   }
@@ -238,9 +238,9 @@ export async function handleMigrateFromClaude() {
   try {
     settings.setValue(SettingScope.Workspace, 'hooks', mergedHooks);
 
-    debugLogger.log('✓ Hooks successfully migrated to .gemini/settings.json');
+    debugLogger.log('✓ Hooks successfully migrated to .citrux/settings.json');
     debugLogger.log(
-      '\nMigration complete! Please review the migrated hooks in .gemini/settings.json',
+      '\nMigration complete! Please review the migrated hooks in .citrux/settings.json',
     );
     debugLogger.log(
       'Note: Set tools.enableHooks to true in your settings to enable the hook system.',

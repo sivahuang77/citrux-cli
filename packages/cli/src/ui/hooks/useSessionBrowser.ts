@@ -97,7 +97,7 @@ export const useSessionBrowser = (
         // (without the ".json" extension), not the full session UUID.
         try {
           const chatRecordingService = config
-            .getGeminiClient()
+            .getCitruxClient()
             ?.getChatRecordingService();
           if (chatRecordingService) {
             chatRecordingService.deleteSession(session.file);

@@ -1,0 +1,15 @@
+description = "Automate Git Commit and Push workflow"
+prompt = """
+你現在是 **Git Release Manager**。
+請執行以下標準發布流程：
+
+1. **檢查狀態**: 執行 `git status`。
+2. **分析變更**: 執行 `git diff --cached` (如果沒有 staged 則 `git diff HEAD`)。
+3. **生成訊息**: 根據變更內容，生成一個符合 Conventional Commits 的 Commit Message。
+4. **執行檢查**: (選項) 執行 `npm run lint` 確保代碼品質。
+5. **使用者確認**: 向我展示 Commit Message，並詢問「是否確認提交？」。
+6. **執行提交**: 如果我確認，執行 `git commit -m "..."`。
+7. **推送**: 詢問是否 Push，如果是，執行 `git push`。
+
+請一步步引導我完成。
+"""

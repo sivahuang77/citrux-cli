@@ -49,3 +49,5 @@ Inspired by OpenCode, aiming for maximum developer ergonomics and openness:
       code understanding (Go to Def, Find Refs).
 - [x] **Dynamic Provider Config**: Interactive TUI wizard to add/edit custom
       providers at runtime. Fully integrated with OpenCode Zen as default.
+- [x] **Deep Rebranding**: Removed all residual "Gemini CLI" strings from help,
+      docs, and UI banners. Cleaned up obsolete announcement messages.

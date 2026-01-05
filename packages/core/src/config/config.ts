@@ -32,7 +32,7 @@ import { WebFetchTool } from '../tools/web-fetch.js';
 import { MemoryTool, setGeminiMdFilename } from '../tools/memoryTool.js';
 import { WebSearchTool } from '../tools/web-search.js';
 import { OpenAIContentGenerator } from '../core/openAIContentGenerator.js';
-import { GeminiClient } from '../core/client.js';
+import { CitruxClient } from '../core/client.js';
 import { BaseLlmClient } from '../core/baseLlmClient.js';
 import type { HookDefinition, HookEventName } from '../hooks/types.js';
 import { FileDiscoveryService } from '../services/fileDiscoveryService.js';
@@ -47,13 +47,13 @@ import {
 import { coreEvents } from '../utils/events.js';
 import { tokenLimit } from '../core/tokenLimits.js';
 import {
-  DEFAULT_GEMINI_EMBEDDING_MODEL,
-  DEFAULT_GEMINI_FLASH_MODEL,
-  DEFAULT_GEMINI_MODEL_AUTO,
+  DEFAULT_CITRUX_EMBEDDING_MODEL,
+  DEFAULT_CITRUX_FLASH_MODEL,
+  DEFAULT_CITRUX_MODEL_AUTO,
   DEFAULT_THINKING_MODE,
   isPreviewModel,
-  PREVIEW_GEMINI_MODEL,
-  PREVIEW_GEMINI_MODEL_AUTO,
+  PREVIEW_CITRUX_MODEL,
+  PREVIEW_CITRUX_MODEL_AUTO,
 } from './models.js';
 import { shouldAttemptBrowserLaunch } from '../utils/browser.js';
 import type { MCPOAuthConfig } from '../mcp/oauth-provider.js';
@@ -285,7 +285,7 @@ export interface ConfigParameters {
   usageStatisticsEnabled?: boolean;
   fileFiltering?: {
     respectGitIgnore?: boolean;
-    respectGeminiIgnore?: boolean;
+    respectCitruxIgnore?: boolean;
     enableRecursiveFileSearch?: boolean;
     disableFuzzySearch?: boolean;
   };
@@ -410,7 +410,7 @@ export class Config {
   private readonly accessibility: AccessibilitySettings;
   private readonly telemetrySettings: TelemetrySettings;
   private readonly usageStatisticsEnabled: boolean;
-  private geminiClient!: GeminiClient;
+  private geminiClient!: CitruxClient;
   // @ts-expect-error: Alias for future use
   private get citruxClient() {
     return this.geminiClient;
@@ -420,7 +420,7 @@ export class Config {
   private readonly modelAvailabilityService: ModelAvailabilityService;
   private readonly fileFiltering: {
     respectGitIgnore: boolean;
-    respectGeminiIgnore: boolean;
+    respectCitruxIgnore: boolean;
     enableRecursiveFileSearch: boolean;
     disableFuzzySearch: boolean;
   };
@@ -511,7 +511,7 @@ export class Config {
   constructor(params: ConfigParameters) {
     this.sessionId = params.sessionId;
     this.embeddingModel =
-      params.embeddingModel ?? DEFAULT_GEMINI_EMBEDDING_MODEL;
+      params.embeddingModel ?? DEFAULT_CITRUX_EMBEDDING_MODEL;
     this.fileSystemService = new StandardFileSystemService();
     this.sandbox = params.sandbox;
     this.targetDir = path.resolve(params.targetDir);
@@ -556,9 +556,9 @@ export class Config {
       respectGitIgnore:
         params.fileFiltering?.respectGitIgnore ??
         DEFAULT_FILE_FILTERING_OPTIONS.respectGitIgnore,
-      respectGeminiIgnore:
-        params.fileFiltering?.respectGeminiIgnore ??
-        DEFAULT_FILE_FILTERING_OPTIONS.respectGeminiIgnore,
+      respectCitruxIgnore:
+        params.fileFiltering?.respectCitruxIgnore ??
+        DEFAULT_FILE_FILTERING_OPTIONS.respectCitruxIgnore,
       enableRecursiveFileSearch:
         params.fileFiltering?.enableRecursiveFileSearch ?? true,
       disableFuzzySearch: params.fileFiltering?.disableFuzzySearch ?? false,
@@ -688,7 +688,7 @@ export class Config {
         );
       }
     }
-    this.geminiClient = new GeminiClient(this);
+    this.geminiClient = new CitruxClient(this);
     this.modelRouterService = new ModelRouterService(this);
 
     // HACK: The settings loading logic doesn't currently merge the default
@@ -847,7 +847,7 @@ export class Config {
 
     // Update model if user no longer has access to the preview model
     if (!this.hasAccessToPreviewModel && isPreviewModel(this.model)) {
-      this.setModel(DEFAULT_GEMINI_MODEL_AUTO);
+      this.setModel(DEFAULT_CITRUX_MODEL_AUTO);
     }
   }
 
@@ -1041,12 +1041,12 @@ export class Config {
 
     // Case 1: Disabling preview features while on a preview model
     if (!previewFeatures && isPreviewModel(currentModel)) {
-      this.setModel(DEFAULT_GEMINI_MODEL_AUTO);
+      this.setModel(DEFAULT_CITRUX_MODEL_AUTO);
     }
 
     // Case 2: Enabling preview features while on the default auto model
-    else if (previewFeatures && currentModel === DEFAULT_GEMINI_MODEL_AUTO) {
-      this.setModel(PREVIEW_GEMINI_MODEL_AUTO);
+    else if (previewFeatures && currentModel === DEFAULT_CITRUX_MODEL_AUTO) {
+      this.setModel(PREVIEW_CITRUX_MODEL_AUTO);
     }
   }
 
@@ -1068,7 +1068,7 @@ export class Config {
         project: codeAssistServer.projectId,
       });
       const hasAccess =
-        quota.buckets?.some((b) => b.modelId === PREVIEW_GEMINI_MODEL) ?? false;
+        quota.buckets?.some((b) => b.modelId === PREVIEW_CITRUX_MODEL) ?? false;
       this.setHasAccessToPreviewModel(hasAccess);
       return quota;
     } catch (e) {
@@ -1291,16 +1291,12 @@ export class Config {
     return this.telemetrySettings.useCliAuth ?? false;
   }
 
-  getGeminiClient(): GeminiClient {
+  getCitruxClient(): CitruxClient {
     return this.geminiClient;
   }
 
-  getCitruxClient(): GeminiClient {
-    return this.getGeminiClient();
-  }
-
   async updateSystemInstructionIfInitialized(): Promise<void> {
-    const geminiClient = this.getGeminiClient();
+    const geminiClient = this.getCitruxClient();
     if (geminiClient?.isInitialized()) {
       await geminiClient.updateSystemInstruction();
     }
@@ -1326,13 +1322,13 @@ export class Config {
     return this.fileFiltering.respectGitIgnore;
   }
   getFileFilteringRespectGeminiIgnore(): boolean {
-    return this.fileFiltering.respectGeminiIgnore;
+    return this.fileFiltering.respectCitruxIgnore;
   }
 
   getFileFilteringOptions(): FileFilteringOptions {
     return {
       respectGitIgnore: this.fileFiltering.respectGitIgnore,
-      respectGeminiIgnore: this.fileFiltering.respectGeminiIgnore,
+      respectCitruxIgnore: this.fileFiltering.respectCitruxIgnore,
     };
   }
 
@@ -1896,4 +1892,4 @@ export class Config {
   }
 }
 // Export model constants for use in CLI
-export { DEFAULT_GEMINI_FLASH_MODEL };
+export { DEFAULT_CITRUX_FLASH_MODEL };

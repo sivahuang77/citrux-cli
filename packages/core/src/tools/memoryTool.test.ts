@@ -18,7 +18,7 @@ import * as path from 'node:path';
 import * as os from 'node:os';
 import { ToolConfirmationOutcome } from './tools.js';
 import { ToolErrorType } from './tool-error.js';
-import { GEMINI_DIR } from '../utils/paths.js';
+import { CITRUX_DIR } from '../utils/paths.js';
 
 // Mock dependencies
 vi.mock(import('node:fs/promises'), async (importOriginal) => {
@@ -72,7 +72,7 @@ describe('MemoryTool', () => {
 
   afterEach(() => {
     vi.restoreAllMocks();
-    // Reset GEMINI_MD_FILENAME to its original value after each test
+    // Reset CITRUX_MD_FILENAME to its original value after each test
     setGeminiMdFilename(DEFAULT_CONTEXT_FILENAME);
   });
 
@@ -106,7 +106,7 @@ describe('MemoryTool', () => {
     beforeEach(() => {
       testFilePath = path.join(
         os.homedir(),
-        GEMINI_DIR,
+        CITRUX_DIR,
         DEFAULT_CONTEXT_FILENAME,
       );
     });
@@ -238,7 +238,7 @@ describe('MemoryTool', () => {
       // Use getCurrentGeminiMdFilename for the default expectation before any setGeminiMdFilename calls in a test
       const expectedFilePath = path.join(
         os.homedir(),
-        GEMINI_DIR,
+        CITRUX_DIR,
         getCurrentGeminiMdFilename(), // This will be DEFAULT_CONTEXT_FILENAME unless changed by a test
       );
 
@@ -318,13 +318,13 @@ describe('MemoryTool', () => {
       expect(result).not.toBe(false);
 
       if (result && result.type === 'edit') {
-        const expectedPath = path.join('~', GEMINI_DIR, 'GEMINI.md');
+        const expectedPath = path.join('~', CITRUX_DIR, 'CITRUX.md');
         expect(result.title).toBe(`Confirm Memory Save: ${expectedPath}`);
         expect(result.fileName).toContain(
-          path.join('mock', 'home', GEMINI_DIR),
+          path.join('mock', 'home', CITRUX_DIR),
         );
-        expect(result.fileName).toContain('GEMINI.md');
-        expect(result.fileDiff).toContain('Index: GEMINI.md');
+        expect(result.fileName).toContain('CITRUX.md');
+        expect(result.fileDiff).toContain('Index: CITRUX.md');
         expect(result.fileDiff).toContain('+## Gemini Added Memories');
         expect(result.fileDiff).toContain('+- Test fact');
         expect(result.originalContent).toBe('');
@@ -337,7 +337,7 @@ describe('MemoryTool', () => {
       const params = { fact: 'Test fact' };
       const memoryFilePath = path.join(
         os.homedir(),
-        GEMINI_DIR,
+        CITRUX_DIR,
         getCurrentGeminiMdFilename(),
       );
 
@@ -355,7 +355,7 @@ describe('MemoryTool', () => {
       const params = { fact: 'Test fact' };
       const memoryFilePath = path.join(
         os.homedir(),
-        GEMINI_DIR,
+        CITRUX_DIR,
         getCurrentGeminiMdFilename(),
       );
 
@@ -381,7 +381,7 @@ describe('MemoryTool', () => {
       const params = { fact: 'Test fact' };
       const memoryFilePath = path.join(
         os.homedir(),
-        GEMINI_DIR,
+        CITRUX_DIR,
         getCurrentGeminiMdFilename(),
       );
 
@@ -418,9 +418,9 @@ describe('MemoryTool', () => {
       expect(result).not.toBe(false);
 
       if (result && result.type === 'edit') {
-        const expectedPath = path.join('~', GEMINI_DIR, 'GEMINI.md');
+        const expectedPath = path.join('~', CITRUX_DIR, 'CITRUX.md');
         expect(result.title).toBe(`Confirm Memory Save: ${expectedPath}`);
-        expect(result.fileDiff).toContain('Index: GEMINI.md');
+        expect(result.fileDiff).toContain('Index: CITRUX.md');
         expect(result.fileDiff).toContain('+- New fact');
         expect(result.originalContent).toBe(existingContent);
         expect(result.newContent).toContain('- Old fact');

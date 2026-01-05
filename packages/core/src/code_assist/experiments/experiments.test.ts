@@ -22,7 +22,7 @@ describe('experiments', () => {
 
     // Mock the dependencies that `getExperiments` relies on
     vi.mocked(getClientMetadata).mockResolvedValue({
-      ideName: 'GEMINI_CLI',
+      ideName: 'CITRUX_CLI',
       ideVersion: '1.0.0',
       platform: 'LINUX_AMD64',
       updateChannel: 'stable',

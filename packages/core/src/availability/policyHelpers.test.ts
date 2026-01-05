@@ -12,7 +12,7 @@ import {
 } from './policyHelpers.js';
 import { createDefaultPolicy } from './policyCatalog.js';
 import type { Config } from '../config/config.js';
-import { DEFAULT_GEMINI_MODEL_AUTO } from '../config/models.js';
+import { DEFAULT_CITRUX_MODEL_AUTO } from '../config/models.js';
 
 const createMockConfig = (overrides: Partial<Config> = {}): Config =>
   ({
@@ -43,7 +43,7 @@ describe('policyHelpers', () => {
 
     it('returns the default chain when active model is "auto"', () => {
       const config = createMockConfig({
-        getModel: () => DEFAULT_GEMINI_MODEL_AUTO,
+        getModel: () => DEFAULT_CITRUX_MODEL_AUTO,
       });
       const chain = resolvePolicyChain(config);
 
@@ -55,7 +55,7 @@ describe('policyHelpers', () => {
 
     it('starts chain from preferredModel when model is "auto"', () => {
       const config = createMockConfig({
-        getModel: () => DEFAULT_GEMINI_MODEL_AUTO,
+        getModel: () => DEFAULT_CITRUX_MODEL_AUTO,
       });
       const chain = resolvePolicyChain(config, 'gemini-2.5-flash');
       expect(chain).toHaveLength(1);
@@ -64,7 +64,7 @@ describe('policyHelpers', () => {
 
     it('wraps around the chain when wrapsAround is true', () => {
       const config = createMockConfig({
-        getModel: () => DEFAULT_GEMINI_MODEL_AUTO,
+        getModel: () => DEFAULT_CITRUX_MODEL_AUTO,
       });
       const chain = resolvePolicyChain(config, 'gemini-2.5-flash', true);
       expect(chain).toHaveLength(2);

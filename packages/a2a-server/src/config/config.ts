@@ -17,12 +17,12 @@ import {
   FileDiscoveryService,
   ApprovalMode,
   loadServerHierarchicalMemory,
-  GEMINI_DIR,
-  DEFAULT_GEMINI_EMBEDDING_MODEL,
-  DEFAULT_GEMINI_MODEL,
+  CITRUX_DIR,
+  DEFAULT_CITRUX_EMBEDDING_MODEL,
+  DEFAULT_CITRUX_MODEL,
   type ExtensionLoader,
   startupProfiler,
-  PREVIEW_GEMINI_MODEL,
+  PREVIEW_CITRUX_MODEL,
 } from '@google/gemini-cli-core';
 
 import { logger } from '../utils/logger.js';
@@ -40,9 +40,9 @@ export async function loadConfig(
   const configParams: ConfigParameters = {
     sessionId: taskId,
     model: settings.general?.previewFeatures
-      ? PREVIEW_GEMINI_MODEL
-      : DEFAULT_GEMINI_MODEL,
-    embeddingModel: DEFAULT_GEMINI_EMBEDDING_MODEL,
+      ? PREVIEW_CITRUX_MODEL
+      : DEFAULT_CITRUX_MODEL,
+    embeddingModel: DEFAULT_CITRUX_EMBEDDING_MODEL,
     sandbox: undefined, // Sandbox might not be relevant for a server-side agent
     targetDir: workspaceDir, // Or a specific directory the agent operates on
     debugMode: process.env['DEBUG'] === 'true' || false,
@@ -52,7 +52,7 @@ export async function loadConfig(
     excludeTools: settings.excludeTools || undefined,
     showMemoryUsage: settings.showMemoryUsage || false,
     approvalMode:
-      process.env['GEMINI_YOLO_MODE'] === 'true'
+      process.env['CITRUX_YOLO_MODE'] === 'true'
         ? ApprovalMode.YOLO
         : ApprovalMode.DEFAULT,
     mcpServers: settings.mcpServers,
@@ -114,12 +114,12 @@ export async function loadConfig(
     logger.info(
       `[Config] GOOGLE_CLOUD_PROJECT: ${process.env['GOOGLE_CLOUD_PROJECT']}`,
     );
-  } else if (process.env['GEMINI_API_KEY']) {
+  } else if (process.env['CITRUX_API_KEY']) {
     logger.info('[Config] Using Gemini API Key');
     await config.refreshAuth(AuthType.USE_GEMINI);
   } else {
     const errorMessage =
-      '[Config] Unable to set GeneratorConfig. Please provide a GEMINI_API_KEY or set USE_CCPA.';
+      '[Config] Unable to set GeneratorConfig. Please provide a CITRUX_API_KEY or set USE_CCPA.';
     logger.error(errorMessage);
     throw new Error(errorMessage);
   }
@@ -165,8 +165,8 @@ export function loadEnvironment(): void {
 function findEnvFile(startDir: string): string | null {
   let currentDir = path.resolve(startDir);
   while (true) {
-    // prefer gemini-specific .env under GEMINI_DIR
-    const geminiEnvPath = path.join(currentDir, GEMINI_DIR, '.env');
+    // prefer gemini-specific .env under CITRUX_DIR
+    const geminiEnvPath = path.join(currentDir, CITRUX_DIR, '.env');
     if (fs.existsSync(geminiEnvPath)) {
       return geminiEnvPath;
     }
@@ -177,7 +177,7 @@ function findEnvFile(startDir: string): string | null {
     const parentDir = path.dirname(currentDir);
     if (parentDir === currentDir || !parentDir) {
       // check .env under home as fallback, again preferring gemini-specific .env
-      const homeGeminiEnvPath = path.join(process.cwd(), GEMINI_DIR, '.env');
+      const homeGeminiEnvPath = path.join(process.cwd(), CITRUX_DIR, '.env');
       if (fs.existsSync(homeGeminiEnvPath)) {
         return homeGeminiEnvPath;
       }

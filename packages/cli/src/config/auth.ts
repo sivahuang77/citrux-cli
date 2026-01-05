@@ -17,12 +17,13 @@ export function validateAuthMethod(authMethod: string): string | null {
   }
 
   if (authMethod === AuthType.USE_GEMINI) {
-      if (!process.env['CITRUX_API_KEY'] && !process.env['GEMINI_API_KEY']) {
-        return (
-          'When using Citrux API, you must specify the CITRUX_API_KEY or GEMINI_API_KEY environment variable.\n' +
-          'Update your environment and try again (no reload needed if using .env)!'
-        );
-      }    return null;
+    if (!process.env['CITRUX_API_KEY'] && !process.env['CITRUX_API_KEY']) {
+      return (
+        'When using Citrux API, you must specify the CITRUX_API_KEY or CITRUX_API_KEY environment variable.\n' +
+        'Update your environment and try again (no reload needed if using .env)!'
+      );
+    }
+    return null;
   }
 
   if (authMethod === AuthType.USE_VERTEX_AI) {

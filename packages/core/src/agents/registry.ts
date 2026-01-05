@@ -15,9 +15,9 @@ import { A2AClientManager } from './a2a-client-manager.js';
 import { type z } from 'zod';
 import { debugLogger } from '../utils/debugLogger.js';
 import {
-  DEFAULT_GEMINI_MODEL,
-  GEMINI_MODEL_ALIAS_AUTO,
-  PREVIEW_GEMINI_FLASH_MODEL,
+  DEFAULT_CITRUX_MODEL,
+  CITRUX_MODEL_ALIAS_AUTO,
+  PREVIEW_CITRUX_FLASH_MODEL,
   isPreviewModel,
 } from '../config/models.js';
 import type { ModelConfigAlias } from '../services/modelConfigService.js';
@@ -60,7 +60,7 @@ export class AgentRegistry {
       return;
     }
 
-    // Load user-level agents: ~/.gemini/agents/
+    // Load user-level agents: ~/.citrux/agents/
     const userAgentsDir = Storage.getUserAgentsDir();
     const userAgents = await loadAgentsFromDirectory(userAgentsDir);
     for (const error of userAgents.errors) {
@@ -73,7 +73,7 @@ export class AgentRegistry {
       userAgents.agents.map((agent) => this.registerAgent(agent)),
     );
 
-    // Load project-level agents: .gemini/agents/ (relative to Project Root)
+    // Load project-level agents: .citrux/agents/ (relative to Project Root)
     const folderTrustEnabled = this.config.getFolderTrust();
     const isTrustedFolder = this.config.isTrustedFolder();
 
@@ -112,14 +112,14 @@ export class AgentRegistry {
       let model;
       const settingsModel = investigatorSettings.model;
       // Check if the user explicitly set a model in the settings.
-      if (settingsModel && settingsModel !== GEMINI_MODEL_ALIAS_AUTO) {
+      if (settingsModel && settingsModel !== CITRUX_MODEL_ALIAS_AUTO) {
         model = settingsModel;
       } else {
         // Use Preview Flash model if the main model is any of the preview models
         // If the main model is not preview model, use default pro model.
         model = isPreviewModel(this.config.getModel())
-          ? PREVIEW_GEMINI_FLASH_MODEL
-          : DEFAULT_GEMINI_MODEL;
+          ? PREVIEW_CITRUX_FLASH_MODEL
+          : DEFAULT_CITRUX_MODEL;
       }
 
       const agentDef = {

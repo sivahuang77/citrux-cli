@@ -28,7 +28,7 @@ vi.mock('node:os', async (importOriginal) => {
 });
 
 vi.mock('@google/gemini-cli-core', () => ({
-  GEMINI_DIR: '.citrux',
+  CITRUX_DIR: '.citrux',
   debugLogger: {
     error: vi.fn(),
   },

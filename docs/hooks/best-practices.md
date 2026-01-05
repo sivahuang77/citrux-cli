@@ -121,7 +121,7 @@ For maximum security, consider running untrusted hooks in isolated environments:
 ```bash
 # Run hook in Docker container
 docker run --rm \
-  -v "$GEMINI_PROJECT_DIR:/workspace:ro" \
+  -v "$CITRUX_PROJECT_DIR:/workspace:ro" \
   -i untrusted-hook-image \
   /hook-script.sh < input.json
 ```
@@ -442,7 +442,7 @@ Add descriptions to help others understand your hooks:
           {
             "name": "secret-scanner",
             "type": "command",
-            "command": "$GEMINI_PROJECT_DIR/.citrux/hooks/block-secrets.sh",
+            "command": "$CITRUX_PROJECT_DIR/.citrux/hooks/block-secrets.sh",
             "description": "Scans code changes for API keys, passwords, and other secrets before writing"
           }
         ]
@@ -508,10 +508,10 @@ chmod +x .citrux/hooks/my-hook.sh
 
 ```bash
 # Check path expansion
-echo "$GEMINI_PROJECT_DIR/.citrux/hooks/my-hook.sh"
+echo "$CITRUX_PROJECT_DIR/.citrux/hooks/my-hook.sh"
 
 # Verify file exists
-test -f "$GEMINI_PROJECT_DIR/.citrux/hooks/my-hook.sh" && echo "File exists"
+test -f "$CITRUX_PROJECT_DIR/.citrux/hooks/my-hook.sh" && echo "File exists"
 ```
 
 ### Hook timing out
@@ -678,8 +678,8 @@ trap cleanup EXIT
 ```bash
 #!/usr/bin/env bash
 
-if [ -z "$GEMINI_PROJECT_DIR" ]; then
-  echo "GEMINI_PROJECT_DIR not set" >&2
+if [ -z "$CITRUX_PROJECT_DIR" ]; then
+  echo "CITRUX_PROJECT_DIR not set" >&2
   exit 1
 fi
 
@@ -698,9 +698,9 @@ fi
 env > .citrux/hook-env.log
 
 # Check specific variables
-echo "GEMINI_PROJECT_DIR: $GEMINI_PROJECT_DIR" >> .citrux/hook-env.log
-echo "GEMINI_SESSION_ID: $GEMINI_SESSION_ID" >> .citrux/hook-env.log
-echo "GEMINI_API_KEY: ${GEMINI_API_KEY:+<set>}" >> .citrux/hook-env.log
+echo "CITRUX_PROJECT_DIR: $CITRUX_PROJECT_DIR" >> .citrux/hook-env.log
+echo "CITRUX_SESSION_ID: $CITRUX_SESSION_ID" >> .citrux/hook-env.log
+echo "CITRUX_API_KEY: ${CITRUX_API_KEY:+<set>}" >> .citrux/hook-env.log
 ```
 
 **Use .env files:**
@@ -709,8 +709,8 @@ echo "GEMINI_API_KEY: ${GEMINI_API_KEY:+<set>}" >> .citrux/hook-env.log
 #!/usr/bin/env bash
 
 # Load .env file if it exists
-if [ -f "$GEMINI_PROJECT_DIR/.env" ]; then
-  source "$GEMINI_PROJECT_DIR/.env"
+if [ -f "$CITRUX_PROJECT_DIR/.env" ]; then
+  source "$CITRUX_PROJECT_DIR/.env"
 fi
 ```
 
@@ -762,7 +762,7 @@ outputs are excluded. Use this when:
 **Disable via environment variable:**
 
 ```bash
-export GEMINI_TELEMETRY_LOG_PROMPTS=false
+export CITRUX_TELEMETRY_LOG_PROMPTS=false
 ```
 
 ### Sensitive data in hooks

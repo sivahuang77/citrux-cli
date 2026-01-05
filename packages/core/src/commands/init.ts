@@ -11,7 +11,8 @@ export function performInit(doesGeminiMdExist: boolean): CommandActionReturn {
     return {
       type: 'message',
       messageType: 'info',
-          content: 'A CITRUX.md file already exists in this directory. No changes were made.',
+      content:
+        'A CITRUX.md file already exists in this directory. No changes were made.',
     };
   }
 
@@ -49,7 +50,7 @@ export function performInit(doesGeminiMdExist: boolean): CommandActionReturn {
 
 **Final Output:**
 
-Write the complete content to the \`GEMINI.md\` file. The output must be well-formatted Markdown.
+Write the complete content to the \`CITRUX.md\` file. The output must be well-formatted Markdown.
 `,
   };
 }

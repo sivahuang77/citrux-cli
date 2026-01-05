@@ -13,7 +13,7 @@ import { useCallback, useState } from 'react';
 import type {
   AnsiOutput,
   Config,
-  GeminiClient,
+  CitruxClient,
   ShellExecutionResult,
 } from '@google/gemini-cli-core';
 import { isBinary, ShellExecutionService } from '@google/gemini-cli-core';
@@ -31,7 +31,7 @@ export const OUTPUT_UPDATE_INTERVAL_MS = 1000;
 const MAX_OUTPUT_LENGTH = 10000;
 
 function addShellCommandToGeminiHistory(
-  geminiClient: GeminiClient,
+  geminiClient: CitruxClient,
   rawQuery: string,
   resultText: string,
 ) {
@@ -71,7 +71,7 @@ export const useShellCommandProcessor = (
   onExec: (command: Promise<void>) => void,
   onDebugMessage: (message: string) => void,
   config: Config,
-  geminiClient: GeminiClient,
+  geminiClient: CitruxClient,
   setShellInputFocused: (value: boolean) => void,
   terminalWidth?: number,
   terminalHeight?: number,

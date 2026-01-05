@@ -230,7 +230,7 @@ describe('ClearcutLogger', () => {
       const event = logger?.createLogEvent(EventNames.API_ERROR, []);
 
       expect(event?.event_metadata[0]).toContainEqual({
-        gemini_cli_key: EventMetadataKey.GEMINI_CLI_GOOGLE_ACCOUNTS_COUNT,
+        gemini_cli_key: EventMetadataKey.CITRUX_CLI_GOOGLE_ACCOUNTS_COUNT,
         value: '9001',
       });
     });
@@ -264,39 +264,39 @@ describe('ClearcutLogger', () => {
       expect(event?.event_metadata[0]).toEqual(
         expect.arrayContaining([
           {
-            gemini_cli_key: EventMetadataKey.GEMINI_CLI_SESSION_ID,
+            gemini_cli_key: EventMetadataKey.CITRUX_CLI_SESSION_ID,
             value: session_id,
           },
           {
-            gemini_cli_key: EventMetadataKey.GEMINI_CLI_AUTH_TYPE,
+            gemini_cli_key: EventMetadataKey.CITRUX_CLI_AUTH_TYPE,
             value: JSON.stringify(auth_type),
           },
           {
-            gemini_cli_key: EventMetadataKey.GEMINI_CLI_GOOGLE_ACCOUNTS_COUNT,
+            gemini_cli_key: EventMetadataKey.CITRUX_CLI_GOOGLE_ACCOUNTS_COUNT,
             value: `${google_accounts}`,
           },
           {
-            gemini_cli_key: EventMetadataKey.GEMINI_CLI_SURFACE,
+            gemini_cli_key: EventMetadataKey.CITRUX_CLI_SURFACE,
             value: surface,
           },
           {
-            gemini_cli_key: EventMetadataKey.GEMINI_CLI_VERSION,
+            gemini_cli_key: EventMetadataKey.CITRUX_CLI_VERSION,
             value: cli_version,
           },
           {
-            gemini_cli_key: EventMetadataKey.GEMINI_CLI_GIT_COMMIT_HASH,
+            gemini_cli_key: EventMetadataKey.CITRUX_CLI_GIT_COMMIT_HASH,
             value: git_commit_hash,
           },
           {
-            gemini_cli_key: EventMetadataKey.GEMINI_CLI_PROMPT_ID,
+            gemini_cli_key: EventMetadataKey.CITRUX_CLI_PROMPT_ID,
             value: prompt_id,
           },
           {
-            gemini_cli_key: EventMetadataKey.GEMINI_CLI_OS,
+            gemini_cli_key: EventMetadataKey.CITRUX_CLI_OS,
             value: process.platform,
           },
           {
-            gemini_cli_key: EventMetadataKey.GEMINI_CLI_USER_SETTINGS,
+            gemini_cli_key: EventMetadataKey.CITRUX_CLI_USER_SETTINGS,
             value: logger?.getConfigJson(),
           },
         ]),
@@ -309,7 +309,7 @@ describe('ClearcutLogger', () => {
       const event = logger?.createLogEvent(EventNames.API_ERROR, []);
 
       expect(event?.event_metadata[0]).toContainEqual({
-        gemini_cli_key: EventMetadataKey.GEMINI_CLI_NODE_VERSION,
+        gemini_cli_key: EventMetadataKey.CITRUX_CLI_NODE_VERSION,
         value: process.versions.node,
       });
     });
@@ -325,7 +325,7 @@ describe('ClearcutLogger', () => {
       const event = logger?.createLogEvent(EventNames.TOOL_CALL, []);
 
       expect(event?.event_metadata[0]).toContainEqual({
-        gemini_cli_key: EventMetadataKey.GEMINI_CLI_USER_SETTINGS,
+        gemini_cli_key: EventMetadataKey.CITRUX_CLI_USER_SETTINGS,
         value: logger?.getConfigJson(),
       });
     });
@@ -416,7 +416,7 @@ describe('ClearcutLogger', () => {
         }
         const event = logger?.createLogEvent(EventNames.API_ERROR, []);
         expect(event?.event_metadata[0]).toContainEqual({
-          gemini_cli_key: EventMetadataKey.GEMINI_CLI_SURFACE,
+          gemini_cli_key: EventMetadataKey.CITRUX_CLI_SURFACE,
           value: expected,
         });
       },
@@ -430,7 +430,7 @@ describe('ClearcutLogger', () => {
 
       const event = logger?.createLogEvent(EventNames.API_ERROR, []);
       expect(event?.event_metadata[0]).toContainEqual({
-        gemini_cli_key: EventMetadataKey.GEMINI_CLI_GH_WORKFLOW_NAME,
+        gemini_cli_key: EventMetadataKey.CITRUX_CLI_GH_WORKFLOW_NAME,
         value: 'test-workflow',
       });
     });
@@ -442,7 +442,7 @@ describe('ClearcutLogger', () => {
       const event = logger?.createLogEvent(EventNames.API_ERROR, []);
       const hasWorkflowName = event?.event_metadata[0].some(
         (item) =>
-          item.gemini_cli_key === EventMetadataKey.GEMINI_CLI_GH_WORKFLOW_NAME,
+          item.gemini_cli_key === EventMetadataKey.CITRUX_CLI_GH_WORKFLOW_NAME,
       );
       expect(hasWorkflowName).toBe(false);
     });
@@ -457,7 +457,7 @@ describe('ClearcutLogger', () => {
       const repositoryMetadata = event?.event_metadata[0].find(
         (item) =>
           item.gemini_cli_key ===
-          EventMetadataKey.GEMINI_CLI_GH_REPOSITORY_NAME_HASH,
+          EventMetadataKey.CITRUX_CLI_GH_REPOSITORY_NAME_HASH,
       );
       expect(repositoryMetadata).toBeDefined();
       expect(repositoryMetadata?.value).toMatch(/^[a-f0-9]{64}$/);
@@ -474,12 +474,12 @@ describe('ClearcutLogger', () => {
       const hash1 = event1?.event_metadata[0].find(
         (item) =>
           item.gemini_cli_key ===
-          EventMetadataKey.GEMINI_CLI_GH_REPOSITORY_NAME_HASH,
+          EventMetadataKey.CITRUX_CLI_GH_REPOSITORY_NAME_HASH,
       )?.value;
       const hash2 = event2?.event_metadata[0].find(
         (item) =>
           item.gemini_cli_key ===
-          EventMetadataKey.GEMINI_CLI_GH_REPOSITORY_NAME_HASH,
+          EventMetadataKey.CITRUX_CLI_GH_REPOSITORY_NAME_HASH,
       )?.value;
 
       expect(hash1).toBeDefined();
@@ -494,7 +494,7 @@ describe('ClearcutLogger', () => {
       const hash1 = event1?.event_metadata[0].find(
         (item) =>
           item.gemini_cli_key ===
-          EventMetadataKey.GEMINI_CLI_GH_REPOSITORY_NAME_HASH,
+          EventMetadataKey.CITRUX_CLI_GH_REPOSITORY_NAME_HASH,
       )?.value;
 
       vi.stubEnv('GITHUB_REPOSITORY', 'google/other-repo');
@@ -504,7 +504,7 @@ describe('ClearcutLogger', () => {
       const hash2 = event2?.event_metadata[0].find(
         (item) =>
           item.gemini_cli_key ===
-          EventMetadataKey.GEMINI_CLI_GH_REPOSITORY_NAME_HASH,
+          EventMetadataKey.CITRUX_CLI_GH_REPOSITORY_NAME_HASH,
       )?.value;
 
       expect(hash1).toBeDefined();
@@ -520,7 +520,7 @@ describe('ClearcutLogger', () => {
       const hasRepository = event?.event_metadata[0].some(
         (item) =>
           item.gemini_cli_key ===
-          EventMetadataKey.GEMINI_CLI_GH_REPOSITORY_NAME_HASH,
+          EventMetadataKey.CITRUX_CLI_GH_REPOSITORY_NAME_HASH,
       );
       expect(hasRepository).toBe(false);
     });
@@ -540,11 +540,11 @@ describe('ClearcutLogger', () => {
       expect(events.length).toBe(1);
       expect(events[0]).toHaveEventName(EventNames.CHAT_COMPRESSION);
       expect(events[0]).toHaveMetadataValue([
-        EventMetadataKey.GEMINI_CLI_COMPRESSION_TOKENS_BEFORE,
+        EventMetadataKey.CITRUX_CLI_COMPRESSION_TOKENS_BEFORE,
         '9001',
       ]);
       expect(events[0]).toHaveMetadataValue([
-        EventMetadataKey.GEMINI_CLI_COMPRESSION_TOKENS_AFTER,
+        EventMetadataKey.CITRUX_CLI_COMPRESSION_TOKENS_AFTER,
         '8000',
       ]);
     });
@@ -582,7 +582,7 @@ describe('ClearcutLogger', () => {
         logger!.enqueueLogEvent(
           logger!.createLogEvent(EventNames.API_ERROR, [
             {
-              gemini_cli_key: EventMetadataKey.GEMINI_CLI_AI_ADDED_LINES,
+              gemini_cli_key: EventMetadataKey.CITRUX_CLI_AI_ADDED_LINES,
               value: `${i}`,
             },
           ]),
@@ -592,7 +592,7 @@ describe('ClearcutLogger', () => {
       let events = getEvents(logger!);
       expect(events.length).toBe(TEST_ONLY.MAX_EVENTS);
       expect(events[0]).toHaveMetadataValue([
-        EventMetadataKey.GEMINI_CLI_AI_ADDED_LINES,
+        EventMetadataKey.CITRUX_CLI_AI_ADDED_LINES,
         '0',
       ]);
 
@@ -600,7 +600,7 @@ describe('ClearcutLogger', () => {
       logger!.enqueueLogEvent(
         logger!.createLogEvent(EventNames.API_ERROR, [
           {
-            gemini_cli_key: EventMetadataKey.GEMINI_CLI_AI_ADDED_LINES,
+            gemini_cli_key: EventMetadataKey.CITRUX_CLI_AI_ADDED_LINES,
             value: `${TEST_ONLY.MAX_EVENTS}`,
           },
         ]),
@@ -608,12 +608,12 @@ describe('ClearcutLogger', () => {
       events = getEvents(logger!);
       expect(events.length).toBe(TEST_ONLY.MAX_EVENTS);
       expect(events[0]).toHaveMetadataValue([
-        EventMetadataKey.GEMINI_CLI_AI_ADDED_LINES,
+        EventMetadataKey.CITRUX_CLI_AI_ADDED_LINES,
         '1',
       ]);
 
       expect(events.at(TEST_ONLY.MAX_EVENTS - 1)).toHaveMetadataValue([
-        EventMetadataKey.GEMINI_CLI_AI_ADDED_LINES,
+        EventMetadataKey.CITRUX_CLI_AI_ADDED_LINES,
         `${TEST_ONLY.MAX_EVENTS}`,
       ]);
     });
@@ -772,19 +772,19 @@ describe('ClearcutLogger', () => {
       expect(events.length).toBe(1);
       expect(events[0]).toHaveEventName(EventNames.MODEL_ROUTING);
       expect(events[0]).toHaveMetadataValue([
-        EventMetadataKey.GEMINI_CLI_ROUTING_DECISION,
+        EventMetadataKey.CITRUX_CLI_ROUTING_DECISION,
         'gemini-pro',
       ]);
       expect(events[0]).toHaveMetadataValue([
-        EventMetadataKey.GEMINI_CLI_ROUTING_DECISION_SOURCE,
+        EventMetadataKey.CITRUX_CLI_ROUTING_DECISION_SOURCE,
         'default-strategy',
       ]);
       expect(events[0]).toHaveMetadataValue([
-        EventMetadataKey.GEMINI_CLI_ROUTING_LATENCY_MS,
+        EventMetadataKey.CITRUX_CLI_ROUTING_LATENCY_MS,
         '123',
       ]);
       expect(events[0]).toHaveMetadataValue([
-        EventMetadataKey.GEMINI_CLI_ROUTING_FAILURE,
+        EventMetadataKey.CITRUX_CLI_ROUTING_FAILURE,
         'false',
       ]);
     });
@@ -806,23 +806,23 @@ describe('ClearcutLogger', () => {
       expect(events.length).toBe(1);
       expect(events[0]).toHaveEventName(EventNames.MODEL_ROUTING);
       expect(events[0]).toHaveMetadataValue([
-        EventMetadataKey.GEMINI_CLI_ROUTING_DECISION,
+        EventMetadataKey.CITRUX_CLI_ROUTING_DECISION,
         'gemini-pro',
       ]);
       expect(events[0]).toHaveMetadataValue([
-        EventMetadataKey.GEMINI_CLI_ROUTING_DECISION_SOURCE,
+        EventMetadataKey.CITRUX_CLI_ROUTING_DECISION_SOURCE,
         'router-exception',
       ]);
       expect(events[0]).toHaveMetadataValue([
-        EventMetadataKey.GEMINI_CLI_ROUTING_LATENCY_MS,
+        EventMetadataKey.CITRUX_CLI_ROUTING_LATENCY_MS,
         '234',
       ]);
       expect(events[0]).toHaveMetadataValue([
-        EventMetadataKey.GEMINI_CLI_ROUTING_FAILURE,
+        EventMetadataKey.CITRUX_CLI_ROUTING_FAILURE,
         'true',
       ]);
       expect(events[0]).toHaveMetadataValue([
-        EventMetadataKey.GEMINI_CLI_ROUTING_FAILURE_REASON,
+        EventMetadataKey.CITRUX_CLI_ROUTING_FAILURE_REASON,
         'Something went wrong',
       ]);
     });
@@ -839,11 +839,11 @@ describe('ClearcutLogger', () => {
       expect(events.length).toBe(1);
       expect(events[0]).toHaveEventName(EventNames.AGENT_START);
       expect(events[0]).toHaveMetadataValue([
-        EventMetadataKey.GEMINI_CLI_AGENT_ID,
+        EventMetadataKey.CITRUX_CLI_AGENT_ID,
         'agent-123',
       ]);
       expect(events[0]).toHaveMetadataValue([
-        EventMetadataKey.GEMINI_CLI_AGENT_NAME,
+        EventMetadataKey.CITRUX_CLI_AGENT_NAME,
         'TestAgent',
       ]);
     });
@@ -860,7 +860,7 @@ describe('ClearcutLogger', () => {
       expect(events.length).toBe(1);
       expect(events[0]).toHaveEventName(EventNames.AGENT_START);
       expect(events[0]).toHaveMetadataValue([
-        EventMetadataKey.GEMINI_CLI_EXPERIMENT_IDS,
+        EventMetadataKey.CITRUX_CLI_EXPERIMENT_IDS,
         '123,456,789',
       ]);
     });
@@ -883,23 +883,23 @@ describe('ClearcutLogger', () => {
       expect(events.length).toBe(1);
       expect(events[0]).toHaveEventName(EventNames.AGENT_FINISH);
       expect(events[0]).toHaveMetadataValue([
-        EventMetadataKey.GEMINI_CLI_AGENT_ID,
+        EventMetadataKey.CITRUX_CLI_AGENT_ID,
         'agent-123',
       ]);
       expect(events[0]).toHaveMetadataValue([
-        EventMetadataKey.GEMINI_CLI_AGENT_NAME,
+        EventMetadataKey.CITRUX_CLI_AGENT_NAME,
         'TestAgent',
       ]);
       expect(events[0]).toHaveMetadataValue([
-        EventMetadataKey.GEMINI_CLI_AGENT_DURATION_MS,
+        EventMetadataKey.CITRUX_CLI_AGENT_DURATION_MS,
         '1000',
       ]);
       expect(events[0]).toHaveMetadataValue([
-        EventMetadataKey.GEMINI_CLI_AGENT_TURN_COUNT,
+        EventMetadataKey.CITRUX_CLI_AGENT_TURN_COUNT,
         '5',
       ]);
       expect(events[0]).toHaveMetadataValue([
-        EventMetadataKey.GEMINI_CLI_AGENT_TERMINATE_REASON,
+        EventMetadataKey.CITRUX_CLI_AGENT_TERMINATE_REASON,
         'GOAL',
       ]);
     });
@@ -920,7 +920,7 @@ describe('ClearcutLogger', () => {
       expect(events.length).toBe(1);
       expect(events[0]).toHaveEventName(EventNames.AGENT_FINISH);
       expect(events[0]).toHaveMetadataValue([
-        EventMetadataKey.GEMINI_CLI_AGENT_TERMINATE_REASON,
+        EventMetadataKey.CITRUX_CLI_AGENT_TERMINATE_REASON,
         'ERROR',
       ]);
     });
@@ -954,35 +954,35 @@ describe('ClearcutLogger', () => {
       expect(events.length).toBe(1);
       expect(events[0]).toHaveEventName(EventNames.TOOL_CALL);
       expect(events[0]).toHaveMetadataValue([
-        EventMetadataKey.GEMINI_CLI_AI_ADDED_LINES,
+        EventMetadataKey.CITRUX_CLI_AI_ADDED_LINES,
         '1',
       ]);
       expect(events[0]).toHaveMetadataValue([
-        EventMetadataKey.GEMINI_CLI_AI_REMOVED_LINES,
+        EventMetadataKey.CITRUX_CLI_AI_REMOVED_LINES,
         '2',
       ]);
       expect(events[0]).toHaveMetadataValue([
-        EventMetadataKey.GEMINI_CLI_AI_ADDED_CHARS,
+        EventMetadataKey.CITRUX_CLI_AI_ADDED_CHARS,
         '3',
       ]);
       expect(events[0]).toHaveMetadataValue([
-        EventMetadataKey.GEMINI_CLI_AI_REMOVED_CHARS,
+        EventMetadataKey.CITRUX_CLI_AI_REMOVED_CHARS,
         '4',
       ]);
       expect(events[0]).toHaveMetadataValue([
-        EventMetadataKey.GEMINI_CLI_USER_ADDED_LINES,
+        EventMetadataKey.CITRUX_CLI_USER_ADDED_LINES,
         '5',
       ]);
       expect(events[0]).toHaveMetadataValue([
-        EventMetadataKey.GEMINI_CLI_USER_REMOVED_LINES,
+        EventMetadataKey.CITRUX_CLI_USER_REMOVED_LINES,
         '6',
       ]);
       expect(events[0]).toHaveMetadataValue([
-        EventMetadataKey.GEMINI_CLI_USER_ADDED_CHARS,
+        EventMetadataKey.CITRUX_CLI_USER_ADDED_CHARS,
         '7',
       ]);
       expect(events[0]).toHaveMetadataValue([
-        EventMetadataKey.GEMINI_CLI_USER_REMOVED_CHARS,
+        EventMetadataKey.CITRUX_CLI_USER_REMOVED_CHARS,
         '8',
       ]);
     });
@@ -1010,32 +1010,32 @@ describe('ClearcutLogger', () => {
       expect(events.length).toBe(1);
       expect(events[0]).toHaveEventName(EventNames.TOOL_CALL);
       expect(events[0]).toHaveMetadataValue([
-        EventMetadataKey.GEMINI_CLI_AI_ADDED_LINES,
+        EventMetadataKey.CITRUX_CLI_AI_ADDED_LINES,
         '1',
       ]);
       expect(events[0]).toHaveMetadataValue([
-        EventMetadataKey.GEMINI_CLI_AI_REMOVED_LINES,
+        EventMetadataKey.CITRUX_CLI_AI_REMOVED_LINES,
         '2',
       ]);
       expect(events[0]).toHaveMetadataValue([
-        EventMetadataKey.GEMINI_CLI_AI_ADDED_CHARS,
+        EventMetadataKey.CITRUX_CLI_AI_ADDED_CHARS,
         '3',
       ]);
       expect(events[0]).toHaveMetadataValue([
-        EventMetadataKey.GEMINI_CLI_AI_REMOVED_CHARS,
+        EventMetadataKey.CITRUX_CLI_AI_REMOVED_CHARS,
         '4',
       ]);
       expect(events[0]).not.toHaveMetadataKey(
-        EventMetadataKey.GEMINI_CLI_USER_ADDED_LINES,
+        EventMetadataKey.CITRUX_CLI_USER_ADDED_LINES,
       );
       expect(events[0]).not.toHaveMetadataKey(
-        EventMetadataKey.GEMINI_CLI_USER_REMOVED_LINES,
+        EventMetadataKey.CITRUX_CLI_USER_REMOVED_LINES,
       );
       expect(events[0]).not.toHaveMetadataKey(
-        EventMetadataKey.GEMINI_CLI_USER_ADDED_CHARS,
+        EventMetadataKey.CITRUX_CLI_USER_ADDED_CHARS,
       );
       expect(events[0]).not.toHaveMetadataKey(
-        EventMetadataKey.GEMINI_CLI_USER_REMOVED_CHARS,
+        EventMetadataKey.CITRUX_CLI_USER_REMOVED_CHARS,
       );
     });
 
@@ -1055,7 +1055,7 @@ describe('ClearcutLogger', () => {
       expect(events.length).toBe(1);
       expect(events[0]).toHaveEventName(EventNames.TOOL_CALL);
       expect(events[0]).not.toHaveMetadataKey(
-        EventMetadataKey.GEMINI_CLI_AI_ADDED_LINES,
+        EventMetadataKey.CITRUX_CLI_AI_ADDED_LINES,
       );
     });
   });
@@ -1098,7 +1098,7 @@ describe('ClearcutLogger', () => {
       expect(events.length).toBe(1);
       expect(events[0]).toHaveEventName(EventNames.WEB_FETCH_FALLBACK_ATTEMPT);
       expect(events[0]).toHaveMetadataValue([
-        EventMetadataKey.GEMINI_CLI_WEB_FETCH_FALLBACK_REASON,
+        EventMetadataKey.CITRUX_CLI_WEB_FETCH_FALLBACK_REASON,
         'private_ip',
       ]);
     });
@@ -1126,19 +1126,19 @@ describe('ClearcutLogger', () => {
       expect(events.length).toBe(1);
       expect(events[0]).toHaveEventName(EventNames.HOOK_CALL);
       expect(events[0]).toHaveMetadataValue([
-        EventMetadataKey.GEMINI_CLI_HOOK_EVENT_NAME,
+        EventMetadataKey.CITRUX_CLI_HOOK_EVENT_NAME,
         'before-tool',
       ]);
       expect(events[0]).toHaveMetadataValue([
-        EventMetadataKey.GEMINI_CLI_HOOK_DURATION_MS,
+        EventMetadataKey.CITRUX_CLI_HOOK_DURATION_MS,
         '150',
       ]);
       expect(events[0]).toHaveMetadataValue([
-        EventMetadataKey.GEMINI_CLI_HOOK_SUCCESS,
+        EventMetadataKey.CITRUX_CLI_HOOK_SUCCESS,
         'true',
       ]);
       expect(events[0]).toHaveMetadataValue([
-        EventMetadataKey.GEMINI_CLI_HOOK_EXIT_CODE,
+        EventMetadataKey.CITRUX_CLI_HOOK_EXIT_CODE,
         '0',
       ]);
     });

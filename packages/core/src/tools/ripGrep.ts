@@ -23,7 +23,7 @@ import {
   FileExclusions,
   COMMON_DIRECTORY_EXCLUDES,
 } from '../utils/ignorePatterns.js';
-import { GeminiIgnoreParser } from '../utils/geminiIgnoreParser.js';
+import { CitruxIgnoreParser } from '../utils/citruxIgnoreParser.js';
 
 const DEFAULT_TOTAL_MAX_MATCHES = 20000;
 
@@ -190,7 +190,7 @@ class GrepToolInvocation extends BaseToolInvocation<
 > {
   constructor(
     private readonly config: Config,
-    private readonly geminiIgnoreParser: GeminiIgnoreParser,
+    private readonly citruxIgnoreParser: CitruxIgnoreParser,
     params: RipGrepToolParams,
     messageBus?: MessageBus,
     _toolName?: string,
@@ -391,8 +391,8 @@ class GrepToolInvocation extends BaseToolInvocation<
       });
 
       if (this.config.getFileFilteringRespectGeminiIgnore()) {
-        // Add .geminiignore support (ripgrep natively handles .gitignore)
-        const geminiIgnorePath = this.geminiIgnoreParser.getIgnoreFilePath();
+        // Add .citruxignore support (ripgrep natively handles .gitignore)
+        const geminiIgnorePath = this.citruxIgnoreParser.getIgnoreFilePath();
         if (geminiIgnorePath) {
           rgArgs.push('--ignore-file', geminiIgnorePath);
         }
@@ -489,7 +489,7 @@ export class RipGrepTool extends BaseDeclarativeTool<
   ToolResult
 > {
   static readonly Name = GREP_TOOL_NAME;
-  private readonly geminiIgnoreParser: GeminiIgnoreParser;
+  private readonly citruxIgnoreParser: CitruxIgnoreParser;
 
   constructor(
     private readonly config: Config,
@@ -555,7 +555,7 @@ export class RipGrepTool extends BaseDeclarativeTool<
       false, // canUpdateOutput
       messageBus,
     );
-    this.geminiIgnoreParser = new GeminiIgnoreParser(config.getTargetDir());
+    this.citruxIgnoreParser = new CitruxIgnoreParser(config.getTargetDir());
   }
 
   /**
@@ -592,7 +592,7 @@ export class RipGrepTool extends BaseDeclarativeTool<
   ): ToolInvocation<RipGrepToolParams, ToolResult> {
     return new GrepToolInvocation(
       this.config,
-      this.geminiIgnoreParser,
+      this.citruxIgnoreParser,
       params,
       messageBus,
       _toolName,

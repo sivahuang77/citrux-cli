@@ -24,7 +24,7 @@ vi.mock('../utils/debugLogger.js', () => ({
 describe('TrustedHooksManager', () => {
   beforeEach(() => {
     vi.resetAllMocks();
-    vi.mocked(Storage.getGlobalGeminiDir).mockReturnValue('/mock/home/.gemini');
+    vi.mocked(Storage.getGlobalGeminiDir).mockReturnValue('/mock/home/.citrux');
   });
 
   describe('initialization', () => {

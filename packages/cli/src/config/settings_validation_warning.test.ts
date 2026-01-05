@@ -29,10 +29,10 @@ vi.mock('@google/gemini-cli-core', async (importOriginal) => {
     coreEvents: mockCoreEvents,
     Storage: class extends actual.Storage {
       static override getGlobalSettingsPath = () =>
-        '/mock/home/user/.gemini/settings.json';
+        '/mock/home/user/.citrux/settings.json';
       override getWorkspaceSettingsPath = () =>
-        '/mock/workspace/.gemini/settings.json';
-      static override getGlobalGeminiDir = () => '/mock/home/user/.gemini';
+        '/mock/workspace/.citrux/settings.json';
+      static override getGlobalGeminiDir = () => '/mock/home/user/.citrux';
     },
   };
 });

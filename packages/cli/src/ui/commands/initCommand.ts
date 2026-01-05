@@ -31,18 +31,18 @@ export const initCommand: SlashCommand = {
       };
     }
     const targetDir = context.services.config.getTargetDir();
-    const geminiMdPath = path.join(targetDir, 'GEMINI.md');
+    const geminiMdPath = path.join(targetDir, 'CITRUX.md');
 
     const result = performInit(fs.existsSync(geminiMdPath));
 
     if (result.type === 'submit_prompt') {
-      // Create an empty GEMINI.md file
+      // Create an empty CITRUX.md file
       fs.writeFileSync(geminiMdPath, '', 'utf8');
 
       context.ui.addItem(
         {
           type: 'info',
-          text: 'Empty GEMINI.md created. Now analyzing the project to populate it.',
+          text: 'Empty CITRUX.md created. Now analyzing the project to populate it.',
         },
         Date.now(),
       );

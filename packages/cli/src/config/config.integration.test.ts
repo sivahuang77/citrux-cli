@@ -62,7 +62,7 @@ describe('Configuration Integration Tests', () => {
     server.resetHandlers(http.post(CLEARCUT_URL, () => HttpResponse.text()));
 
     tempDir = fs.mkdtempSync(path.join(tmpdir(), 'gemini-cli-test-'));
-    vi.stubEnv('GEMINI_API_KEY', 'test-api-key');
+    vi.stubEnv('CITRUX_API_KEY', 'test-api-key');
     vi.clearAllMocks();
   });
 

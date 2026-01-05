@@ -15,8 +15,8 @@ import {
   setGeminiMdFilename as setServerGeminiMdFilename,
   getCurrentGeminiMdFilename,
   ApprovalMode,
-  DEFAULT_GEMINI_MODEL_AUTO,
-  DEFAULT_GEMINI_EMBEDDING_MODEL,
+  DEFAULT_CITRUX_MODEL_AUTO,
+  DEFAULT_CITRUX_EMBEDDING_MODEL,
   DEFAULT_FILE_FILTERING_OPTIONS,
   DEFAULT_MEMORY_FILE_FILTERING_OPTIONS,
   FileDiscoveryService,
@@ -31,7 +31,7 @@ import {
   loadServerHierarchicalMemory,
   WEB_FETCH_TOOL_NAME,
   getVersion,
-  PREVIEW_GEMINI_MODEL_AUTO,
+  PREVIEW_CITRUX_MODEL_AUTO,
   type HookDefinition,
   type HookEventName,
   type OutputFormat,
@@ -397,7 +397,7 @@ export async function loadCliConfig(
   const loadedSettings = loadSettings(cwd);
 
   if (argv.sandbox) {
-    process.env['GEMINI_SANDBOX'] = 'true';
+    process.env['CITRUX_SANDBOX'] = 'true';
   }
 
   const memoryImportFormat = settings.context?.importFormat || 'tree';
@@ -587,18 +587,18 @@ export async function loadCliConfig(
   );
 
   const defaultModel = settings.general?.previewFeatures
-    ? PREVIEW_GEMINI_MODEL_AUTO
-    : DEFAULT_GEMINI_MODEL_AUTO;
+    ? PREVIEW_CITRUX_MODEL_AUTO
+    : DEFAULT_CITRUX_MODEL_AUTO;
   const resolvedModel: string =
     argv.model ||
     process.env['CITRUX_MODEL'] ||
-    process.env['GEMINI_MODEL'] ||
+    process.env['CITRUX_MODEL'] ||
     settings.model?.name ||
     defaultModel;
 
   const sandboxConfig = await loadSandboxConfig(settings, argv);
   if (argv.sandbox || process.env['CITRUX_SANDBOX'] === 'true') {
-    process.env['GEMINI_SANDBOX'] = 'true';
+    process.env['CITRUX_SANDBOX'] = 'true';
   }
   const screenReader =
     argv.screenReader !== undefined
@@ -609,7 +609,7 @@ export async function loadCliConfig(
 
   return new Config({
     sessionId,
-    embeddingModel: DEFAULT_GEMINI_EMBEDDING_MODEL,
+    embeddingModel: DEFAULT_CITRUX_EMBEDDING_MODEL,
     sandbox: sandboxConfig,
     targetDir: cwd,
     includeDirectories,

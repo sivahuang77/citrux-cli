@@ -10,12 +10,12 @@ import { mkdirSync, writeFileSync, readFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { env } from 'node:process';
-import { DEFAULT_GEMINI_MODEL } from '../packages/core/src/config/models.js';
+import { DEFAULT_CITRUX_MODEL } from '../packages/core/src/config/models.js';
 import fs from 'node:fs';
 import * as pty from '@lydell/node-pty';
 import stripAnsi from 'strip-ansi';
 import * as os from 'node:os';
-import { GEMINI_DIR } from '../packages/core/src/utils/paths.js';
+import { CITRUX_DIR } from '../packages/core/src/utils/paths.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const BUNDLE_PATH = join(__dirname, '..', 'bundle/citrux.js');
@@ -23,7 +23,7 @@ const BUNDLE_PATH = join(__dirname, '..', 'bundle/citrux.js');
 // Get timeout based on environment
 function getDefaultTimeout() {
   if (env['CI']) return 60000; // 1 minute in CI
-  if (env['GEMINI_SANDBOX']) return 30000; // 30s in containers
+  if (env['CITRUX_SANDBOX']) return 30000; // 30s in containers
   return 15000; // 15s locally
 }
 
@@ -298,7 +298,7 @@ export class TestRig {
     }
 
     // Create a settings file to point the CLI to the local collector
-    const geminiDir = join(this.testDir, GEMINI_DIR);
+    const geminiDir = join(this.testDir, CITRUX_DIR);
     mkdirSync(geminiDir, { recursive: true });
     // In sandbox mode, use an absolute path for telemetry inside the container
     // The container mounts the test directory at the same path as the host
@@ -325,9 +325,9 @@ export class TestRig {
       ui: {
         useAlternateBuffer: true,
       },
-      model: DEFAULT_GEMINI_MODEL,
+      model: DEFAULT_CITRUX_MODEL,
       sandbox:
-        env['GEMINI_SANDBOX'] !== 'false' ? env['GEMINI_SANDBOX'] : false,
+        env['CITRUX_SANDBOX'] !== 'false' ? env['CITRUX_SANDBOX'] : false,
       // Don't show the IDE connection dialog when running from VsCode
       ide: { enabled: false, hasSeenNudge: true },
       ...options.settings, // Allow tests to override/add settings
@@ -451,7 +451,7 @@ export class TestRig {
           // Filter out telemetry output when running with Podman
           // Podman seems to output telemetry to stdout even when writing to file
           let result = stdout;
-          if (env['GEMINI_SANDBOX'] === 'podman') {
+          if (env['CITRUX_SANDBOX'] === 'podman') {
             // Remove telemetry JSON objects from output
             // They are multi-line JSON objects that start with { and contain telemetry fields
             const lines = result.split(os.EOL);
@@ -895,7 +895,7 @@ export class TestRig {
   readToolLogs() {
     // For Podman, first check if telemetry file exists and has content
     // If not, fall back to parsing from stdout
-    if (env['GEMINI_SANDBOX'] === 'podman') {
+    if (env['CITRUX_SANDBOX'] === 'podman') {
       // Try reading from file first
       const logFilePath = join(this.testDir!, 'telemetry.log');
 

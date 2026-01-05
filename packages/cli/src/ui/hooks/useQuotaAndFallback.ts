@@ -12,9 +12,9 @@ import {
   TerminalQuotaError,
   ModelNotFoundError,
   type UserTierId,
-  PREVIEW_GEMINI_MODEL,
-  DEFAULT_GEMINI_MODEL,
-  VALID_GEMINI_MODELS,
+  PREVIEW_CITRUX_MODEL,
+  DEFAULT_CITRUX_MODEL,
+  VALID_CITRUX_MODELS,
 } from '@google/gemini-cli-core';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { type UseHistoryManagerReturn } from './useHistoryManager.js';
@@ -58,8 +58,8 @@ export function useQuotaAndFallback({
       let isTerminalQuotaError = false;
       let isModelNotFoundError = false;
       const usageLimitReachedModel =
-        failedModel === DEFAULT_GEMINI_MODEL ||
-        failedModel === PREVIEW_GEMINI_MODEL
+        failedModel === DEFAULT_CITRUX_MODEL ||
+        failedModel === PREVIEW_CITRUX_MODEL
           ? 'all Pro models'
           : failedModel;
       if (error instanceof TerminalQuotaError) {
@@ -75,7 +75,7 @@ export function useQuotaAndFallback({
         message = messageLines.join('\n');
       } else if (
         error instanceof ModelNotFoundError &&
-        VALID_GEMINI_MODELS.has(failedModel)
+        VALID_CITRUX_MODELS.has(failedModel)
       ) {
         isModelNotFoundError = true;
         const messageLines = [

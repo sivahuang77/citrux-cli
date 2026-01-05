@@ -157,7 +157,7 @@ function shouldRedactEnvironmentVariable(
   // These are never redacted.
   if (
     ALWAYS_ALLOWED_ENVIRONMENT_VARIABLES.has(key) ||
-    key.startsWith('GEMINI_CLI_')
+    key.startsWith('CITRUX_CLI_')
   ) {
     return false;
   }

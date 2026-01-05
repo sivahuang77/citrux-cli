@@ -19,7 +19,7 @@ import {
   validateDnsResolutionOrder,
   startInteractiveUI,
   getNodeMemoryArgs,
-} from './gemini.js';
+} from './citrux.js';
 import os from 'node:os';
 import v8 from 'node:v8';
 import { type CliArgs } from './config/config.js';
@@ -199,9 +199,9 @@ describe('gemini.tsx main function', () => {
 
   beforeEach(() => {
     // Store and clear sandbox-related env variables to ensure a consistent test environment
-    originalEnvGeminiSandbox = process.env['GEMINI_SANDBOX'];
+    originalEnvGeminiSandbox = process.env['CITRUX_SANDBOX'];
     originalEnvSandbox = process.env['SANDBOX'];
-    delete process.env['GEMINI_SANDBOX'];
+    delete process.env['CITRUX_SANDBOX'];
     delete process.env['SANDBOX'];
 
     initialUnhandledRejectionListeners =
@@ -211,9 +211,9 @@ describe('gemini.tsx main function', () => {
   afterEach(() => {
     // Restore original env variables
     if (originalEnvGeminiSandbox !== undefined) {
-      process.env['GEMINI_SANDBOX'] = originalEnvGeminiSandbox;
+      process.env['CITRUX_SANDBOX'] = originalEnvGeminiSandbox;
     } else {
-      delete process.env['GEMINI_SANDBOX'];
+      delete process.env['CITRUX_SANDBOX'];
     }
     if (originalEnvSandbox !== undefined) {
       process.env['SANDBOX'] = originalEnvSandbox;
@@ -372,7 +372,7 @@ describe('initializeOutputListenersAndFlush', () => {
 
   it('should flush backlogs and setup listeners if no listeners exist', async () => {
     const { coreEvents } = await import('@google/gemini-cli-core');
-    const { initializeOutputListenersAndFlush } = await import('./gemini.js');
+    const { initializeOutputListenersAndFlush } = await import('./citrux.js');
 
     // Mock listenerCount to return 0
     vi.spyOn(coreEvents, 'listenerCount').mockReturnValue(0);
@@ -393,15 +393,15 @@ describe('getNodeMemoryArgs', () => {
   beforeEach(() => {
     osTotalMemSpy = vi.spyOn(os, 'totalmem');
     v8GetHeapStatisticsSpy = vi.spyOn(v8, 'getHeapStatistics');
-    delete process.env['GEMINI_CLI_NO_RELAUNCH'];
+    delete process.env['CITRUX_CLI_NO_RELAUNCH'];
   });
 
   afterEach(() => {
     vi.restoreAllMocks();
   });
 
-  it('should return empty array if GEMINI_CLI_NO_RELAUNCH is set', () => {
-    process.env['GEMINI_CLI_NO_RELAUNCH'] = 'true';
+  it('should return empty array if CITRUX_CLI_NO_RELAUNCH is set', () => {
+    process.env['CITRUX_CLI_NO_RELAUNCH'] = 'true';
     expect(getNodeMemoryArgs(false)).toEqual([]);
   });
 
@@ -447,8 +447,8 @@ describe('gemini.tsx main function kitty protocol', () => {
 
   beforeEach(() => {
     // Set no relaunch in tests since process spawning causing issues in tests
-    originalEnvNoRelaunch = process.env['GEMINI_CLI_NO_RELAUNCH'];
-    process.env['GEMINI_CLI_NO_RELAUNCH'] = 'true';
+    originalEnvNoRelaunch = process.env['CITRUX_CLI_NO_RELAUNCH'];
+    process.env['CITRUX_CLI_NO_RELAUNCH'] = 'true';
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     if (!(process.stdin as any).setRawMode) {
@@ -470,9 +470,9 @@ describe('gemini.tsx main function kitty protocol', () => {
   afterEach(() => {
     // Restore original env variables
     if (originalEnvNoRelaunch !== undefined) {
-      process.env['GEMINI_CLI_NO_RELAUNCH'] = originalEnvNoRelaunch;
+      process.env['CITRUX_CLI_NO_RELAUNCH'] = originalEnvNoRelaunch;
     } else {
-      delete process.env['GEMINI_CLI_NO_RELAUNCH'];
+      delete process.env['CITRUX_CLI_NO_RELAUNCH'];
     }
     vi.restoreAllMocks();
   });
@@ -1069,8 +1069,8 @@ describe('gemini.tsx main function exit codes', () => {
   let originalEnvNoRelaunch: string | undefined;
 
   beforeEach(() => {
-    originalEnvNoRelaunch = process.env['GEMINI_CLI_NO_RELAUNCH'];
-    process.env['GEMINI_CLI_NO_RELAUNCH'] = 'true';
+    originalEnvNoRelaunch = process.env['CITRUX_CLI_NO_RELAUNCH'];
+    process.env['CITRUX_CLI_NO_RELAUNCH'] = 'true';
     vi.spyOn(process, 'exit').mockImplementation((code) => {
       throw new MockProcessExitError(code);
     });
@@ -1080,9 +1080,9 @@ describe('gemini.tsx main function exit codes', () => {
 
   afterEach(() => {
     if (originalEnvNoRelaunch !== undefined) {
-      process.env['GEMINI_CLI_NO_RELAUNCH'] = originalEnvNoRelaunch;
+      process.env['CITRUX_CLI_NO_RELAUNCH'] = originalEnvNoRelaunch;
     } else {
-      delete process.env['GEMINI_CLI_NO_RELAUNCH'];
+      delete process.env['CITRUX_CLI_NO_RELAUNCH'];
     }
     vi.restoreAllMocks();
   });

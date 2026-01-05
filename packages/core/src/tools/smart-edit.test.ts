@@ -23,7 +23,7 @@ vi.mock('../utils/llm-edit-fixer.js', () => ({
 }));
 
 vi.mock('../core/client.js', () => ({
-  GeminiClient: vi.fn().mockImplementation(() => ({
+  CitruxClient: vi.fn().mockImplementation(() => ({
     generateJson: mockGenerateJson,
     getHistory: vi.fn().mockResolvedValue([]),
   })),
@@ -91,7 +91,7 @@ describe('SmartEditTool', () => {
       getContentGeneratorConfig: vi.fn(() => ({ authType: 'mock' })),
       getUseSmartEdit: vi.fn(() => false),
       getProxy: vi.fn(() => undefined),
-      getGeminiClient: vi.fn().mockReturnValue(geminiClient),
+      getCitruxClient: vi.fn().mockReturnValue(geminiClient),
       getBaseLlmClient: vi.fn().mockReturnValue(baseLlmClient),
       getTargetDir: () => rootDir,
       getApprovalMode: vi.fn(),

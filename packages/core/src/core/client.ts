@@ -71,7 +71,7 @@ type BeforeAgentHookReturn =
   | { additionalContext: string | undefined }
   | undefined;
 
-export class GeminiClient {
+export class CitruxClient {
   private chat?: GeminiChat;
   private sessionTurnCount = 0;
 

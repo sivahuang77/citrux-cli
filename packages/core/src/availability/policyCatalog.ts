@@ -11,10 +11,10 @@ import type {
   ModelPolicyStateMap,
 } from './modelPolicy.js';
 import {
-  DEFAULT_GEMINI_FLASH_MODEL,
-  DEFAULT_GEMINI_MODEL,
-  PREVIEW_GEMINI_FLASH_MODEL,
-  PREVIEW_GEMINI_MODEL,
+  DEFAULT_CITRUX_FLASH_MODEL,
+  DEFAULT_CITRUX_MODEL,
+  PREVIEW_CITRUX_FLASH_MODEL,
+  PREVIEW_CITRUX_MODEL,
 } from '../config/models.js';
 import type { UserTierId } from '../code_assist/types.js';
 
@@ -44,13 +44,13 @@ const DEFAULT_STATE: ModelPolicyStateMap = {
 };
 
 const DEFAULT_CHAIN: ModelPolicyChain = [
-  definePolicy({ model: DEFAULT_GEMINI_MODEL }),
-  definePolicy({ model: DEFAULT_GEMINI_FLASH_MODEL, isLastResort: true }),
+  definePolicy({ model: DEFAULT_CITRUX_MODEL }),
+  definePolicy({ model: DEFAULT_CITRUX_FLASH_MODEL, isLastResort: true }),
 ];
 
 const PREVIEW_CHAIN: ModelPolicyChain = [
-  definePolicy({ model: PREVIEW_GEMINI_MODEL }),
-  definePolicy({ model: PREVIEW_GEMINI_FLASH_MODEL, isLastResort: true }),
+  definePolicy({ model: PREVIEW_CITRUX_MODEL }),
+  definePolicy({ model: PREVIEW_CITRUX_FLASH_MODEL, isLastResort: true }),
 ];
 
 /**

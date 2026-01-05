@@ -1,4 +1,22 @@
-## 7. Suggested Future Actions (Post-v0.1.0)
+## 2026-01-06: Identity Refactoring (Gemini CLI -> Citrux CLI)
+
+- **Objective**: Establish independent identity for Citrux CLI to run alongside
+  Gemini CLI.
+- **Changes**:
+  - `GEMINI.md` renamed to `CITRUX.md`.
+  - `.gemini/` config directory renamed to `.citrux/`.
+  - `.geminiignore` renamed to `.citruxignore`.
+  - Internal class `GeminiClient` renamed to `CitruxClient`.
+  - Env vars `GEMINI_*` renamed to `CITRUX_*`.
+  - Telemetry events `gemini_cli.*` preserved for backend compatibility.
+- **Status**: Codebase refactored and built successfully. Self-tests updated.
+
+## 2025-10-24: Initial Architecture
+
+- **Context Management**: The project uses a hierarchical context system
+  (`CITRUX.md` formerly `GEMINI.md`) to provide persistent memory to the LLM.
+- **Tools**: Integrated `ripgrep` for fast searching and `google_web_search` for
+  external knowledge.
 
 The following initiatives are suggested to further enhance Citrux CLI's
 capabilities and ecosystem:
@@ -75,3 +93,15 @@ Analysis of `sst/opencode` features and how to apply them to Citrux:
 - **TypeScript & Build Fixes**: Resolved significant compilation errors in
   `openAIContentGenerator.ts` related to strict property access and missing type
   imports.
+- **Deep Rebranding Sweep**: Replaced all user-facing "Gemini CLI" occurrences
+  with "Citrux CLI" across `/help`, `/docs`, tips, and dialogs. Removed obsolete
+  Gemini 3 announcement banners.
+
+## 10. Installation & User Testing Readiness
+
+- **Husky Fix**: Modified `package.json` to make `husky` optional during
+  `prepare`, allowing global installs from Git without developer tools.
+- **Private Field Fix**: Corrected `package.json` to `"private": false` to
+  enable successful remote installation via `npm install -g`.
+- **Verified Bundle**: Confirmed that `npm run bundle` produces a functional
+  `bundle/citrux.js` with correct Shebang and all required assets.

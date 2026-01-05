@@ -196,7 +196,7 @@ export async function runNonInteractive({
         }
       });
 
-      const geminiClient = config.getGeminiClient();
+      const geminiClient = config.getCitruxClient();
 
       // Initialize chat.  Resume if resume data is passed.
       if (resumedSessionData) {

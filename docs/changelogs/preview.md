@@ -98,7 +98,7 @@ npm install -g @google/gemini-cli@preview
   @gemini-cli-robot in https://github.com/google-gemini/gemini-cli/pull/15029
 - Disallow redundant typecasts. by @gundermanc in
   https://github.com/google-gemini/gemini-cli/pull/15030
-- fix(auth): prioritize GEMINI_API_KEY env var and skip unnecessary key… by
+- fix(auth): prioritize CITRUX_API_KEY env var and skip unnecessary key… by
   @galz10 in https://github.com/google-gemini/gemini-cli/pull/14745
 - fix: use zod for safety check result validation by @allenhutchison in
   https://github.com/google-gemini/gemini-cli/pull/15026

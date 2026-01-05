@@ -30,7 +30,7 @@ describe('GlobTool', () => {
     getFileFilteringRespectGitIgnore: () => true,
     getFileFilteringOptions: () => ({
       respectGitIgnore: true,
-      respectGeminiIgnore: true,
+      respectCitruxIgnore: true,
     }),
     getTargetDir: () => tempRootDir,
     getWorkspaceContext: () => createMockWorkspaceContext(tempRootDir),
@@ -365,12 +365,12 @@ describe('GlobTool', () => {
         notExpectedToContain: ['a.ignored.txt'],
       },
       {
-        name: 'should respect .geminiignore files by default',
-        ignoreFile: { name: '.geminiignore', content: '*.geminiignored.txt' },
-        filesToCreate: ['a.geminiignored.txt', 'b.notignored.txt'],
+        name: 'should respect .citruxignore files by default',
+        ignoreFile: { name: '.citruxignore', content: '*.citruxignored.txt' },
+        filesToCreate: ['a.citruxignored.txt', 'b.notignored.txt'],
         globToolParams: { pattern: '*.txt' },
         expectedCountMessage: 'Found 3 file(s)',
-        notExpectedToContain: ['a.geminiignored.txt'],
+        notExpectedToContain: ['a.citruxignored.txt'],
       },
       {
         name: 'should not respect .gitignore when respect_git_ignore is false',
@@ -381,12 +381,12 @@ describe('GlobTool', () => {
         expectedToContain: ['a.ignored.txt'],
       },
       {
-        name: 'should not respect .geminiignore when respect_gemini_ignore is false',
-        ignoreFile: { name: '.geminiignore', content: '*.geminiignored.txt' },
-        filesToCreate: ['a.geminiignored.txt'],
+        name: 'should not respect .citruxignore when respect_gemini_ignore is false',
+        ignoreFile: { name: '.citruxignore', content: '*.citruxignored.txt' },
+        filesToCreate: ['a.citruxignored.txt'],
         globToolParams: { pattern: '*.txt', respect_gemini_ignore: false },
         expectedCountMessage: 'Found 3 file(s)',
-        expectedToContain: ['a.geminiignored.txt'],
+        expectedToContain: ['a.citruxignored.txt'],
       },
     ])(
       '$name',

@@ -61,7 +61,7 @@ describe('migrate command', () => {
         hooks: {},
       },
       setValue: mockSetValue,
-      workspace: { path: '/test/project/.gemini' },
+      workspace: { path: '/test/project/.citrux' },
     });
   });
 
@@ -133,7 +133,7 @@ describe('migrate command', () => {
       expect.stringContaining('Migrating 1 hook event'),
     );
     expect(debugLoggerLogSpy).toHaveBeenCalledWith(
-      '✓ Hooks successfully migrated to .gemini/settings.json',
+      '✓ Hooks successfully migrated to .citrux/settings.json',
     );
   });
 
@@ -226,7 +226,7 @@ describe('migrate command', () => {
     );
   });
 
-  it('should replace $CLAUDE_PROJECT_DIR with $GEMINI_PROJECT_DIR', async () => {
+  it('should replace $CLAUDE_PROJECT_DIR with $CITRUX_PROJECT_DIR', async () => {
     const claudeSettings = {
       hooks: {
         PreToolUse: [
@@ -249,7 +249,7 @@ describe('migrate command', () => {
 
     const migratedHooks = mockSetValue.mock.calls[0][2];
     expect(migratedHooks.BeforeTool[0].hooks[0].command).toBe(
-      'cd $GEMINI_PROJECT_DIR && ls',
+      'cd $CITRUX_PROJECT_DIR && ls',
     );
   });
 
@@ -322,7 +322,7 @@ describe('migrate command', () => {
         },
       },
       setValue: mockSetValue,
-      workspace: { path: '/test/project/.gemini' },
+      workspace: { path: '/test/project/.citrux' },
     });
 
     mockedFs.existsSync.mockReturnValue(true);
@@ -506,10 +506,10 @@ describe('migrate command', () => {
     await handleMigrateFromClaude();
 
     expect(debugLoggerLogSpy).toHaveBeenCalledWith(
-      '✓ Hooks successfully migrated to .gemini/settings.json',
+      '✓ Hooks successfully migrated to .citrux/settings.json',
     );
     expect(debugLoggerLogSpy).toHaveBeenCalledWith(
-      '\nMigration complete! Please review the migrated hooks in .gemini/settings.json',
+      '\nMigration complete! Please review the migrated hooks in .citrux/settings.json',
     );
     expect(debugLoggerLogSpy).toHaveBeenCalledWith(
       'Note: Set tools.enableHooks to true in your settings to enable the hook system.',

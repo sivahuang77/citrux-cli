@@ -29,7 +29,7 @@ vi.mock('fs', () => ({
 }));
 
 vi.mock('../core/client.js', () => ({
-  GeminiClient: vi.fn().mockImplementation(function (
+  CitruxClient: vi.fn().mockImplementation(function (
     this: any,
     _config: Config,
   ) {
@@ -48,7 +48,7 @@ import {
   unescapeStringForGeminiBug,
   resetEditCorrectorCaches_TEST_ONLY,
 } from './editCorrector.js';
-import { GeminiClient } from '../core/client.js';
+import { CitruxClient } from '../core/client.js';
 import type { Config } from '../config/config.js';
 import { ToolRegistry } from '../tools/tool-registry.js';
 
@@ -157,7 +157,7 @@ describe('editCorrector', () => {
   });
 
   describe('ensureCorrectEdit', () => {
-    let mockGeminiClientInstance: Mocked<GeminiClient>;
+    let mockCitruxClientInstance: Mocked<CitruxClient>;
     let mockBaseLlmClientInstance: Mocked<BaseLlmClient>;
     let mockToolRegistry: Mocked<ToolRegistry>;
     let mockConfigInstance: Config;
@@ -234,10 +234,10 @@ describe('editCorrector', () => {
       mockStartChat = vi.fn();
       mockSendMessageStream = vi.fn();
 
-      mockGeminiClientInstance = new GeminiClient(
+      mockCitruxClientInstance = new CitruxClient(
         mockConfigInstance,
-      ) as Mocked<GeminiClient>;
-      mockGeminiClientInstance.getHistory = vi.fn().mockReturnValue([]);
+      ) as Mocked<CitruxClient>;
+      mockCitruxClientInstance.getHistory = vi.fn().mockReturnValue([]);
       mockBaseLlmClientInstance = {
         generateJson: mockGenerateJson,
         config: {
@@ -267,7 +267,7 @@ describe('editCorrector', () => {
           '/test/file.txt',
           currentContent,
           originalParams,
-          mockGeminiClientInstance,
+          mockCitruxClientInstance,
           mockBaseLlmClientInstance,
           abortSignal,
         );
@@ -287,7 +287,7 @@ describe('editCorrector', () => {
           '/test/file.txt',
           currentContent,
           originalParams,
-          mockGeminiClientInstance,
+          mockCitruxClientInstance,
           mockBaseLlmClientInstance,
           abortSignal,
         );
@@ -310,7 +310,7 @@ describe('editCorrector', () => {
           '/test/file.txt',
           currentContent,
           originalParams,
-          mockGeminiClientInstance,
+          mockCitruxClientInstance,
           mockBaseLlmClientInstance,
           abortSignal,
         );
@@ -330,7 +330,7 @@ describe('editCorrector', () => {
           '/test/file.txt',
           currentContent,
           originalParams,
-          mockGeminiClientInstance,
+          mockCitruxClientInstance,
           mockBaseLlmClientInstance,
           abortSignal,
         );
@@ -354,7 +354,7 @@ describe('editCorrector', () => {
           '/test/file.txt',
           currentContent,
           originalParams,
-          mockGeminiClientInstance,
+          mockCitruxClientInstance,
           mockBaseLlmClientInstance,
           abortSignal,
         );
@@ -374,7 +374,7 @@ describe('editCorrector', () => {
           '/test/file.txt',
           currentContent,
           originalParams,
-          mockGeminiClientInstance,
+          mockCitruxClientInstance,
           mockBaseLlmClientInstance,
           abortSignal,
         );
@@ -394,7 +394,7 @@ describe('editCorrector', () => {
           '/test/file.txt',
           currentContent,
           originalParams,
-          mockGeminiClientInstance,
+          mockCitruxClientInstance,
           mockBaseLlmClientInstance,
           abortSignal,
         );
@@ -419,7 +419,7 @@ describe('editCorrector', () => {
           '/test/file.txt',
           currentContent,
           originalParams,
-          mockGeminiClientInstance,
+          mockCitruxClientInstance,
           mockBaseLlmClientInstance,
           abortSignal,
         );
@@ -443,7 +443,7 @@ describe('editCorrector', () => {
           '/test/file.txt',
           currentContent,
           originalParams,
-          mockGeminiClientInstance,
+          mockCitruxClientInstance,
           mockBaseLlmClientInstance,
           abortSignal,
         );
@@ -465,7 +465,7 @@ describe('editCorrector', () => {
           '/test/file.txt',
           currentContent,
           originalParams,
-          mockGeminiClientInstance,
+          mockCitruxClientInstance,
           mockBaseLlmClientInstance,
           abortSignal,
         );
@@ -489,7 +489,7 @@ describe('editCorrector', () => {
           '/test/file.txt',
           currentContent,
           originalParams,
-          mockGeminiClientInstance,
+          mockCitruxClientInstance,
           mockBaseLlmClientInstance,
           abortSignal,
         );
@@ -512,7 +512,7 @@ describe('editCorrector', () => {
           '/test/file.txt',
           currentContent,
           originalParams,
-          mockGeminiClientInstance,
+          mockCitruxClientInstance,
           mockBaseLlmClientInstance,
           abortSignal,
         );
@@ -532,7 +532,7 @@ describe('editCorrector', () => {
           '/test/file.txt',
           currentContent,
           originalParams,
-          mockGeminiClientInstance,
+          mockCitruxClientInstance,
           mockBaseLlmClientInstance,
           abortSignal,
         );
@@ -557,7 +557,7 @@ describe('editCorrector', () => {
           '/test/file.txt',
           currentContent,
           originalParams,
-          mockGeminiClientInstance,
+          mockCitruxClientInstance,
           mockBaseLlmClientInstance,
           abortSignal,
         );
@@ -606,13 +606,13 @@ describe('editCorrector', () => {
             ],
           },
         ];
-        (mockGeminiClientInstance.getHistory as Mock).mockReturnValue(history);
+        (mockCitruxClientInstance.getHistory as Mock).mockReturnValue(history);
 
         const result = await ensureCorrectEdit(
           filePath,
           currentContent,
           originalParams,
-          mockGeminiClientInstance,
+          mockCitruxClientInstance,
           mockBaseLlmClientInstance,
           abortSignal,
         );

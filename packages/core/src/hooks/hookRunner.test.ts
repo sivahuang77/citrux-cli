@@ -336,7 +336,7 @@ describe('HookRunner', () => {
       it('should expand environment variables in commands', async () => {
         const configWithEnvVar: HookConfig = {
           type: HookType.Command,
-          command: '$GEMINI_PROJECT_DIR/hooks/test.sh',
+          command: '$CITRUX_PROJECT_DIR/hooks/test.sh',
         };
 
         mockSpawn.mockProcessOn.mockImplementation(
@@ -361,14 +361,14 @@ describe('HookRunner', () => {
           expect.objectContaining({
             shell: false,
             env: expect.objectContaining({
-              GEMINI_PROJECT_DIR: '/test/project',
+              CITRUX_PROJECT_DIR: '/test/project',
               CLAUDE_PROJECT_DIR: '/test/project',
             }),
           }),
         );
       });
 
-      it('should not allow command injection via GEMINI_PROJECT_DIR', async () => {
+      it('should not allow command injection via CITRUX_PROJECT_DIR', async () => {
         const maliciousCwd = '/test/project; echo "pwned" > /tmp/pwned';
         const mockMaliciousInput: HookInput = {
           ...mockInput,
@@ -377,7 +377,7 @@ describe('HookRunner', () => {
 
         const config: HookConfig = {
           type: HookType.Command,
-          command: 'ls $GEMINI_PROJECT_DIR',
+          command: 'ls $CITRUX_PROJECT_DIR',
         };
 
         // Mock the process closing immediately

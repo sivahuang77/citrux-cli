@@ -56,7 +56,7 @@ scripts:
 ```json
 {
   "type": "command",
-  "command": "$GEMINI_PROJECT_DIR/.citrux/hooks/my-hook.sh",
+  "command": "$CITRUX_PROJECT_DIR/.citrux/hooks/my-hook.sh",
   "timeout": 30000
 }
 ```
@@ -475,9 +475,9 @@ configuration.
 
 Hooks have access to:
 
-- `GEMINI_PROJECT_DIR`: Project root directory
-- `GEMINI_SESSION_ID`: Current session ID
-- `GEMINI_API_KEY`: Gemini API key (if configured)
+- `CITRUX_PROJECT_DIR`: Project root directory
+- `CITRUX_SESSION_ID`: Current session ID
+- `CITRUX_API_KEY`: Gemini API key (if configured)
 - All other environment variables from the parent process
 
 ## Managing hooks

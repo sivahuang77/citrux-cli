@@ -113,10 +113,10 @@ Promise.allSettled([
 ]).then((results) => {
   const [cliResult, a2aResult] = results;
   if (cliResult.status === 'rejected') {
-    console.error('gemini.js build failed:', cliResult.reason);
+    console.error('citrux.js build failed:', cliResult.reason);
     process.exit(1);
   }
-  // error in a2a-server bundling will not stop gemini.js bundling process
+  // error in a2a-server bundling will not stop citrux.js bundling process
   if (a2aResult.status === 'rejected') {
     console.warn('a2a-server build failed:', a2aResult.reason);
   }

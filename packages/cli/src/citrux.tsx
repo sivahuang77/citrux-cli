@@ -138,7 +138,7 @@ export function getNodeMemoryArgs(isDebugMode: boolean): string[] {
     );
   }
 
-  if (process.env['GEMINI_CLI_NO_RELAUNCH']) {
+  if (process.env['CITRUX_CLI_NO_RELAUNCH']) {
     return [];
   }
 
@@ -367,7 +367,7 @@ export async function main() {
   ) {
     if (
       process.env['CLOUD_SHELL'] === 'true' ||
-      process.env['GEMINI_CLI_USE_COMPUTE_ADC'] === 'true'
+      process.env['CITRUX_CLI_USE_COMPUTE_ADC'] === 'true'
     ) {
       settings.setValue(
         SettingScope.User,
@@ -660,7 +660,7 @@ export async function main() {
     }
     if (!input) {
       debugLogger.error(
-        `No input provided via stdin. Input can be provided by piping data into gemini or using the --prompt option.`,
+        `No input provided via stdin. Input can be provided by piping data into citrux or using the --prompt option.`,
       );
       await runExitCleanup();
       process.exit(ExitCodes.FATAL_INPUT_ERROR);

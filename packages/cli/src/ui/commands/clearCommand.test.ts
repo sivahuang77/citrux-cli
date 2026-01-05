@@ -21,7 +21,7 @@ vi.mock('@google/gemini-cli-core', async () => {
   };
 });
 
-import type { GeminiClient } from '@google/gemini-cli-core';
+import type { CitruxClient } from '@google/gemini-cli-core';
 import { uiTelemetryService } from '@google/gemini-cli-core';
 
 describe('clearCommand', () => {
@@ -36,13 +36,13 @@ describe('clearCommand', () => {
     mockContext = createMockCommandContext({
       services: {
         config: {
-          getGeminiClient: () =>
+          getCitruxClient: () =>
             ({
               resetChat: mockResetChat,
               getChat: () => ({
                 getChatRecordingService: mockGetChatRecordingService,
               }),
-            }) as unknown as GeminiClient,
+            }) as unknown as CitruxClient,
           setSessionId: vi.fn(),
           getEnableHooks: vi.fn().mockReturnValue(false),
           getMessageBus: vi.fn().mockReturnValue(undefined),

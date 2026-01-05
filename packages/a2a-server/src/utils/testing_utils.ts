@@ -11,10 +11,10 @@ import type {
 } from '@a2a-js/sdk';
 import {
   ApprovalMode,
-  DEFAULT_GEMINI_MODEL,
+  DEFAULT_CITRUX_MODEL,
   DEFAULT_TRUNCATE_TOOL_OUTPUT_LINES,
   DEFAULT_TRUNCATE_TOOL_OUTPUT_THRESHOLD,
-  GeminiClient,
+  CitruxClient,
   HookSystem,
 } from '@google/gemini-cli-core';
 import { createMockMessageBus } from '@google/gemini-cli-core/src/test-utils/mock-message-bus.js';
@@ -47,7 +47,7 @@ export function createMockConfig(
     getTruncateToolOutputThreshold: () =>
       DEFAULT_TRUNCATE_TOOL_OUTPUT_THRESHOLD,
     getTruncateToolOutputLines: () => DEFAULT_TRUNCATE_TOOL_OUTPUT_LINES,
-    getActiveModel: vi.fn().mockReturnValue(DEFAULT_GEMINI_MODEL),
+    getActiveModel: vi.fn().mockReturnValue(DEFAULT_CITRUX_MODEL),
     getDebugMode: vi.fn().mockReturnValue(false),
     getContentGeneratorConfig: vi.fn().mockReturnValue({ model: 'gemini-pro' }),
     getModel: vi.fn().mockReturnValue('gemini-pro'),
@@ -75,9 +75,9 @@ export function createMockConfig(
     .fn()
     .mockReturnValue(new HookSystem(mockConfig));
 
-  mockConfig.getGeminiClient = vi
+  mockConfig.getCitruxClient = vi
     .fn()
-    .mockReturnValue(new GeminiClient(mockConfig));
+    .mockReturnValue(new CitruxClient(mockConfig));
   return mockConfig;
 }
 

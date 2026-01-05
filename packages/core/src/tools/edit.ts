@@ -185,7 +185,7 @@ class EditToolInvocation
         this.resolvedPath,
         currentContent,
         params,
-        this.config.getGeminiClient(),
+        this.config.getCitruxClient(),
         this.config.getBaseLlmClient(),
         abortSignal,
       );

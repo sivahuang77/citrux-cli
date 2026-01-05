@@ -47,7 +47,7 @@ const mockSendMessageStream = vi
   .mockReturnValue((async function* () {})());
 const mockStartChat = vi.fn();
 
-const MockedGeminiClientClass = vi.hoisted(() =>
+const MockedCitruxClientClass = vi.hoisted(() =>
   vi.fn().mockImplementation(function (this: any, _config: any) {
     // _config
     this.startChat = mockStartChat;
@@ -77,7 +77,7 @@ vi.mock('@google/gemini-cli-core', async (importOriginal) => {
   return {
     ...actualCoreModule,
     GitService: vi.fn(),
-    GeminiClient: MockedGeminiClientClass,
+    CitruxClient: MockedCitruxClientClass,
     UserPromptEvent: MockedUserPromptEvent,
     parseAndFormatApiError: mockParseAndFormatApiError,
     tokenLimit: vi.fn().mockReturnValue(100), // Mock tokenLimit
@@ -166,11 +166,11 @@ describe('useGeminiStream', () => {
     vi.clearAllMocks(); // Clear mocks before each test
 
     mockAddItem = vi.fn();
-    // Define the mock for getGeminiClient
-    const mockGetGeminiClient = vi.fn().mockImplementation(() => {
-      // MockedGeminiClientClass is defined in the module scope by the previous change.
+    // Define the mock for getCitruxClient
+    const mockGetCitruxClient = vi.fn().mockImplementation(() => {
+      // MockedCitruxClientClass is defined in the module scope by the previous change.
       // It will use the mockStartChat and mockSendMessageStream that are managed within beforeEach.
-      const clientInstance = new MockedGeminiClientClass(mockConfig);
+      const clientInstance = new MockedCitruxClientClass(mockConfig);
       return clientInstance;
     });
 
@@ -206,7 +206,7 @@ describe('useGeminiStream', () => {
       ),
       getProjectRoot: vi.fn(() => '/test/dir'),
       getCheckpointingEnabled: vi.fn(() => false),
-      getGeminiClient: mockGetGeminiClient,
+      getCitruxClient: mockGetCitruxClient,
       getApprovalMode: () => ApprovalMode.DEFAULT,
       getUsageStatisticsEnabled: () => true,
       getDebugMode: () => false,
@@ -241,8 +241,8 @@ describe('useGeminiStream', () => {
       mockCancelAllToolCalls,
     ]);
 
-    // Reset mocks for GeminiClient instance methods (startChat and sendMessageStream)
-    // The GeminiClient constructor itself is mocked at the module level.
+    // Reset mocks for CitruxClient instance methods (startChat and sendMessageStream)
+    // The CitruxClient constructor itself is mocked at the module level.
     mockStartChat.mockClear().mockResolvedValue({
       sendMessageStream: mockSendMessageStream,
     } as unknown as any); // GeminiChat -> any
@@ -255,7 +255,7 @@ describe('useGeminiStream', () => {
   const mockLoadedSettings: LoadedSettings = {
     merged: { preferredEditor: 'vscode' },
     user: { path: '/user/settings.json', settings: {} },
-    workspace: { path: '/workspace/.gemini/settings.json', settings: {} },
+    workspace: { path: '/workspace/.citrux/settings.json', settings: {} },
     errors: [],
     forScope: vi.fn(),
     setValue: vi.fn(),
@@ -265,7 +265,7 @@ describe('useGeminiStream', () => {
     initialToolCalls: TrackedToolCall[] = [],
     geminiClient?: any,
   ) => {
-    const client = geminiClient || mockConfig.getGeminiClient();
+    const client = geminiClient || mockConfig.getCitruxClient();
 
     const initialProps = {
       client,
@@ -433,7 +433,7 @@ describe('useGeminiStream', () => {
 
     return renderHook(() =>
       useGeminiStream(
-        new MockedGeminiClientClass(mockConfig),
+        new MockedCitruxClientClass(mockConfig),
         [],
         mockAddItem,
         mockConfig,
@@ -574,7 +574,7 @@ describe('useGeminiStream', () => {
 
     renderHook(() =>
       useGeminiStream(
-        new MockedGeminiClientClass(mockConfig),
+        new MockedCitruxClientClass(mockConfig),
         [],
         mockAddItem,
         mockConfig,
@@ -642,7 +642,7 @@ describe('useGeminiStream', () => {
         } as unknown as AnyToolInvocation,
       } as TrackedCancelledToolCall,
     ];
-    const client = new MockedGeminiClientClass(mockConfig);
+    const client = new MockedCitruxClientClass(mockConfig);
 
     // Capture the onComplete callback
     let capturedOnComplete:
@@ -721,7 +721,7 @@ describe('useGeminiStream', () => {
         } as unknown as AnyToolInvocation,
       } as unknown as TrackedCompletedToolCall,
     ];
-    const client = new MockedGeminiClientClass(mockConfig);
+    const client = new MockedCitruxClientClass(mockConfig);
 
     // Capture the onComplete callback
     let capturedOnComplete:
@@ -847,7 +847,7 @@ describe('useGeminiStream', () => {
       responseSubmittedToGemini: false,
     };
     const allCancelledTools = [cancelledToolCall1, cancelledToolCall2];
-    const client = new MockedGeminiClientClass(mockConfig);
+    const client = new MockedCitruxClientClass(mockConfig);
 
     let capturedOnComplete:
       | ((completedTools: TrackedToolCall[]) => Promise<void>)
@@ -973,7 +973,7 @@ describe('useGeminiStream', () => {
 
     const { result, rerender } = renderHook(() =>
       useGeminiStream(
-        new MockedGeminiClientClass(mockConfig),
+        new MockedCitruxClientClass(mockConfig),
         [],
         mockAddItem,
         mockConfig,
@@ -1107,7 +1107,7 @@ describe('useGeminiStream', () => {
 
       const { result } = renderHook(() =>
         useGeminiStream(
-          mockConfig.getGeminiClient(),
+          mockConfig.getCitruxClient(),
           [],
           mockAddItem,
           mockConfig,
@@ -1148,7 +1148,7 @@ describe('useGeminiStream', () => {
 
       const { result } = renderHook(() =>
         useGeminiStream(
-          mockConfig.getGeminiClient(),
+          mockConfig.getCitruxClient(),
           [],
           mockAddItem,
           mockConfig,
@@ -1484,7 +1484,7 @@ describe('useGeminiStream', () => {
     it('should not call handleSlashCommand is shell mode is active', async () => {
       const { result } = renderHook(() =>
         useGeminiStream(
-          new MockedGeminiClientClass(mockConfig),
+          new MockedCitruxClientClass(mockConfig),
           [],
           mockAddItem,
           mockConfig,
@@ -1557,7 +1557,7 @@ describe('useGeminiStream', () => {
 
       renderHook(() =>
         useGeminiStream(
-          new MockedGeminiClientClass(mockConfig),
+          new MockedCitruxClientClass(mockConfig),
           [],
           mockAddItem,
           mockConfig,
@@ -1613,7 +1613,7 @@ describe('useGeminiStream', () => {
 
       const { result } = renderHook(() =>
         useGeminiStream(
-          new MockedGeminiClientClass(testConfig),
+          new MockedCitruxClientClass(testConfig),
           [],
           mockAddItem,
           testConfig,
@@ -1914,7 +1914,7 @@ describe('useGeminiStream', () => {
 
       const { result } = renderHook(() =>
         useGeminiStream(
-          new MockedGeminiClientClass(mockConfig),
+          new MockedCitruxClientClass(mockConfig),
           [],
           mockAddItem,
           mockConfig,
@@ -2022,7 +2022,7 @@ describe('useGeminiStream', () => {
 
       const { result } = renderHook(() =>
         useGeminiStream(
-          new MockedGeminiClientClass(mockConfig),
+          new MockedCitruxClientClass(mockConfig),
           [],
           mockAddItem,
           mockConfig,
@@ -2166,7 +2166,7 @@ describe('useGeminiStream', () => {
 
     const { result } = renderHook(() =>
       useGeminiStream(
-        mockConfig.getGeminiClient(),
+        mockConfig.getCitruxClient(),
         [],
         mockAddItem,
         mockConfig,
@@ -2236,7 +2236,7 @@ describe('useGeminiStream', () => {
 
       const { result } = renderHook(() =>
         useGeminiStream(
-          new MockedGeminiClientClass(mockConfig),
+          new MockedCitruxClientClass(mockConfig),
           [],
           mockAddItem,
           mockConfig,
@@ -2316,7 +2316,7 @@ describe('useGeminiStream', () => {
 
       const { result, rerender } = renderHook(() =>
         useGeminiStream(
-          mockConfig.getGeminiClient(),
+          mockConfig.getCitruxClient(),
           [],
           mockAddItem,
           mockConfig,
@@ -2385,7 +2385,7 @@ describe('useGeminiStream', () => {
 
       const { result } = renderHook(() =>
         useGeminiStream(
-          new MockedGeminiClientClass(mockConfig),
+          new MockedCitruxClientClass(mockConfig),
           [],
           mockAddItem,
           mockConfig,
@@ -2442,7 +2442,7 @@ describe('useGeminiStream', () => {
 
       const { result } = renderHook(() =>
         useGeminiStream(
-          new MockedGeminiClientClass(mockConfig),
+          new MockedCitruxClientClass(mockConfig),
           [],
           mockAddItem,
           mockConfig,
@@ -2494,8 +2494,8 @@ describe('useGeminiStream', () => {
       const mockLoopDetectionService = {
         disableForSession: vi.fn(),
       };
-      mockConfig.getGeminiClient = vi.fn().mockReturnValue({
-        ...new MockedGeminiClientClass(mockConfig),
+      mockConfig.getCitruxClient = vi.fn().mockReturnValue({
+        ...new MockedCitruxClientClass(mockConfig),
         getLoopDetectionService: () => mockLoopDetectionService,
       });
     });
@@ -2532,10 +2532,10 @@ describe('useGeminiStream', () => {
         disableForSession: vi.fn(),
       };
       const mockClient = {
-        ...new MockedGeminiClientClass(mockConfig),
+        ...new MockedCitruxClientClass(mockConfig),
         getLoopDetectionService: () => mockLoopDetectionService,
       };
-      mockConfig.getGeminiClient = vi.fn().mockReturnValue(mockClient);
+      mockConfig.getCitruxClient = vi.fn().mockReturnValue(mockClient);
 
       // Mock for the initial request
       mockSendMessageStream.mockReturnValueOnce(
@@ -2612,10 +2612,10 @@ describe('useGeminiStream', () => {
         disableForSession: vi.fn(),
       };
       const mockClient = {
-        ...new MockedGeminiClientClass(mockConfig),
+        ...new MockedCitruxClientClass(mockConfig),
         getLoopDetectionService: () => mockLoopDetectionService,
       };
-      mockConfig.getGeminiClient = vi.fn().mockReturnValue(mockClient);
+      mockConfig.getCitruxClient = vi.fn().mockReturnValue(mockClient);
 
       mockSendMessageStream.mockReturnValue(
         (async function* () {

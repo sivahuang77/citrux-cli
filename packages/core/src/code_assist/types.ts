@@ -22,7 +22,7 @@ export type ClientMetadataIdeType =
   | 'VSCODE_CLOUD_WORKSTATION'
   | 'INTELLIJ_CLOUD_WORKSTATION'
   | 'CLOUD_SHELL'
-  | 'GEMINI_CLI';
+  | 'CITRUX_CLI';
 export type ClientMetadataPlatform =
   | 'PLATFORM_UNSPECIFIED'
   | 'DARWIN_AMD64'

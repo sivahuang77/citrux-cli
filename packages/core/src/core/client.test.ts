@@ -15,7 +15,7 @@ import {
 } from 'vitest';
 
 import type { Content, GenerateContentResponse, Part } from '@google/genai';
-import { GeminiClient } from './client.js';
+import { CitruxClient } from './client.js';
 import {
   AuthType,
   type ContentGenerator,
@@ -30,7 +30,7 @@ import {
   type ChatCompressionInfo,
 } from './turn.js';
 import { getCoreSystemPrompt } from './prompts.js';
-import { DEFAULT_GEMINI_MODEL_AUTO } from '../config/models.js';
+import { DEFAULT_CITRUX_MODEL_AUTO } from '../config/models.js';
 import { FileDiscoveryService } from '../services/fileDiscoveryService.js';
 import { setSimulate429 } from '../utils/testUtils.js';
 import { tokenLimit } from './tokenLimits.js';
@@ -161,7 +161,7 @@ async function fromAsync<T>(promise: AsyncGenerator<T>): Promise<readonly T[]> {
 describe('Gemini Client (client.ts)', () => {
   let mockContentGenerator: ContentGenerator;
   let mockConfig: Config;
-  let client: GeminiClient;
+  let client: CitruxClient;
   let mockGenerateContentFn: Mock;
   let mockRouterService: { route: Mock };
   beforeEach(async () => {
@@ -198,7 +198,7 @@ describe('Gemini Client (client.ts)', () => {
       countTokens: vi.fn().mockResolvedValue({ totalTokens: 100 }),
     } as unknown as ContentGenerator;
 
-    // Because the GeminiClient constructor kicks off an async process (startChat)
+    // Because the CitruxClient constructor kicks off an async process (startChat)
     // that depends on a fully-formed Config object, we need to mock the
     // entire implementation of Config for these tests.
     const mockToolRegistry = {
@@ -243,7 +243,7 @@ describe('Gemini Client (client.ts)', () => {
       getWorkspaceContext: vi.fn().mockReturnValue({
         getDirectories: vi.fn().mockReturnValue(['/test/dir']),
       }),
-      getGeminiClient: vi.fn(),
+      getCitruxClient: vi.fn(),
       getModelRouterService: vi
         .fn()
         .mockReturnValue(mockRouterService as unknown as ModelRouterService),
@@ -289,9 +289,9 @@ describe('Gemini Client (client.ts)', () => {
       .fn()
       .mockReturnValue(new HookSystem(mockConfig));
 
-    client = new GeminiClient(mockConfig);
+    client = new CitruxClient(mockConfig);
     await client.initialize();
-    vi.mocked(mockConfig.getGeminiClient).mockReturnValue(client);
+    vi.mocked(mockConfig.getCitruxClient).mockReturnValue(client);
 
     vi.mocked(uiTelemetryService.setLastPromptTokenCount).mockClear();
   });
@@ -2036,7 +2036,7 @@ ${JSON.stringify(
           },
         );
         vi.mocked(mockConfig.getModel).mockReturnValue(
-          DEFAULT_GEMINI_MODEL_AUTO,
+          DEFAULT_CITRUX_MODEL_AUTO,
         );
         const stream = client.sendMessageStream(
           [{ text: 'Hi' }],
@@ -2068,7 +2068,7 @@ ${JSON.stringify(
           },
         );
         vi.mocked(mockConfig.getModel).mockReturnValue(
-          DEFAULT_GEMINI_MODEL_AUTO,
+          DEFAULT_CITRUX_MODEL_AUTO,
         );
         const stream = client.sendMessageStream(
           [{ text: 'Hi' }],

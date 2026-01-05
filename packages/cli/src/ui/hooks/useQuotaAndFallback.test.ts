@@ -25,10 +25,10 @@ import {
   makeFakeConfig,
   type GoogleApiError,
   RetryableQuotaError,
-  PREVIEW_GEMINI_MODEL,
+  PREVIEW_CITRUX_MODEL,
   ModelNotFoundError,
-  DEFAULT_GEMINI_MODEL,
-  DEFAULT_GEMINI_FLASH_MODEL,
+  DEFAULT_CITRUX_MODEL,
+  DEFAULT_CITRUX_FLASH_MODEL,
 } from '@google/gemini-cli-core';
 import { useQuotaAndFallback } from './useQuotaAndFallback.js';
 import type { UseHistoryManagerReturn } from './useHistoryManager.js';
@@ -450,8 +450,8 @@ describe('useQuotaAndFallback', () => {
       let promise: Promise<FallbackIntent | null>;
       act(() => {
         promise = handler(
-          PREVIEW_GEMINI_MODEL,
-          DEFAULT_GEMINI_MODEL,
+          PREVIEW_CITRUX_MODEL,
+          DEFAULT_CITRUX_MODEL,
           new Error('preview model failed'),
         );
       });
@@ -485,8 +485,8 @@ describe('useQuotaAndFallback', () => {
       let promise: Promise<FallbackIntent | null>;
       act(() => {
         promise = handler(
-          PREVIEW_GEMINI_MODEL,
-          DEFAULT_GEMINI_FLASH_MODEL,
+          PREVIEW_CITRUX_MODEL,
+          DEFAULT_CITRUX_FLASH_MODEL,
           new Error('preview model failed'),
         );
       });

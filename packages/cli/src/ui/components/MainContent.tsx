@@ -15,7 +15,7 @@ import { useAlternateBuffer } from '../hooks/useAlternateBuffer.js';
 import { SCROLL_TO_ITEM_END } from './shared/VirtualizedList.js';
 import { ScrollableList } from './shared/ScrollableList.js';
 import { useMemo, memo, useCallback } from 'react';
-import { MAX_GEMINI_MESSAGE_LINES } from '../constants.js';
+import { MAX_CITRUX_MESSAGE_LINES } from '../constants.js';
 
 const MemoizedHistoryItemDisplay = memo(HistoryItemDisplay);
 const MemoizedAppHeader = memo(AppHeader);
@@ -40,7 +40,7 @@ export const MainContent = () => {
     <HistoryItemDisplay
       terminalWidth={mainAreaWidth}
       availableTerminalHeight={staticAreaMaxItemHeight}
-      availableTerminalHeightGemini={MAX_GEMINI_MESSAGE_LINES}
+      availableTerminalHeightGemini={MAX_CITRUX_MESSAGE_LINES}
       key={h.id}
       item={h}
       isPending={false}
@@ -99,7 +99,7 @@ export const MainContent = () => {
           <MemoizedHistoryItemDisplay
             terminalWidth={mainAreaWidth}
             availableTerminalHeight={staticAreaMaxItemHeight}
-            availableTerminalHeightGemini={MAX_GEMINI_MESSAGE_LINES}
+            availableTerminalHeightGemini={MAX_CITRUX_MESSAGE_LINES}
             key={item.item.id}
             item={item.item}
             isPending={false}

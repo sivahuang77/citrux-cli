@@ -19,7 +19,7 @@ import {
   ToolErrorType,
   ApprovalMode,
   HookSystem,
-  PREVIEW_GEMINI_MODEL,
+  PREVIEW_CITRUX_MODEL,
 } from '../index.js';
 import type { Part } from '@google/genai';
 import { MockTool } from '../test-utils/mock-tool.js';
@@ -62,9 +62,9 @@ describe('executeToolCall', () => {
       getTruncateToolOutputThreshold: () =>
         DEFAULT_TRUNCATE_TOOL_OUTPUT_THRESHOLD,
       getTruncateToolOutputLines: () => DEFAULT_TRUNCATE_TOOL_OUTPUT_LINES,
-      getActiveModel: () => PREVIEW_GEMINI_MODEL,
+      getActiveModel: () => PREVIEW_CITRUX_MODEL,
       getUseSmartEdit: () => false,
-      getGeminiClient: () => null, // No client needed for these tests
+      getCitruxClient: () => null, // No client needed for these tests
       getMessageBus: () => null,
       getPolicyEngine: () => null,
       isInteractive: () => false,

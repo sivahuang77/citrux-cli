@@ -15,7 +15,7 @@ interface UseSessionResumeParams {
   config: Config;
   historyManager: UseHistoryManagerReturn;
   refreshStatic: () => void;
-  isGeminiClientInitialized: boolean;
+  isCitruxClientInitialized: boolean;
   setQuittingMessages: (messages: null) => void;
   resumedSessionData?: ResumedSessionData;
   isAuthenticating: boolean;
@@ -30,7 +30,7 @@ export function useSessionResume({
   config,
   historyManager,
   refreshStatic,
-  isGeminiClientInitialized,
+  isCitruxClientInitialized,
   setQuittingMessages,
   resumedSessionData,
   isAuthenticating,
@@ -51,7 +51,7 @@ export function useSessionResume({
       resumedData: ResumedSessionData,
     ) => {
       // Wait for the client.
-      if (!isGeminiClientInitialized) {
+      if (!isCitruxClientInitialized) {
         return;
       }
 
@@ -65,9 +65,9 @@ export function useSessionResume({
 
       // Give the history to the Gemini client.
       // eslint-disable-next-line @typescript-eslint/no-floating-promises
-      config.getGeminiClient()?.resumeChat(clientHistory, resumedData);
+      config.getCitruxClient()?.resumeChat(clientHistory, resumedData);
     },
-    [config, isGeminiClientInitialized, setQuittingMessages],
+    [config, isCitruxClientInitialized, setQuittingMessages],
   );
 
   // Handle interactive resume from the command line (-r/--resume without -p/--prompt-interactive).
@@ -77,7 +77,7 @@ export function useSessionResume({
     if (
       resumedSessionData &&
       !isAuthenticating &&
-      isGeminiClientInitialized &&
+      isCitruxClientInitialized &&
       !hasLoadedResumedSession.current
     ) {
       hasLoadedResumedSession.current = true;
@@ -93,7 +93,7 @@ export function useSessionResume({
   }, [
     resumedSessionData,
     isAuthenticating,
-    isGeminiClientInitialized,
+    isCitruxClientInitialized,
     loadHistoryForResume,
   ]);
 

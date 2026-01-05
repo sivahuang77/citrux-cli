@@ -89,9 +89,9 @@ contain other project-specific files related to Citrux CLI's operation, such as:
 
 - **`contextFileName`** (string or array of strings):
   - **Description:** Specifies the filename for context files (e.g.,
-    `GEMINI.md`, `AGENTS.md`). Can be a single filename or a list of accepted
+    `CITRUX.md`, `AGENTS.md`). Can be a single filename or a list of accepted
     filenames.
-  - **Default:** `GEMINI.md`
+  - **Default:** `CITRUX.md`
   - **Example:** `"contextFileName": "AGENTS.md"`
 
 - **`bugCommand`** (object):
@@ -464,8 +464,8 @@ a few things you can try in order of recommendation:
 
 - **`loadMemoryFromIncludeDirectories`** (boolean):
   - **Description:** Controls the behavior of the `/memory refresh` command. If
-    set to `true`, `GEMINI.md` files should be loaded from all directories that
-    are added. If set to `false`, `GEMINI.md` should only be loaded from the
+    set to `true`, `CITRUX.md` files should be loaded from all directories that
+    are added. If set to `false`, `CITRUX.md` should only be loaded from the
     current directory.
   - **Default:** `false`
   - **Example:**
@@ -572,15 +572,15 @@ files to prevent interference with gemini-cli behavior. Variables from
 `.citrux/.env` files are never excluded. You can customize this behavior using
 the `excludedProjectEnvVars` setting in your `settings.json` file.
 
-- **`GEMINI_API_KEY`**:
+- **`CITRUX_API_KEY`**:
   - Your API key for the Gemini API.
   - One of several available [authentication methods](./authentication.md).
   - Set this in your shell profile (e.g., `~/.bashrc`, `~/.zshrc`) or an `.env`
     file.
-- **`GEMINI_MODEL`**:
+- **`CITRUX_MODEL`**:
   - Specifies the default Gemini model to use.
   - Overrides the hardcoded default
-  - Example: `export GEMINI_MODEL="gemini-2.5-flash"`
+  - Example: `export CITRUX_MODEL="gemini-2.5-flash"`
 - **`GOOGLE_API_KEY`**:
   - Your Google Cloud API key.
   - Required for using Vertex AI in express mode.
@@ -608,7 +608,7 @@ the `excludedProjectEnvVars` setting in your `settings.json` file.
   - Your Google Cloud Project Location (e.g., us-central1).
   - Required for using Vertex AI in non express mode.
   - Example: `export GOOGLE_CLOUD_LOCATION="YOUR_PROJECT_LOCATION"`.
-- **`GEMINI_SANDBOX`**:
+- **`CITRUX_SANDBOX`**:
   - Alternative to the `sandbox` setting in `settings.json`.
   - Accepts `true`, `false`, `docker`, `podman`, or a custom command string.
 - **`HTTP_PROXY` / `HTTPS_PROXY`**:
@@ -717,7 +717,7 @@ for that specific session.
 ## Context files (hierarchical instructional context)
 
 While not strictly configuration for the CLI's _behavior_, context files
-(defaulting to `GEMINI.md` but configurable via the `contextFileName` setting)
+(defaulting to `CITRUX.md` but configurable via the `contextFileName` setting)
 are crucial for configuring the _instructional context_ (also referred to as
 "memory") provided to the Gemini model. This powerful feature allows you to give
 project-specific instructions, coding style guides, or any relevant background
@@ -730,7 +730,7 @@ context.
   that you want the Gemini model to be aware of during your interactions. The
   system is designed to manage this instructional context hierarchically.
 
-### Example context file content (e.g., `GEMINI.md`)
+### Example context file content (e.g., `CITRUX.md`)
 
 Here's a conceptual example of what a context file at the root of a TypeScript
 project might contain:
@@ -772,13 +772,13 @@ you. Project-specific context files are highly encouraged to establish
 conventions and context.
 
 - **Hierarchical loading and precedence:** The CLI implements a sophisticated
-  hierarchical memory system by loading context files (e.g., `GEMINI.md`) from
+  hierarchical memory system by loading context files (e.g., `CITRUX.md`) from
   several locations. Content from files lower in this list (more specific)
   typically overrides or supplements content from files higher up (more
   general). The exact concatenation order and final context can be inspected
   using the `/memory show` command. The typical loading order is:
   1.  **Global context file:**
-      - Location: `~/.citrux/<contextFileName>` (e.g., `~/.citrux/GEMINI.md` in
+      - Location: `~/.citrux/<contextFileName>` (e.g., `~/.citrux/CITRUX.md` in
         your user home directory).
       - Scope: Provides default instructions for all your projects.
   2.  **Project root and ancestors context files:**
@@ -824,7 +824,7 @@ and file modifications) within a sandboxed environment to protect your system.
 Sandboxing is disabled by default, but you can enable it in a few ways:
 
 - Using `--sandbox` or `-s` flag.
-- Setting `GEMINI_SANDBOX` environment variable.
+- Setting `CITRUX_SANDBOX` environment variable.
 - Sandbox is enabled when using `--yolo` or `--approval-mode=yolo` by default.
 
 By default, it uses a pre-built `gemini-cli-sandbox` Docker image.

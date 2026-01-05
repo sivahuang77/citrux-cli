@@ -5,15 +5,15 @@
  */
 
 import type { GitIgnoreFilter } from '../utils/gitIgnoreParser.js';
-import type { GeminiIgnoreFilter } from '../utils/geminiIgnoreParser.js';
+import type { CitruxIgnoreFilter } from '../utils/citruxIgnoreParser.js';
 import { GitIgnoreParser } from '../utils/gitIgnoreParser.js';
-import { GeminiIgnoreParser } from '../utils/geminiIgnoreParser.js';
+import { CitruxIgnoreParser } from '../utils/citruxIgnoreParser.js';
 import { isGitRepository } from '../utils/gitUtils.js';
 import * as path from 'node:path';
 
 export interface FilterFilesOptions {
   respectGitIgnore?: boolean;
-  respectGeminiIgnore?: boolean;
+  respectCitruxIgnore?: boolean;
 }
 
 export interface FilterReport {
@@ -23,7 +23,7 @@ export interface FilterReport {
 
 export class FileDiscoveryService {
   private gitIgnoreFilter: GitIgnoreFilter | null = null;
-  private geminiIgnoreFilter: GeminiIgnoreFilter | null = null;
+  private citruxIgnoreFilter: CitruxIgnoreFilter | null = null;
   private combinedIgnoreFilter: GitIgnoreFilter | null = null;
   private projectRoot: string;
 
@@ -32,11 +32,11 @@ export class FileDiscoveryService {
     if (isGitRepository(this.projectRoot)) {
       this.gitIgnoreFilter = new GitIgnoreParser(this.projectRoot);
     }
-    this.geminiIgnoreFilter = new GeminiIgnoreParser(this.projectRoot);
+    this.citruxIgnoreFilter = new CitruxIgnoreParser(this.projectRoot);
 
     if (this.gitIgnoreFilter) {
-      const geminiPatterns = this.geminiIgnoreFilter.getPatterns();
-      // Create combined parser: .gitignore + .geminiignore
+      const geminiPatterns = this.citruxIgnoreFilter.getPatterns();
+      // Create combined parser: .gitignore + .citruxignore
       this.combinedIgnoreFilter = new GitIgnoreParser(
         this.projectRoot,
         geminiPatterns,
@@ -48,11 +48,11 @@ export class FileDiscoveryService {
    * Filters a list of file paths based on git ignore rules
    */
   filterFiles(filePaths: string[], options: FilterFilesOptions = {}): string[] {
-    const { respectGitIgnore = true, respectGeminiIgnore = true } = options;
+    const { respectGitIgnore = true, respectCitruxIgnore = true } = options;
     return filePaths.filter((filePath) => {
       if (
         respectGitIgnore &&
-        respectGeminiIgnore &&
+        respectCitruxIgnore &&
         this.combinedIgnoreFilter
       ) {
         return !this.combinedIgnoreFilter.isIgnored(filePath);
@@ -61,7 +61,7 @@ export class FileDiscoveryService {
       if (respectGitIgnore && this.gitIgnoreFilter?.isIgnored(filePath)) {
         return false;
       }
-      if (respectGeminiIgnore && this.geminiIgnoreFilter?.isIgnored(filePath)) {
+      if (respectCitruxIgnore && this.citruxIgnoreFilter?.isIgnored(filePath)) {
         return false;
       }
       return true;
@@ -76,7 +76,7 @@ export class FileDiscoveryService {
     filePaths: string[],
     opts: FilterFilesOptions = {
       respectGitIgnore: true,
-      respectGeminiIgnore: true,
+      respectCitruxIgnore: true,
     },
   ): FilterReport {
     const filteredPaths = this.filterFiles(filePaths, opts);

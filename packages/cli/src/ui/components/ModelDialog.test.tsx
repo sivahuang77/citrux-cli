@@ -10,12 +10,12 @@ import { ModelDialog } from './ModelDialog.js';
 import { ConfigContext } from '../contexts/ConfigContext.js';
 import { KeypressProvider } from '../contexts/KeypressContext.js';
 import {
-  DEFAULT_GEMINI_MODEL,
-  DEFAULT_GEMINI_MODEL_AUTO,
-  DEFAULT_GEMINI_FLASH_MODEL,
-  DEFAULT_GEMINI_FLASH_LITE_MODEL,
-  PREVIEW_GEMINI_MODEL,
-  PREVIEW_GEMINI_MODEL_AUTO,
+  DEFAULT_CITRUX_MODEL,
+  DEFAULT_CITRUX_MODEL_AUTO,
+  DEFAULT_CITRUX_FLASH_MODEL,
+  DEFAULT_CITRUX_FLASH_LITE_MODEL,
+  PREVIEW_CITRUX_MODEL,
+  PREVIEW_CITRUX_MODEL_AUTO,
 } from '@google/gemini-cli-core';
 import type { Config, ModelSlashCommandEvent } from '@google/gemini-cli-core';
 
@@ -62,7 +62,7 @@ describe('<ModelDialog />', () => {
 
   beforeEach(() => {
     vi.resetAllMocks();
-    mockGetModel.mockReturnValue(DEFAULT_GEMINI_MODEL_AUTO);
+    mockGetModel.mockReturnValue(DEFAULT_CITRUX_MODEL_AUTO);
     mockGetPreviewFeatures.mockReturnValue(false);
     mockGetHasAccessToPreviewModel.mockReturnValue(false);
 
@@ -116,15 +116,15 @@ describe('<ModelDialog />', () => {
     await waitForUpdate();
 
     // Should now show manual options
-    expect(lastFrame()).toContain(DEFAULT_GEMINI_MODEL);
-    expect(lastFrame()).toContain(DEFAULT_GEMINI_FLASH_MODEL);
-    expect(lastFrame()).toContain(DEFAULT_GEMINI_FLASH_LITE_MODEL);
+    expect(lastFrame()).toContain(DEFAULT_CITRUX_MODEL);
+    expect(lastFrame()).toContain(DEFAULT_CITRUX_FLASH_MODEL);
+    expect(lastFrame()).toContain(DEFAULT_CITRUX_FLASH_LITE_MODEL);
   });
 
   it('renders "manual" view with preview options when preview features are enabled', async () => {
     mockGetPreviewFeatures.mockReturnValue(true);
     mockGetHasAccessToPreviewModel.mockReturnValue(true); // Must have access
-    mockGetModel.mockReturnValue(PREVIEW_GEMINI_MODEL_AUTO);
+    mockGetModel.mockReturnValue(PREVIEW_CITRUX_MODEL_AUTO);
     const { lastFrame, stdin } = renderComponent();
 
     // Select "Manual" (index 2 because Preview Auto is first, then Auto (Gemini 2.5))
@@ -138,7 +138,7 @@ describe('<ModelDialog />', () => {
     stdin.write('\r');
     await waitForUpdate();
 
-    expect(lastFrame()).toContain(PREVIEW_GEMINI_MODEL);
+    expect(lastFrame()).toContain(PREVIEW_CITRUX_MODEL);
   });
 
   it('sets model and closes when a model is selected in "main" view', async () => {
@@ -148,7 +148,7 @@ describe('<ModelDialog />', () => {
     stdin.write('\r');
     await waitForUpdate();
 
-    expect(mockSetModel).toHaveBeenCalledWith(DEFAULT_GEMINI_MODEL_AUTO);
+    expect(mockSetModel).toHaveBeenCalledWith(DEFAULT_CITRUX_MODEL_AUTO);
     expect(mockOnClose).toHaveBeenCalled();
   });
 
@@ -161,11 +161,11 @@ describe('<ModelDialog />', () => {
     stdin.write('\r');
     await waitForUpdate();
 
-    // Now in manual view. Default selection is first item (DEFAULT_GEMINI_MODEL)
+    // Now in manual view. Default selection is first item (DEFAULT_CITRUX_MODEL)
     stdin.write('\r');
     await waitForUpdate();
 
-    expect(mockSetModel).toHaveBeenCalledWith(DEFAULT_GEMINI_MODEL);
+    expect(mockSetModel).toHaveBeenCalledWith(DEFAULT_CITRUX_MODEL);
     expect(mockOnClose).toHaveBeenCalled();
   });
 
@@ -187,7 +187,7 @@ describe('<ModelDialog />', () => {
     stdin.write('\r');
     await waitForUpdate();
 
-    expect(lastFrame()).toContain(DEFAULT_GEMINI_MODEL);
+    expect(lastFrame()).toContain(DEFAULT_CITRUX_MODEL);
 
     // Press Escape
     stdin.write('\u001B');

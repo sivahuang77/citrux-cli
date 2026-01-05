@@ -74,7 +74,7 @@ export async function readPathFromWorkspace(
     );
     const filteredFiles = fileService.filterFiles(relativeFiles, {
       respectGitIgnore: config.getFileFilteringRespectGitIgnore(),
-      respectGeminiIgnore: config.getFileFilteringRespectGeminiIgnore(),
+      respectCitruxIgnore: config.getFileFilteringRespectGeminiIgnore(),
     });
     const finalFiles = filteredFiles.map((p) =>
       path.resolve(config.getTargetDir(), p),
@@ -99,7 +99,7 @@ export async function readPathFromWorkspace(
     const relativePath = path.relative(config.getTargetDir(), absolutePath);
     const filtered = fileService.filterFiles([relativePath], {
       respectGitIgnore: config.getFileFilteringRespectGitIgnore(),
-      respectGeminiIgnore: config.getFileFilteringRespectGeminiIgnore(),
+      respectCitruxIgnore: config.getFileFilteringRespectGeminiIgnore(),
     });
 
     if (filtered.length === 0) {

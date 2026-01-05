@@ -23,7 +23,7 @@ export function handleAutoUpdate(
     return;
   }
 
-  if (settings.merged.tools?.sandbox || process.env['GEMINI_SANDBOX']) {
+  if (settings.merged.tools?.sandbox || process.env['CITRUX_SANDBOX']) {
     updateEventEmitter.emit('update-info', {
       message: `${info.message}\nAutomatic update is not available in sandbox mode.`,
     });
@@ -64,8 +64,9 @@ export function handleAutoUpdate(
   }
 
   // Citrux CLI update command always points to GitHub for now
-  const updateCommand = 'npm install -g https://github.com/sivahuang77/citrux-cli.git';
-  
+  const updateCommand =
+    'npm install -g https://github.com/sivahuang77/citrux-cli.git';
+
   const updateProcess = spawnFn(updateCommand, {
     stdio: 'ignore',
     shell: true,

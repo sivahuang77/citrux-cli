@@ -19,12 +19,12 @@ import type { HistoryItemWithoutId } from '../types.js';
 
 describe('useSessionResume', () => {
   // Mock dependencies
-  const mockGeminiClient = {
+  const mockCitruxClient = {
     resumeChat: vi.fn(),
   };
 
   const mockConfig = {
-    getGeminiClient: vi.fn().mockReturnValue(mockGeminiClient),
+    getCitruxClient: vi.fn().mockReturnValue(mockCitruxClient),
   };
 
   const createMockHistoryManager = (): UseHistoryManagerReturn => ({
@@ -44,7 +44,7 @@ describe('useSessionResume', () => {
     config: mockConfig as unknown as Config,
     historyManager: mockHistoryManager,
     refreshStatic: mockRefreshStatic,
-    isGeminiClientInitialized: true,
+    isCitruxClientInitialized: true,
     setQuittingMessages: mockSetQuittingMessages,
     resumedSessionData: undefined,
     isAuthenticating: false,
@@ -110,7 +110,7 @@ describe('useSessionResume', () => {
         true,
       );
       expect(mockRefreshStatic).toHaveBeenCalled();
-      expect(mockGeminiClient.resumeChat).toHaveBeenCalledWith(
+      expect(mockCitruxClient.resumeChat).toHaveBeenCalledWith(
         clientHistory,
         resumedData,
       );
@@ -120,7 +120,7 @@ describe('useSessionResume', () => {
       const { result } = renderHook(() =>
         useSessionResume({
           ...getDefaultProps(),
-          isGeminiClientInitialized: false,
+          isCitruxClientInitialized: false,
         }),
       );
 
@@ -151,7 +151,7 @@ describe('useSessionResume', () => {
 
       expect(mockHistoryManager.clearItems).not.toHaveBeenCalled();
       expect(mockHistoryManager.addItem).not.toHaveBeenCalled();
-      expect(mockGeminiClient.resumeChat).not.toHaveBeenCalled();
+      expect(mockCitruxClient.resumeChat).not.toHaveBeenCalled();
     });
 
     it('should handle empty history arrays', () => {
@@ -175,7 +175,7 @@ describe('useSessionResume', () => {
       expect(mockHistoryManager.clearItems).toHaveBeenCalled();
       expect(mockHistoryManager.addItem).not.toHaveBeenCalled();
       expect(mockRefreshStatic).toHaveBeenCalled();
-      expect(mockGeminiClient.resumeChat).toHaveBeenCalledWith([], resumedData);
+      expect(mockCitruxClient.resumeChat).toHaveBeenCalledWith([], resumedData);
     });
   });
 
@@ -207,7 +207,7 @@ describe('useSessionResume', () => {
       const initialCallback = result.current.loadHistoryForResume;
 
       const newMockConfig = {
-        getGeminiClient: vi.fn().mockReturnValue(mockGeminiClient),
+        getCitruxClient: vi.fn().mockReturnValue(mockCitruxClient),
       };
 
       rerender({ config: newMockConfig as unknown as Config });
@@ -222,7 +222,7 @@ describe('useSessionResume', () => {
 
       expect(mockHistoryManager.clearItems).not.toHaveBeenCalled();
       expect(mockHistoryManager.addItem).not.toHaveBeenCalled();
-      expect(mockGeminiClient.resumeChat).not.toHaveBeenCalled();
+      expect(mockCitruxClient.resumeChat).not.toHaveBeenCalled();
     });
 
     it('should not resume when user is authenticating', () => {
@@ -254,7 +254,7 @@ describe('useSessionResume', () => {
 
       expect(mockHistoryManager.clearItems).not.toHaveBeenCalled();
       expect(mockHistoryManager.addItem).not.toHaveBeenCalled();
-      expect(mockGeminiClient.resumeChat).not.toHaveBeenCalled();
+      expect(mockCitruxClient.resumeChat).not.toHaveBeenCalled();
     });
 
     it('should not resume when Gemini client is not initialized', () => {
@@ -280,13 +280,13 @@ describe('useSessionResume', () => {
             conversation,
             filePath: '/path/to/session.json',
           },
-          isGeminiClientInitialized: false,
+          isCitruxClientInitialized: false,
         }),
       );
 
       expect(mockHistoryManager.clearItems).not.toHaveBeenCalled();
       expect(mockHistoryManager.addItem).not.toHaveBeenCalled();
-      expect(mockGeminiClient.resumeChat).not.toHaveBeenCalled();
+      expect(mockCitruxClient.resumeChat).not.toHaveBeenCalled();
     });
 
     it('should automatically resume session when resumedSessionData is provided', async () => {
@@ -338,7 +338,7 @@ describe('useSessionResume', () => {
         1,
         true,
       );
-      expect(mockGeminiClient.resumeChat).toHaveBeenCalled();
+      expect(mockCitruxClient.resumeChat).toHaveBeenCalled();
     });
 
     it('should only resume once even if props change', async () => {
@@ -423,12 +423,12 @@ describe('useSessionResume', () => {
       );
 
       await waitFor(() => {
-        expect(mockGeminiClient.resumeChat).toHaveBeenCalled();
+        expect(mockCitruxClient.resumeChat).toHaveBeenCalled();
       });
 
       // Check that the client history was called with filtered messages
       // (slash commands should be filtered out)
-      const clientHistory = mockGeminiClient.resumeChat.mock.calls[0][0];
+      const clientHistory = mockCitruxClient.resumeChat.mock.calls[0][0];
 
       // Should only have the non-slash-command message
       expect(clientHistory).toHaveLength(1);

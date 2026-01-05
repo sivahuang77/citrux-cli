@@ -10,7 +10,7 @@ const fs = fsSync.promises;
 import type {
   Config,
   EditorType,
-  GeminiClient,
+  CitruxClient,
   ServerGeminiChatCompressedEvent,
   ServerGeminiContentEvent as ContentEvent,
   ServerGeminiFinishedEvent,
@@ -28,7 +28,7 @@ import {
   GitService,
   UnauthorizedError,
   UserPromptEvent,
-  DEFAULT_GEMINI_FLASH_MODEL,
+  DEFAULT_CITRUX_FLASH_MODEL,
   logConversationFinishedEvent,
   ConversationFinishedEvent,
   ApprovalMode,
@@ -94,7 +94,7 @@ function showCitations(settings: LoadedSettings): boolean {
  * API interaction, and tool call lifecycle.
  */
 export const useGeminiStream = (
-  geminiClient: GeminiClient,
+  geminiClient: CitruxClient,
   history: HistoryItem[],
   addItem: UseHistoryManagerReturn['addItem'],
   config: Config,
@@ -163,10 +163,10 @@ export const useGeminiStream = (
         // Record tool calls with full metadata before sending responses.
         try {
           const currentModel =
-            config.getGeminiClient().getCurrentSequenceModel() ??
+            config.getCitruxClient().getCurrentSequenceModel() ??
             config.getModel();
           config
-            .getGeminiClient()
+            .getCitruxClient()
             .getChat()
             .recordCompletedToolCalls(
               currentModel,
@@ -653,7 +653,7 @@ export const useGeminiStream = (
             config.getContentGeneratorConfig()?.authType,
             undefined,
             config.getModel(),
-            DEFAULT_GEMINI_FLASH_MODEL,
+            DEFAULT_CITRUX_FLASH_MODEL,
           ),
         },
         userMessageTimestamp,
@@ -1008,7 +1008,7 @@ export const useGeminiStream = (
 
                     if (result.userSelection === 'disable') {
                       config
-                        .getGeminiClient()
+                        .getCitruxClient()
                         .getLoopDetectionService()
                         .disableForSession();
                       addItem(
@@ -1186,7 +1186,7 @@ export const useGeminiStream = (
                       config.getContentGeneratorConfig()?.authType,
                       undefined,
                       config.getModel(),
-                      DEFAULT_GEMINI_FLASH_MODEL,
+                      DEFAULT_CITRUX_FLASH_MODEL,
                     ),
                   },
                   userMessageTimestamp,

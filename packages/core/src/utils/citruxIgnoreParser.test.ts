@@ -5,12 +5,12 @@
  */
 
 import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
-import { GeminiIgnoreParser } from './geminiIgnoreParser.js';
+import { CitruxIgnoreParser } from './citruxIgnoreParser.js';
 import * as fs from 'node:fs/promises';
 import * as path from 'node:path';
 import * as os from 'node:os';
 
-describe('GeminiIgnoreParser', () => {
+describe('CitruxIgnoreParser', () => {
   let projectRoot: string;
 
   async function createTestFile(filePath: string, content = '') {
@@ -30,10 +30,10 @@ describe('GeminiIgnoreParser', () => {
     vi.restoreAllMocks();
   });
 
-  describe('when .geminiignore exists', () => {
+  describe('when .citruxignore exists', () => {
     beforeEach(async () => {
       await createTestFile(
-        '.geminiignore',
+        '.citruxignore',
         'ignored.txt\n# A comment\n/ignored_dir/\n',
       );
       await createTestFile('ignored.txt', 'ignored');
@@ -48,8 +48,8 @@ describe('GeminiIgnoreParser', () => {
       );
     });
 
-    it('should ignore files specified in .geminiignore', () => {
-      const parser = new GeminiIgnoreParser(projectRoot);
+    it('should ignore files specified in .citruxignore', () => {
+      const parser = new CitruxIgnoreParser(projectRoot);
       expect(parser.getPatterns()).toEqual(['ignored.txt', '/ignored_dir/']);
       expect(parser.isIgnored('ignored.txt')).toBe(true);
       expect(parser.isIgnored('not_ignored.txt')).toBe(false);
@@ -60,74 +60,74 @@ describe('GeminiIgnoreParser', () => {
     });
 
     it('should return ignore file path when patterns exist', () => {
-      const parser = new GeminiIgnoreParser(projectRoot);
+      const parser = new CitruxIgnoreParser(projectRoot);
       expect(parser.getIgnoreFilePath()).toBe(
-        path.join(projectRoot, '.geminiignore'),
+        path.join(projectRoot, '.citruxignore'),
       );
     });
 
     it('should return true for hasPatterns when patterns exist', () => {
-      const parser = new GeminiIgnoreParser(projectRoot);
+      const parser = new CitruxIgnoreParser(projectRoot);
       expect(parser.hasPatterns()).toBe(true);
     });
 
-    it('should return false for hasPatterns when .geminiignore is deleted', async () => {
-      const parser = new GeminiIgnoreParser(projectRoot);
-      await fs.rm(path.join(projectRoot, '.geminiignore'));
+    it('should return false for hasPatterns when .citruxignore is deleted', async () => {
+      const parser = new CitruxIgnoreParser(projectRoot);
+      await fs.rm(path.join(projectRoot, '.citruxignore'));
       expect(parser.hasPatterns()).toBe(false);
       expect(parser.getIgnoreFilePath()).toBeNull();
     });
   });
 
-  describe('when .geminiignore does not exist', () => {
+  describe('when .citruxignore does not exist', () => {
     it('should not load any patterns and not ignore any files', () => {
-      const parser = new GeminiIgnoreParser(projectRoot);
+      const parser = new CitruxIgnoreParser(projectRoot);
       expect(parser.getPatterns()).toEqual([]);
       expect(parser.isIgnored('any_file.txt')).toBe(false);
     });
 
     it('should return null for getIgnoreFilePath when no patterns exist', () => {
-      const parser = new GeminiIgnoreParser(projectRoot);
+      const parser = new CitruxIgnoreParser(projectRoot);
       expect(parser.getIgnoreFilePath()).toBeNull();
     });
 
     it('should return false for hasPatterns when no patterns exist', () => {
-      const parser = new GeminiIgnoreParser(projectRoot);
+      const parser = new CitruxIgnoreParser(projectRoot);
       expect(parser.hasPatterns()).toBe(false);
     });
   });
 
-  describe('when .geminiignore is empty', () => {
+  describe('when .citruxignore is empty', () => {
     beforeEach(async () => {
-      await createTestFile('.geminiignore', '');
+      await createTestFile('.citruxignore', '');
     });
 
     it('should return null for getIgnoreFilePath', () => {
-      const parser = new GeminiIgnoreParser(projectRoot);
+      const parser = new CitruxIgnoreParser(projectRoot);
       expect(parser.getIgnoreFilePath()).toBeNull();
     });
 
     it('should return false for hasPatterns', () => {
-      const parser = new GeminiIgnoreParser(projectRoot);
+      const parser = new CitruxIgnoreParser(projectRoot);
       expect(parser.hasPatterns()).toBe(false);
     });
   });
 
-  describe('when .geminiignore only has comments', () => {
+  describe('when .citruxignore only has comments', () => {
     beforeEach(async () => {
       await createTestFile(
-        '.geminiignore',
+        '.citruxignore',
         '# This is a comment\n# Another comment\n',
       );
     });
 
     it('should return null for getIgnoreFilePath', () => {
-      const parser = new GeminiIgnoreParser(projectRoot);
+      const parser = new CitruxIgnoreParser(projectRoot);
       expect(parser.getIgnoreFilePath()).toBeNull();
     });
 
     it('should return false for hasPatterns', () => {
-      const parser = new GeminiIgnoreParser(projectRoot);
+      const parser = new CitruxIgnoreParser(projectRoot);
       expect(parser.hasPatterns()).toBe(false);
     });
   });

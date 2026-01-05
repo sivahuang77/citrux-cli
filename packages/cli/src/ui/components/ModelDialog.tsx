@@ -8,9 +8,9 @@ import type React from 'react';
 import { useCallback, useContext, useMemo, useState } from 'react';
 import { Box, Text } from 'ink';
 import {
-  DEFAULT_GEMINI_MODEL,
-  DEFAULT_GEMINI_FLASH_MODEL,
-  DEFAULT_GEMINI_MODEL_AUTO,
+  DEFAULT_CITRUX_MODEL,
+  DEFAULT_CITRUX_FLASH_MODEL,
+  DEFAULT_CITRUX_MODEL_AUTO,
   ModelSlashCommandEvent,
   logModelSlashCommand,
   getDisplayString,
@@ -145,10 +145,10 @@ export function ModelDialog({ onClose }: ModelDialogProps): React.JSX.Element {
         key: 'ChangeProvider',
       },
       {
-        value: DEFAULT_GEMINI_MODEL_AUTO,
-        title: getDisplayString(DEFAULT_GEMINI_MODEL_AUTO),
+        value: DEFAULT_CITRUX_MODEL_AUTO,
+        title: getDisplayString(DEFAULT_CITRUX_MODEL_AUTO),
         description: 'Let Citrux decide the best model for the task.',
-        key: DEFAULT_GEMINI_MODEL_AUTO,
+        key: DEFAULT_CITRUX_MODEL_AUTO,
       },
       {
         value: 'Manual',
@@ -211,14 +211,14 @@ export function ModelDialog({ onClose }: ModelDialogProps): React.JSX.Element {
   const manualOptions = useMemo(() => {
     const list = [
       {
-        value: DEFAULT_GEMINI_MODEL,
-        title: DEFAULT_GEMINI_MODEL,
-        key: DEFAULT_GEMINI_MODEL,
+        value: DEFAULT_CITRUX_MODEL,
+        title: DEFAULT_CITRUX_MODEL,
+        key: DEFAULT_CITRUX_MODEL,
       },
       {
-        value: DEFAULT_GEMINI_FLASH_MODEL,
-        title: DEFAULT_GEMINI_FLASH_MODEL,
-        key: DEFAULT_GEMINI_FLASH_MODEL,
+        value: DEFAULT_CITRUX_FLASH_MODEL,
+        title: DEFAULT_CITRUX_FLASH_MODEL,
+        key: DEFAULT_CITRUX_FLASH_MODEL,
       },
     ];
 

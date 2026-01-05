@@ -69,7 +69,7 @@ export async function createContentGeneratorConfig(
 ): Promise<ContentGeneratorConfig> {
   const geminiApiKey =
     process.env['CITRUX_API_KEY'] ||
-    process.env['GEMINI_API_KEY'] ||
+    process.env['CITRUX_API_KEY'] ||
     (await loadApiKey()) ||
     undefined;
   const googleApiKey = process.env['GOOGLE_API_KEY'] || undefined;
@@ -127,21 +127,24 @@ export async function createContentGenerator(
       gcConfig.getPreviewFeatures(),
     );
     const customHeadersEnv =
-      process.env['GEMINI_CLI_CUSTOM_HEADERS'] || undefined;
+      process.env['CITRUX_CLI_CUSTOM_HEADERS'] || undefined;
     const userAgent = `GeminiCLI/${version}/${model} (${process.platform}; ${process.arch})`;
     const customHeadersMap = parseCustomHeaders(customHeadersEnv);
 
-    const provider = (gcConfig as any).getLlmProvider?.() || 'gemini';
+    const provider = gcConfig.getLlmProvider?.() || 'gemini';
     if (provider !== 'gemini') {
       return new OpenAIContentGenerator(gcConfig);
     }
 
-    if (process.env['CITRUX_PROVIDER'] === 'openai' || process.env['OPENAI_API_KEY']) {
+    if (
+      process.env['CITRUX_PROVIDER'] === 'openai' ||
+      process.env['OPENAI_API_KEY']
+    ) {
       return new OpenAIContentGenerator(gcConfig);
     }
 
     const apiKeyAuthMechanism =
-      process.env['GEMINI_API_KEY_AUTH_MECHANISM'] || 'x-goog-api-key';
+      process.env['CITRUX_API_KEY_AUTH_MECHANISM'] || 'x-goog-api-key';
 
     const baseHeaders: Record<string, string> = {
       ...customHeadersMap,

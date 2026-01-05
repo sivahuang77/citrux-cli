@@ -32,10 +32,10 @@ describe('sanitizeEnvironment', () => {
     expect(sanitized).toEqual(env);
   });
 
-  it('should allow variables prefixed with GEMINI_CLI_', () => {
+  it('should allow variables prefixed with CITRUX_CLI_', () => {
     const env = {
-      GEMINI_CLI_FOO: 'bar',
-      GEMINI_CLI_BAZ: 'qux',
+      CITRUX_CLI_FOO: 'bar',
+      CITRUX_CLI_BAZ: 'qux',
     };
     const sanitized = sanitizeEnvironment(env, EMPTY_OPTIONS);
     expect(sanitized).toEqual(env);
@@ -186,7 +186,7 @@ describe('sanitizeEnvironment', () => {
       // Allowed
       PATH: '/usr/bin',
       HOME: '/home/user',
-      GEMINI_CLI_VERSION: '1.2.3',
+      CITRUX_CLI_VERSION: '1.2.3',
       NODE_ENV: 'production',
       // Redacted by name
       API_KEY: 'should-be-redacted',
@@ -201,7 +201,7 @@ describe('sanitizeEnvironment', () => {
     expect(sanitized).toEqual({
       PATH: '/usr/bin',
       HOME: '/home/user',
-      GEMINI_CLI_VERSION: '1.2.3',
+      CITRUX_CLI_VERSION: '1.2.3',
       NODE_ENV: 'production',
     });
   });

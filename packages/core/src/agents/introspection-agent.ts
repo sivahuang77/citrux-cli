@@ -6,7 +6,7 @@
 
 import type { AgentDefinition } from './types.js';
 import { GetInternalDocsTool } from '../tools/get-internal-docs.js';
-import { GEMINI_MODEL_ALIAS_FLASH } from '../config/models.js';
+import { CITRUX_MODEL_ALIAS_FLASH } from '../config/models.js';
 import { z } from 'zod';
 
 const IntrospectionReportSchema = z.object({
@@ -48,7 +48,7 @@ export const IntrospectionAgent: AgentDefinition<
   processOutput: (output) => JSON.stringify(output, null, 2),
 
   modelConfig: {
-    model: GEMINI_MODEL_ALIAS_FLASH,
+    model: CITRUX_MODEL_ALIAS_FLASH,
     temp: 0.1,
     top_p: 0.95,
     thinkingBudget: -1,
