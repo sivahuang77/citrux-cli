@@ -20,11 +20,37 @@
 import { spawn, execSync } from 'node:child_process';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { readFileSync } from 'node:fs';
+import { readFileSync, existsSync } from 'node:fs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = join(__dirname, '..');
 const pkg = JSON.parse(readFileSync(join(root, 'package.json'), 'utf-8'));
+
+// Load .env file if it exists
+const envPath = join(root, '.env');
+const dotEnvVars = {};
+if (existsSync(envPath)) {
+  try {
+    const envContent = readFileSync(envPath, 'utf-8');
+    envContent.split('\n').forEach((line) => {
+      const trimmedLine = line.trim();
+      if (
+        trimmedLine &&
+        !trimmedLine.startsWith('#') &&
+        trimmedLine.includes('=')
+      ) {
+        const [key, ...valueParts] = trimmedLine.split('=');
+        const value = valueParts.join('=');
+        // Remove quotes if present
+        const cleanValue = value.replace(/^['"]|['"]$/g, '').trim();
+        dotEnvVars[key.trim()] = cleanValue;
+      }
+    });
+    console.log('Loaded environment variables from .env');
+  } catch (error) {
+    console.warn('Failed to load .env file:', error);
+  }
+}
 
 // check build status, write warnings to file for app to display if needed
 execSync('node ./scripts/check-build-status.js', {
@@ -62,6 +88,7 @@ nodeArgs.push(...process.argv.slice(2));
 
 const env = {
   ...process.env,
+  ...dotEnvVars,
   CLI_VERSION: pkg.version,
   DEV: 'true',
 };
